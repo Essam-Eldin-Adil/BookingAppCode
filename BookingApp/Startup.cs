@@ -19,7 +19,7 @@ namespace BookingApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(options =>
-            {
+            { 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 //options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
