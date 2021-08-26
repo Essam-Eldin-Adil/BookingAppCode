@@ -1,0 +1,639 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>عن المنتج</value>
+  </data>
+  <data name="Accreditation" xml:space="preserve">
+    <value>الإعتماد</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>مفعل</value>
+  </data>
+  <data name="ActiveDirectory" xml:space="preserve">
+    <value>الدليل النشط</value>
+  </data>
+  <data name="ActiveDirectorySettings" xml:space="preserve">
+    <value>إعدادات الدليل النشط</value>
+  </data>
+  <data name="AddedTo" xml:space="preserve">
+    <value>إضافة الى</value>
+  </data>
+  <data name="AddFiles" xml:space="preserve">
+    <value>إضافة مرفقات</value>
+  </data>
+  <data name="Administration" xml:space="preserve">
+    <value>إدارة النظام</value>
+  </data>
+  <data name="Administrators" xml:space="preserve">
+    <value>مدراء النظام</value>
+  </data>
+  <data name="AdministratorsCreate" xml:space="preserve">
+    <value>إضافة مدير نظام</value>
+  </data>
+  <data name="AlertDataDeletedSuccessfully" xml:space="preserve">
+    <value>لقد تم حذف البيانات بنجاح</value>
+  </data>
+  <data name="AlertDataModifiedSuccessfully" xml:space="preserve">
+    <value>تم تعديل البيانات بنجاح</value>
+  </data>
+  <data name="AlertDataRestoredSuccessfully" xml:space="preserve">
+    <value>تم إستعادة البيانات بنجاح</value>
+  </data>
+  <data name="AlertDataSavedSuccessfully" xml:space="preserve">
+    <value>تم حفظ البيانات بنجاح</value>
+  </data>
+  <data name="AlertErrorDeletingData" xml:space="preserve">
+    <value>لقد حدث خطأ أثناء عملية الحذف</value>
+  </data>
+  <data name="AlertErrorModifyingData" xml:space="preserve">
+    <value>لقد حدث خطأ أثناء عملية التعديل</value>
+  </data>
+  <data name="AlertErrorSavingData" xml:space="preserve">
+    <value>لقد حدث خطأ أثناء عملية الحفظ</value>
+  </data>
+  <data name="AlertMeetingMinutesIsClosed" xml:space="preserve">
+    <value>تم إعتماد المحضر لا يمكن تغيير الحالة</value>
+  </data>
+  <data name="AlertMeetingUserAddingError" xml:space="preserve">
+    <value>يجب دعوة عضو واحد على الاقل في هذا الاجتماع</value>
+  </data>
+  <data name="AlertSystemError" xml:space="preserve">
+    <value>خطأ في النظام</value>
+  </data>
+  <data name="AM" xml:space="preserve">
+    <value>صباحاً</value>
+  </data>
+  <data name="Applications" xml:space="preserve">
+    <value>التطبيقات</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>معتمد</value>
+  </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>العربية</value>
+  </data>
+  <data name="BackToHome" xml:space="preserve">
+    <value>الرجوع إلى الرئيسية</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>الرجوع إلى القائمة الرئيسية</value>
+  </data>
+  <data name="Byte" xml:space="preserve">
+    <value>بايت</value>
+  </data>
+  <data name="Calender" xml:space="preserve">
+    <value>التقويم</value>
+  </data>
+  <data name="CalenderType" xml:space="preserve">
+    <value>نوع التاريخ</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء الأمر</value>
+  </data>
+  <data name="CannotTransferToSameCommittee" xml:space="preserve">
+    <value>لا يمكن إرسال المواضيع لنفس اللجنة</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>تغيير كلمة المرور</value>
+  </data>
+  <data name="ChangePicture" xml:space="preserve">
+    <value>تغيير الصورة</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="Comments" xml:space="preserve">
+    <value>التعليقات</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>هل انت متأكد أنك تريد حذف هذا العنصر</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>تأكيد كلمة المرور</value>
+  </data>
+  <data name="ContactInformation" xml:space="preserve">
+    <value>معلومات التواصل</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>إضافة</value>
+  </data>
+  <data name="CurrentPassword" xml:space="preserve">
+    <value>كلمة المرور الحالية</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>اليوم</value>
+  </data>
+  <data name="Deactivate" xml:space="preserve">
+    <value>معطل</value>
+  </data>
+  <data name="DecisionNumberAlreadyExist" xml:space="preserve">
+    <value>رقم القرار مستخدم مسبقا</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="DeleteGroup" xml:space="preserve">
+    <value>حذف قالب صلاحية</value>
+  </data>
+  <data name="DeletePicture" xml:space="preserve">
+    <value>حذف الصورة</value>
+  </data>
+  <data name="DeleteRole" xml:space="preserve">
+    <value>حذف صلاحية</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>حذف مستخدم</value>
+  </data>
+  <data name="Demo" xml:space="preserve">
+    <value>نسخة تجريبية</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>تفاصيل</value>
+  </data>
+  <data name="Domain" xml:space="preserve">
+    <value>النطاق</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>المدة</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="EmailEnableSSL" xml:space="preserve">
+    <value>تمكين SSL</value>
+  </data>
+  <data name="EmailHost" xml:space="preserve">
+    <value>المضيف</value>
+  </data>
+  <data name="EmailPort" xml:space="preserve">
+    <value>المنفذ</value>
+  </data>
+  <data name="EmailSettings" xml:space="preserve">
+    <value>إعدادات البريد الإلكتروني</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="ErrorDeletingItem" xml:space="preserve">
+    <value>لايمكنك حذف هذا العنصر لإرتباطه بعمليات تم إدخالها مسبقا </value>
+  </data>
+  <data name="External" xml:space="preserve">
+    <value>من خارج المؤسسة</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>الملف</value>
+  </data>
+  <data name="Files" xml:space="preserve">
+    <value>المرفقات</value>
+  </data>
+  <data name="Forgot" xml:space="preserve">
+    <value>نسيت كلمة المرور</value>
+  </data>
+  <data name="ForgotConfirmation" xml:space="preserve">
+    <value>تأكيد طلب إعادة كلمة المرور</value>
+  </data>
+  <data name="ForgotConfirmationMessage" xml:space="preserve">
+    <value>تم إرسال الرابط ، يرجى التحقق من بريدك الإلكتروني لإعادة تعيين كلمة المرور الخاصة بك.</value>
+  </data>
+  <data name="ForgotPassword" xml:space="preserve">
+    <value>هل نسيت كلمة المرور؟</value>
+  </data>
+  <data name="Former" xml:space="preserve">
+    <value>مستخدم سابق</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="FullAccreditation" xml:space="preserve">
+    <value>الإعتماد الكلي</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>الإعدادات العامة</value>
+  </data>
+  <data name="GeneralSettings" xml:space="preserve">
+    <value>الإعدادات العامة</value>
+  </data>
+  <data name="GigaByte" xml:space="preserve">
+    <value>جيجابايت</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>قالب صلاحية</value>
+  </data>
+  <data name="Groups" xml:space="preserve">
+    <value>قوالب الصلاحيات</value>
+  </data>
+  <data name="GroupsCreate" xml:space="preserve">
+    <value>إضافة قالب صلاحية</value>
+  </data>
+  <data name="GroupsEdit" xml:space="preserve">
+    <value>تعديل قالب صلاحية</value>
+  </data>
+  <data name="Hegira" xml:space="preserve">
+    <value>هجري</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>مساعدة</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>هنا</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="Internal" xml:space="preserve">
+    <value>من داخل المؤسسة</value>
+  </data>
+  <data name="InvalidLoginAttempt" xml:space="preserve">
+    <value>اسم المستخدم أو كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="IsLockedOut" xml:space="preserve">
+    <value>لقد حاولت أكثر من 5 مرات، حسابك مغلق مؤقتاً، الرجاء المحاولة بعد 15 دقيقة</value>
+  </data>
+  <data name="IssuingReport" xml:space="preserve">
+    <value>إصدار التقرير</value>
+  </data>
+  <data name="ItemAlreadyExist" xml:space="preserve">
+    <value>هذا العنصر موجود مسبقا</value>
+  </data>
+  <data name="KiloByte" xml:space="preserve">
+    <value>كيلوبايت</value>
+  </data>
+  <data name="Link" xml:space="preserve">
+    <value>الرابط</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>الرئيسية</value>
+  </data>
+  <data name="MegaByte" xml:space="preserve">
+    <value>ميغابايت</value>
+  </data>
+  <data name="Membership" xml:space="preserve">
+    <value>العضوية</value>
+  </data>
+  <data name="Miladi" xml:space="preserve">
+    <value>ميلادي</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>الشهر</value>
+  </data>
+  <data name="MoreAnswers" xml:space="preserve">
+    <value>المزيد من الإجابات</value>
+  </data>
+  <data name="MoreFiles" xml:space="preserve">
+    <value>المزيد من المرفقات</value>
+  </data>
+  <data name="MyCommittees" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الاسم</value>
+  </data>
+  <data name="NextTopice" xml:space="preserve">
+    <value>الموضوع التالي</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="NoRecord" xml:space="preserve">
+    <value>لا يوجد عناصر</value>
+  </data>
+  <data name="NoRoles" xml:space="preserve">
+    <value>لم يتم إضافة صلاحيات بعد</value>
+  </data>
+  <data name="NotApproved" xml:space="preserve">
+    <value>لم يتم الإعتماد</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>التنبيهات</value>
+  </data>
+  <data name="NotSignatured" xml:space="preserve">
+    <value>لم يتم التوقيع</value>
+  </data>
+  <data name="NoUsersAre" xml:space="preserve">
+    <value>لا يوجد مستخدمين من</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>غير متصل</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>موافق</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>متصل</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>الترتيب</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="PasswordComparison" xml:space="preserve">
+    <value>كلمة المرور وتأكيد كلمة المرور لم يتطابقا</value>
+  </data>
+  <data name="Pending" xml:space="preserve">
+    <value>في الإنتظار</value>
+  </data>
+  <data name="PleaseSelect" xml:space="preserve">
+    <value>-- الرجاء الإختيار --</value>
+  </data>
+  <data name="PM" xml:space="preserve">
+    <value>مساءاً</value>
+  </data>
+  <data name="Policy" xml:space="preserve">
+    <value>سياسة الخصوصية</value>
+  </data>
+  <data name="Presents" xml:space="preserve">
+    <value>الحضور</value>
+  </data>
+  <data name="PrevTopice" xml:space="preserve">
+    <value>الموضوع السابق</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>الصفحة الشخصية</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>تذكرني</value>
+  </data>
+  <data name="RemoveFrom" xml:space="preserve">
+    <value>إزالة من </value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>التقارير</value>
+  </data>
+  <data name="ReportType" xml:space="preserve">
+    <value>نوع التقرير</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="ResetConfirmation" xml:space="preserve">
+    <value>تأكيد إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="ResetConfirmationMessage" xml:space="preserve">
+    <value>تم إعادة تعيين كلمة المرور الخاصة بك. يرجى النقر على {0} لتسجيل الدخول.</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>إستعادة</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>الصلاحية</value>
+  </data>
+  <data name="Roles" xml:space="preserve">
+    <value>الصلاحيات</value>
+  </data>
+  <data name="RolesCreate" xml:space="preserve">
+    <value>إضافة صلاحية</value>
+  </data>
+  <data name="RolesEdit" xml:space="preserve">
+    <value>تعديل صلاحية</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="SaveChanges" xml:space="preserve">
+    <value>حفظ التغييرات</value>
+  </data>
+  <data name="SaveMinutes" xml:space="preserve">
+    <value>حفظ المحضر</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث</value>
+  </data>
+  <data name="SeeAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>إرسال</value>
+  </data>
+  <data name="SendAccreditation" xml:space="preserve">
+    <value>إرسال للإعتماد</value>
+  </data>
+  <data name="SendSignature" xml:space="preserve">
+    <value>إرسال للتوقيع</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>تم التحويل</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Signature" xml:space="preserve">
+    <value>التوقيع</value>
+  </data>
+  <data name="Signatured" xml:space="preserve">
+    <value>تم التوقيع</value>
+  </data>
+  <data name="SignatureNotSend" xml:space="preserve">
+    <value>لم يتم الإرسال للتوقيع</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>تسجيل دخول</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="SureSaveMinutes" xml:space="preserve">
+    <value>هل أنت متأكد من انك تريد حفظ المحضر؟</value>
+  </data>
+  <data name="SystemSettings" xml:space="preserve">
+    <value>إعدادات النظام</value>
+  </data>
+  <data name="Terms" xml:space="preserve">
+    <value>الشروط والأحكام</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>إختبار</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>الوقت</value>
+  </data>
+  <data name="To" xml:space="preserve">
+    <value>إلى</value>
+  </data>
+  <data name="TopicTransfer" xml:space="preserve">
+    <value>ترحيل المواضيع</value>
+  </data>
+  <data name="TransferedTopic" xml:space="preserve">
+    <value>موضوع محول</value>
+  </data>
+  <data name="TransferRejected" xml:space="preserve">
+    <value>تم إلغاء التحويل</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>ترقية النظام</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>إرفاق</value>
+  </data>
+  <data name="Useer" xml:space="preserve">
+    <value>مستخدم</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>المستخدم</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>هذا المستخدم مسجل مسبقاً</value>
+  </data>
+  <data name="UserInformation" xml:space="preserve">
+    <value>بيانات المستخدم</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>المستخدمين</value>
+  </data>
+  <data name="UsersCreate" xml:space="preserve">
+    <value>إضافة مستخدم</value>
+  </data>
+  <data name="UsersEdit" xml:space="preserve">
+    <value>تعديل مستخدم</value>
+  </data>
+  <data name="UserType" xml:space="preserve">
+    <value>نوع المستخدم</value>
+  </data>
+  <data name="ValidationsRequired" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>عرض</value>
+  </data>
+  <data name="ViewAll" xml:space="preserve">
+    <value>عرض الكل</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>إسبوع</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>مرحبا!</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>نعم</value>
+  </data>
+  <data name="YouHaveNotifications" xml:space="preserve">
+    <value>لديك &lt;strong class="text-primary"&gt;{0}&lt;/strong&gt; تنبيه.</value>
+  </data>
+</root>
