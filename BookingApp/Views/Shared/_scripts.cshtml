@@ -1,0 +1,34 @@
+﻿<!-- Go To Top
+============================================= -->
+<div id="gotoTop" class="icon-angle-up"></div>
+<input type="hidden" id="DragTrans" value="@Resource.DragAndDrop" />
+<input type="hidden" id="SelectFiles" value="@Resource.SelectFiles" />
+<input type="hidden" id="BrowseFiles" value="@Resource.BrowseFiles" />
+<input type="hidden" id="CancelTrans" value="@Resource.Cancel" />
+
+<!-- JavaScripts
+============================================= -->
+<script src="~/js/jquery.js"></script>
+<script src="~/js/plugins.min.js"></script>
+<script src="~/js/components/bs-filestyle.js"></script>
+<!-- Date & Time Picker JS -->
+<script src="~/js/components/moment.js"></script>
+<script src="~/js/components/timepicker.js"></script>
+<script src="~/js/components/datepicker.js"></script>
+<!-- Footer Scripts
+============================================= -->
+<script src="~/js/functions.js"></script>
+<script src="~/js/PhoneNumberTemp/intlTelInput.js"></script>
+
+<script>
+        var input = document.querySelector("#phone");
+        window.intlTelInput(input, {
+            hiddenInput: "PhoneNumber",
+            utilsScript: "@Url.Content("~/js/PhoneNumberTemp/utils.js?1613236686837")" // just for formatting/placeholders etc
+        });
+    function updateMenu(elementId) {
+        $(".mlink").removeClass("mlink-active");
+        $("#" + elementId).addClass("mlink-active");
+    }
+
+</script>

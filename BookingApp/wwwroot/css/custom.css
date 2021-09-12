@@ -1,0 +1,44 @@
+/* ----------------------------------------------------------------
+	Custom CSS
+
+	Add all your Custom Styled CSS here for New Styles or
+	Overwriting Default Theme Styles for Better Handling Updates
+-----------------------------------------------------------------*/
+
+
+.fc-starttime, .fc-endtime {
+	display: none !important
+}
+.fc-calendar-event {
+	text-align: center
+}
+
+.reservation-section .nav-link {
+    position: relative;
+    padding: 15px 20px;
+    font-size: 20px;
+    background-color: #FFF;
+    margin-bottom: 10px;
+    box-shadow: 3px 8px 30px 4px rgba(0, 0, 0, 0.1);
+    font-family: "Sansita", sans-serif;
+    border-left: 5px solid transparent;
+    overflow: hidden;
+    color: #444;
+    transition: all .3s ease;
+}
+
+.reservation-section .nav-pills .nav-link.active {
+    box-shadow: 3px 8px 30px 4px rgba(0, 0, 0, 0.2);
+    border-left-color: #7E9680;
+    background-color: #FFF;
+    color: #7E9680;
+}
+
+
+
+.reservation-section .nav-link.active::after,
+.reservation-section .nav-link:hover::after {
+    opacity: .6;
+    background-position: 100% 70%;
+}
+

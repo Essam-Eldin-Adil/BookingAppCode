@@ -1,0 +1,33 @@
+﻿<html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="@HttpContextAccessor.HttpContext.Session.GetString("Language")">
+<partial name="_head" />
+<body class="stretched">
+
+    <!-- Document Wrapper
+    ============================================= -->
+    <div id="wrapper">
+
+        <partial name="_headerAccount" />
+        <section id="content">
+            <div class="content-wrap">
+                <div class="container">
+                    <div class="card rounded-top bg-white border-0 w-100 shadow p-3">
+                        @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
+                        {
+                            <div class="style-msg @TempData["AlertType"].ToString()msg">
+                                <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            </div>
+                        }
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </section><!-- #content end -->
+        <partial name="_footerAccount" />
+
+
+    </div><!-- #wrapper end -->
+    <partial name="_scripts" />
+    @RenderSection("scripts", required: false)
+</body>
+</html>

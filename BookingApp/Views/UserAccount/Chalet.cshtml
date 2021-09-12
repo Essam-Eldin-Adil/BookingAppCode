@@ -1,0 +1,102 @@
+﻿@model Data.Models.Chalets.Chalet
+
+@{
+    ViewData["Title"] = "Chalet";
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.Id;
+}
+@section css
+{
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&display=swap" rel="stylesheet" type="text/css" />
+}
+@if (Model.Id == Guid.Empty)
+{
+    <h4>@Resource.NewChalet</h4>
+}
+else
+{
+    <h4>@Model.ChaletName | @Resource.Edit</h4>
+}
+
+<partial name="_chaletFeilds" model="Model" />
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMvk54X0cJtOPiSu60rk-OdX8alzz7Htk&callback=initMap"
+        type="text/javascript"></script>
+@section scripts{
+    <script>
+
+        updateMenu("chaletInfo");
+
+        function getNeighborhood(element) {
+            $.ajax({
+                url: "@Url.Action("GetNeighborhoods")",
+                data: { cityId: $(element).val() },
+                dataType: "json",
+                type: "GET",
+                success: function(data) {
+                    var options = "<option value=''>Select Option</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        options += `<option value="${data[i].id}">${data[i].name}</option>`;
+                    }
+                    $("#NeighborhoodId").html("");
+                    $("#NeighborhoodId").append(options);
+                }
+            });
+        }
+
+        let map, infoWindow;
+
+
+        function initMap() {
+            var lat = 13.07403,
+                lng = 32.90783,
+                latlng = new google.maps.LatLng(lat, lng),
+                image = 'http://maps.google.com/mapfiles/kml/paddle/wht-circle.png';
+            var option = {
+                center: { lat: lat, lng: lng },
+                zoom: 15,
+                mapTypeId: "satellite",
+                panControl: true,
+                panControlOptions: {
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: google.maps.ZoomControlStyle.LARGE,
+                    position: google.maps.ControlPosition.TOP_left
+                }
+            };
+            map = new google.maps.Map(document.getElementById("gmap"), option);
+            var infowindow = new google.maps.InfoWindow();
+            var postion  = new google.maps.LatLng(0, 0);
+            if ($("#Latitude").val() !== "") {
+                var l = (Number($("#Latitude").val())).toFixed(5);
+                var n = (Number($("#Longitude").val())).toFixed(5);
+                postion = new google.maps.LatLng(l, n);
+                console.log(new google.maps.LatLng(l, n));
+            }
+
+            var marker = new google.maps.Marker({
+                position: postion,
+                map: map,
+                icon: image
+            });
+
+            google.maps.event.addListener(map, 'click', function (event) {
+                //alert(event.latLng.lat());
+                //$('.MapLon').val(event.latLng.lng());
+                infowindow.close();
+                moveMarker(event.latLng.lat(), event.latLng.lng());
+            });
+
+            function moveMarker(lat, lng) {
+                var latlng = new google.maps.LatLng(lat, lng);
+                marker.setIcon(image);
+                marker.setPosition(latlng);
+                infowindow.setContent(latlng + "");
+                infowindow.open(map, marker);
+                $("#Latitude").val(lng);
+                $("#Longitude").val(lat);
+            }
+        }
+    </script>
+}

@@ -1,0 +1,95 @@
+﻿@using Microsoft.VisualBasic
+@model List<Data.Models.Chalets.Reservation>
+@{
+    ViewData["Title"] = Resource.Reservations;
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+}
+@section css{
+    <link rel="stylesheet" href="~/css/calendar.css" type="text/css" />
+}
+
+<div class="events-calendar">
+    <div class="events-calendar-header clearfix">
+        <h2>@Resource.ReservationsCalender</h2>
+        <h3 class="calendar-month-year">
+            <span id="calendar-month" class="calendar-month"></span>
+            <span id="calendar-year" class="calendar-year"></span>
+            <nav>
+                <span id="calendar-prev" class="calendar-prev"><i class="icon-chevron-left"></i></span>
+                <span id="calendar-next" class="calendar-next"><i class="icon-chevron-right"></i></span>
+                <span id="calendar-current" class="calendar-current" title="Got to current date"><i class="icon-reload"></i></span>
+            </nav>
+        </h3>
+    </div>
+    <div id="calendar" class="fc-calendar-container"></div>
+</div>
+
+
+@section scripts{
+    <script src="~/js/jquery.calendario.js"></script>
+    @*<script src="~/js/events-data.js"></script>*@
+
+<script>
+
+        getData(@DateTime.Now.Year, @DateTime.Now.Month);
+
+        function getData(year, month) {
+            $.ajax({
+                url: `@Url.Action("GetCalenderData")`,
+                data: {
+                    chaletId: '@ViewBag.chaletId',
+                    year: year,
+                    month: month
+                },
+                dataType: "Json",
+                type: "GET",
+                success: function(data) {
+                    var dataCal = {};
+                    var strData = "";
+                    for (let i = 0; i < data.length; i++) {
+                        dataCal[data[i].date] = data[i].description;
+                    }
+                    cal.setData(dataCal);
+                }
+            });
+        }
+
+        var cal = $('#calendar').calendario({
+            onDayClick: function($el, $contentEl, dateProperties) {
+                for (var key in dateProperties) {
+                    console.log(key + ' = ' + dateProperties[key]);
+                }
+            },
+            startIn: 1,
+            caldata: null,
+            weeks: ['@Resource.Sunday', '@Resource.Monday', '@Resource.Tuesday', '@Resource.Wednesday', '@Resource.Thursday', '@Resource.Friday', '@Resource.Saturday'],
+            weekabbrs: ['@Resource.Sun', '@Resource.Mon', '@Resource.Tues', '@Resource.Wed', '@Resource.Thurs', '@Resource.Fri', '@Resource.Sat'],
+            months: ['@Resource.January', '@Resource.February', '@Resource.March', '@Resource.April', '@Resource.May', '@Resource.June', '@Resource.July', '@Resource.August', '@Resource.September', '@Resource.October', '@Resource.November', '@Resource.December'],
+            monthabbrs: ['@Resource.Jan', '@Resource.Feb', '@Resource.Mar', '@Resource.Apr', '@Resource.May', '@Resource.Jun', '@Resource.Jul', '@Resource.Aug', '@Resource.Sep', '@Resource.Oct', '@Resource.Nov', '@Resource.Dec'],
+        });
+        $month = $('#calendar-month').html(cal.getMonthName()),
+            $year = $('#calendar-year').html(cal.getYear());
+
+        $('#calendar-next').on('click',
+            function() {
+                cal.gotoNextMonth(updateMonthYear);
+
+            });
+        $('#calendar-prev').on('click',
+            function() {
+                cal.gotoPreviousMonth(updateMonthYear);
+            });
+        $('#calendar-current').on('click',
+            function() {
+                cal.gotoNow(updateMonthYear);
+            });
+
+        function updateMonthYear() {
+            $month.html(cal.getMonthName());
+            $year.html(cal.getYear());
+            getData(cal.getYear(), cal.getMonth());
+        };
+
+        updateMenu("reservation-calender");
+</script>
+}

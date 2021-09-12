@@ -1,0 +1,30 @@
+﻿@model UserAccountViewModel
+@{
+    ViewData["Title"] = "My Account";
+    Layout = "~/Views/Shared/_UserAccountLayout.cshtml";
+}
+<div class="center"><img src="~/images/logo.png" style="width:150px" /></div>
+<div class="row">
+    <div class="col-md-8 border-right">
+        <h4>@Resource.MyAccount</h4>
+        <partial name="_myInfo" model="@Model.User" />
+    </div>
+    <div class="col-md-4">
+        <h4>@Resource.ChangePassword</h4>
+        <partial name="_resetPassword" model="@Model.ResetPasswordViewModel" />
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: "today",
+                todayHighlight: true,
+                format: "mm/dd/yyyy",
+            });
+        });
+    </script>
+}

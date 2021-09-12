@@ -1,0 +1,88 @@
+﻿@model Data.ViewModels.UnitsViewModel
+
+@{
+    ViewData["Title"] = "Chalet";
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.Chalet.Id;
+}
+<h4>@Resource.Chalets | @Model.Chalet.ChaletName</h4>
+<!--<div class="border p-3 mb-4">
+    <div class="row">-->
+        @*<h6 class="col-md-6">@Model.Chalet.ChaletName</h6>
+        <h6 class="col-md-6">
+            @if (Model.Chalet.ViewStatus)
+            {
+                <span class="text-success">@Resource.ViewStatusShown</span>
+            }
+            else
+            {
+                <span class="text-danger">@Resource.ViewStatusHidden</span>
+            }
+        </h6>
+        <h6 class="col-md-12">
+            @Model.Chalet.Description
+        </h6>*@
+
+        @*@foreach (var img in Model.ChaletImages)
+        {
+            <div class="col-md-2 entry">
+                <div class="entry-image">
+                    <a href="@Url.Content("~")/@img.File.FileContent" data-lightbox="image"><img src="@Url.Content("~")/@img.File.FileContentMin" alt="Standard Post with Image"></a>
+                        
+                </div>
+            </div>
+        }*@
+    <!--</div>
+</div>-->
+
+
+<a asp-action="Unit" asp-route-chaletId="@Model.Chalet.Id" class="btn btn-primary btn-sm"><i class="icon-plus-circle"></i> @Resource.AddNewUnit</a>
+<table class="table table-striped table-responsive table-bordered w-100 mt-2">
+    <thead>
+    <tr>
+        <th colspan="4">
+            @Resource.Units
+        </th>
+    </tr>
+    <tr>
+        <th>@Resource.UnitName</th>
+        <th>@Resource.UnitCount</th>
+        <th>@Resource.ViewStatus</th>
+        <th>@Resource.Edit</th>
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var modelUnit in Model.Units.Where(c=>!c.IsSimilar))
+        {
+            <tr>
+                <td>@modelUnit.Name - @modelUnit.Code</td>
+                <td>@modelUnit.Count</td>
+                <td>
+                    @if(modelUnit.ViewStatus)
+                    {
+                            <span class="text-success">@Resource.ViewStatusShown</span>
+                        }
+                    else
+                    {
+                        <span class="text-danger">@Resource.ViewStatusHidden</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Unit" asp-route-id="@modelUnit.Id" asp-route-chaletId="@modelUnit.ChaletId" class="btn btn-primary btn-sm"><i class="icon-edit"></i></a>
+                </td>
+            </tr>
+        }
+    @if (Model.Units.Count==0)
+    {
+        <tr>
+            <th colspan="4" class="text-center">@Resource.NoUnits</th>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@section scripts{
+    <script>
+        updateMenu("mychalet");
+    </script>
+}

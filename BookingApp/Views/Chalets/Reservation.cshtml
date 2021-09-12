@@ -1,0 +1,248 @@
+﻿@using Data.Models.Chalets.ChaletDetails
+@model Data.ViewModels.ReservationViewModel
+@{
+    ViewData["Title"] = "Reservation";
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.Chalet.Id;
+    var image = "";
+    var selectedUnitImage = "";
+    if (Model.SelectedUnit != null)
+    {
+        if (Model.SelectedUnit.UnitImages.Count > 0)
+        {
+            var unitImage = Model.SelectedUnit.UnitImages.OrderByDescending(c => c.IsPrimary).FirstOrDefault();
+            if (unitImage != null)
+            {
+                selectedUnitImage = Url.Content("~/" + unitImage.File.FileContentMin);
+            }
+        }
+    }
+
+}
+<div class="reservation-section">
+    <h3>@Resource.ReservationsCalender</h3>
+    <div class="row justify-content-between">
+        <div class="col-lg-4 col-md-5 mt-4 mt-md-0">
+
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                @foreach (var reservationViewModel in Model.ReservationModels)
+                {
+                    var active = "";
+                    image = "";
+                    if (Model.SelectedUnit != null)
+                    {
+                        if (reservationViewModel.Unit.Id == Model.SelectedUnit.Id)
+                        {
+                            active = "active";
+                        }
+                    }
+
+                    if (reservationViewModel.Unit.UnitImages.Count > 0)
+                    {
+                        var chaletImage = reservationViewModel.Unit.UnitImages.OrderByDescending(c => c.IsPrimary).FirstOrDefault();
+                        image = Url.Content("~/" + chaletImage.File.FileContentMin);
+                        <input type="hidden" id="@reservationViewModel.Unit.Id" value="@image" />
+                    }
+                    if (reservationViewModel.Available)
+                    {
+                        <a class="nav-link @active" onclick="SelectUnit('@reservationViewModel.Unit.Name', '@reservationViewModel.Unit.Description', '@reservationViewModel.Unit.Id', $('#@reservationViewModel.Unit.Id').val())" id="sc-tue-tab" data-toggle="pill" href="#sc-tue" role="tab" aria-controls="sc-tue" aria-selected="false">@reservationViewModel.Unit.Name</a>
+                    }
+                    else
+                    {
+                        <a class="nav-link">@reservationViewModel.Unit.Name - <small class="text-danger">@Resource.NotAvailable</small></a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-8">
+            @if (Model.SelectedUnit != null)
+            {
+                <div class="row pt-3 pb-3">
+                    <div class="col-auto">
+                        <div class="entry-image mb-0">
+                            <img id="unitImg" style="width:100px" src="@selectedUnitImage" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image">
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-12">
+                        <div class="entry-title">
+                            <h4 id="unitName">
+                                @Model.SelectedUnit.Name
+                            </h4>
+                            <h4 id="unitDescription"><span class="text-muted">@Model.SelectedUnit.Description</span></h4>
+                        </div>
+                        <div id="unitRate">
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star-half-full"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-12 text-right">
+                        <button class="btn btn-primary btn-sm col-12" data-toggle="modal" data-target="#myModal">@Resource.AddReservation</button>
+                    </div>
+                </div>
+
+            }
+            else
+            {
+                <h4 class="text-danger text-center">NoChaletInThisDay</h4>
+            }
+            <hr />
+
+            @foreach (var reservation in Model.Reservations.Where(c => c.Status == (int)Enums.Status.Confirmed).OrderBy(c => c.ReservationNumber))
+            {
+                image = "";
+                if (reservation.Unit.Chalet.ChaletImages.Count > 0)
+                {
+                    var chaletImage = reservation.Unit.Chalet.ChaletImages.OrderByDescending(c => c.IsPrimary).FirstOrDefault();
+                    image = Url.Content("~/" + chaletImage.File.FileContentMin);
+                }
+                <div class="entry col-12 border">
+                    <div class="grid-inner no-gutters">
+                        <div class="row pt-3 pb-3">
+                            <div class="col-md-6 col-lg-6 col-sm-12">
+                                <div class="entry-title">
+                                    <span>@Resource.ReservationNumber: </span><b>@reservation.ReservationNumber</b>
+                                    <h4>@reservation.Unit.Chalet.ChaletName</h4>
+                                    <h4 class="text-muted">@reservation.Unit.Name</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12 text-right">
+                                <span class="text-success mb-3">@Resource.Confirmed</span>
+                                <br />
+                                <button class="btn btn-primary btn-sm mt-3">@Resource.Details</button>
+                                <button class="btn btn-danger btn-sm mt-3">@Resource.Delete</button>
+                            </div>
+                            <div class="col-md-3 border-left">
+                                <div class="row">
+                                    <div class="col-md-6 p-0 text-center">
+                                        @{
+                                            var date = reservation.DateTo - reservation.DateFrom;
+                                        }
+                                        @if (date.Days > 0)
+                                        {
+                                            <p class="mb-0">@Resource.From @reservation.DateFrom.ToString("dd-MM")</p>
+                                            <p class="mb-0">@Resource.To @reservation.DateTo.ToString("dd-MM")</p>
+                                            <p class="mb-0">@reservation.DateFrom.Year</p>
+                                        }
+                                        else
+                                        {
+                                            <h3 class="mb-0">@reservation.DateFrom.ToString("dd")</h3>
+                                            <p class="mb-0">@reservation.DateTo.ToString("MM/yyyy")</p>
+                                            <p class="mb-0">
+                                                @switch (reservation.DateFrom.DayOfWeek)
+                                                {
+                                                    case DayOfWeek.Friday:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                    case DayOfWeek.Monday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Sunday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Saturday:
+                                                        <span>@Resource.Saturday</span>
+                                                        break;
+                                                    case DayOfWeek.Wednesday:
+                                                        <span>@Resource.Wednesday</span>
+                                                        break;
+                                                    case DayOfWeek.Thursday:
+                                                        <span>@Resource.Thursday</span>
+                                                        break;
+                                                    case DayOfWeek.Tuesday:
+                                                        <span>@Resource.Tuesday</span>
+                                                        break;
+                                                    default:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                }
+                                            </p>
+                                        }
+
+                                    </div>
+                                    <div class="col-md-6 p-0 text-center">
+                                        <i style="font-size: 60px;" class="icon-calendar-1 text-lg-center"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@if (Model.SelectedUnit != null)
+{
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-body">
+                <form asp-action="AddReservation" method="post" class="was-validated modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">@Resource.Reservations</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h5>@Resource.AddReservationFor <span class="mr-2">@Model.SelectedUnit.Name</span> @Resource.ForDay <span class="mr-2">@Model.Date.ToString("dd-MM-yyyy")</span></h5>
+                        <input type="hidden" name="unitId" id="selectedUnitId" value="@Model.SelectedUnit.Id" />
+                        <input type="hidden" name="date" id="selectedDate" value="@Model.Date.ToString("MM-dd-yyyy")" />
+                        <input type="hidden" name="chaletId" value="@Model.SelectedUnit.ChaletId" />
+                        <div class="form-group">
+                            <label for="FirstName" class="control-label">@Resource.FirstName</label>
+                            <input type="text" id="FirstName" name="FirstName" class="form-control" required="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="LastName" class="control-label">@Resource.LastName</label>
+                            <input type="text" id="LastName" name="LastName" class="form-control" required="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="PhoneNumber" class="control-label">@Resource.PhoneNumber</label>
+                            <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" required="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ReservationPrice" class="control-label">@Resource.PricePerDay</label>
+                            <input type="number" id="ReservationPrice" name="ReservationPrice" class="form-control" required="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="Description" class="control-label">@Resource.Note</label>
+                            <textarea rows="3" name="Description" id="Description" class="form-control" placeholder="@Resource.Note"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                        <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+
+    <script>
+        updateMenu("reservation-calender");
+
+        function SelectUnit(name, description, id, img) {
+
+            $("#unitName").text(name);
+            $("#unitDescription").text(description);
+            $("#selectedUnitId").val(id);
+            if (img == undefined) {
+                $("#unitImg").prop("src", '@Url.Content("~/Images/noimg.jpg")');
+            } else {
+                $("#unitImg").prop("src", img);
+            }
+            $("#FirstName").val('');
+            $("#LastName").val('');
+            $("#PhoneNumber").val('');
+            $("#ReservationPrice").val('');
+            $("#Description").val('');
+        }
+    </script>
+}

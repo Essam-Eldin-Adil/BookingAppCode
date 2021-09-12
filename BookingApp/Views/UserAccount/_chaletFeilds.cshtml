@@ -1,0 +1,115 @@
+﻿@model Data.Models.Chalets.Chalet
+<form asp-action="SaveChalet" method="post" class="was-validated" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Order" class="form-control" />
+    <input type="hidden" asp-for="CreatedDate" class="form-control" />
+    <input type="hidden" asp-for="Id" class="form-control" />
+    <input type="hidden" asp-for="Longitude" class="form-control" />
+    <input type="hidden" asp-for="Latitude" class="form-control" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-row">
+        <div class="form-group col-md-7">
+            <label asp-for="ChaletName" class="control-label"></label>
+            <input required="" asp-for="ChaletName" class="form-control" />
+            <span asp-validation-for="ChaletName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-5">
+            <label asp-for="ViewStatus" class="control-label"></label>
+            <select asp-for="ViewStatus" class="form-control">
+                @if (Model.ViewStatus)
+                {
+                    <option value="true" selected="selected">@Resource.ViewStatusShown</option>
+                    <option value="false">@Resource.ViewStatusHidden</option>
+                }
+                else
+                {
+                    <option value="true">@Resource.ViewStatusShown</option>
+                    <option value="false" selected="selected">@Resource.ViewStatusHidden</option>
+                }
+            </select>
+        </div>
+    </div>
+    
+    
+
+    <div class="form-row">
+
+        <div class="form-group col-md-4">
+            <label asp-for="CityId" class="control-label"></label>
+            <select required="" onchange="getNeighborhood(this)" asp-for="CityId" class="form-control" asp-items="ViewBag.Cities">
+                <option value="" selected>Select Option</option>
+            </select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="NeighborhoodId" class="control-label"></label>
+            <select required="" asp-for="NeighborhoodId" class="form-control" asp-items="ViewBag.Neighborhoods">
+                <option value="" selected>Select Option</option>
+            </select>
+            <span asp-validation-for="NeighborhoodId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="Direction" class="control-label"></label>
+            <select required="" asp-for="Direction" class="form-control">
+                <option value="" selected>Select Option</option>
+                <option value="@((int)Domain.Enums.Direction.East)">@(Resource.East)</option>
+                <option value="@((int)Domain.Enums.Direction.West)">@(Resource.West)</option>
+                <option value="@((int)Domain.Enums.Direction.South)">@(Resource.South)</option>
+                <option value="@((int)Domain.Enums.Direction.North)">@(Resource.North)</option>
+                <option value="@((int)Domain.Enums.Direction.Northeast)">@(Resource.Northeast)</option>
+                <option value="@((int)Domain.Enums.Direction.NorthWest)">@(Resource.NorthWest)</option>
+                <option value="@((int)Domain.Enums.Direction.Southeast)">@(Resource.Southeast)</option>
+                <option value="@((int)Domain.Enums.Direction.Southwest)">@(Resource.Southwest)</option>
+            </select>
+            <span asp-validation-for="Direction" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description" class="control-label"></label>
+        <textarea rows="7" asp-for="Description" class="form-control" placeholder="Add the chalet description..."></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" name="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div id="gmap" style="height:300px"></div>
+
+    <div class="form-group bottommargin">
+        <h4 class="mb-2">@Resource.CHALETIMAGES</h4>
+        <div class="widget_links mb-2">
+            <ul>
+                <b>@Resource.ConditionOfAddImages:</b>
+                <li>@Resource.ImageCountDontLessThan4</li>
+                <li>@Resource.MostAddOutdoorPatio</li>
+                <li>@Resource.MostAddExternalCouncil</li>
+                <li>@Resource.MostAddSwimmingPoolImage</li>
+                <li>@Resource.MostAddSleepRooms</li>
+            </ul>
+        </div>
+
+
+        <div class="row" data-big="3" data-lightbox="gallery">
+            @foreach (var img in Model.ChaletImages)
+            {
+                <div class="col-md-2 entry">
+                    <div class="entry-image">
+                        <a href="@Url.Content("~")/@img.File.FileContent" data-lightbox="image"><img src="@Url.Content("~")/@img.File.FileContentMin" alt="Standard Post with Image"></a>
+                        <div>
+                            <a href="~/UserAccount/RemoveChaletImage/@img.FileId?chaletId=@img.ChaletId" class="btn btn-outline-danger btn-sm mt-1"><i class="icon-trash"></i></a>
+                            @if (!img.IsPrimary)
+                            {
+                                <a href="~/UserAccount/RemoveChaletImage/@img.FileId?chaletId=@img.ChaletId" class="btn btn-outline-primary btn-sm mt-1"><i class="icon-image"></i></a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <input id="input-3" name="formFiles[]" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-show-preview="true">
+    </div>
+    <div class="form-group">
+        <input type="submit" value="@Resource.Save" class="btn btn-primary" />
+    </div>
+</form>
+

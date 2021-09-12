@@ -1,0 +1,203 @@
+﻿@model List<Data.Models.Chalets.Reservation>
+@{
+    ViewData["Title"] = Resource.Reservations;
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+}
+
+<h4>@Resource.Reservations</h4>
+<div class="tabs tabs-alt tabs-justify clearfix" id="tab-10">
+
+    <ul class="tab-nav clearfix">
+        <li><a href="#upcomingReservation">@Resource.UpcomingReservations</a></li>
+        <li><a href="#oldReservation">@Resource.OldReservations</a></li>
+    </ul>
+
+    <div class="tab-container">
+        <div class="tab-content clearfix" id="upcomingReservation">
+            @foreach (var reservation in Model.Where(c => c.Status == (int)Enums.Status.New).OrderBy(c => c.ReservationNumber))
+            {
+                var image = "";
+                if (reservation.Unit.Chalet.ChaletImages.Count > 0)
+                {
+                    var chaletImage = reservation.Unit.Chalet.ChaletImages.OrderByDescending(c => c.IsPrimary).FirstOrDefault();
+                    image = Url.Content("~/" + chaletImage.File.FileContentMin);
+                }
+                <div class="entry col-12 border">
+                    <div class="grid-inner no-gutters">
+                        <div class="row pt-3 pb-3">
+                            <div class="col-auto">
+                                <div class="entry-image mb-0">
+                                    <a href=""><img style="width:100px" src="@image" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image"></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-12">
+                                <div class="entry-title">
+                                    <span>@Resource.ReservationNumber: </span><b>@reservation.ReservationNumber</b>
+                                    <h4>@reservation.Unit.Chalet.ChaletName</h4>
+                                    <h4 class="text-muted">@reservation.Unit.Name</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12 text-right">
+                                <button class="btn btn-success btn-sm w-50 mb-3">@Resource.Confirmed</button>
+                                <button class="btn btn-primary btn-sm w-50">@Resource.ReservationDetails</button>
+                            </div>
+                            <div class="col-md-3 border-left">
+                                <div class="row">
+                                    <div class="col-md-8 border-right text-center">
+                                        @{
+                                            var date = reservation.DateTo - reservation.DateFrom;
+                                        }
+                                        @if (date.Days > 0)
+                                        {
+                                            <p class="mb-0">@Resource.From @reservation.DateFrom.ToString("dd-MM")</p>
+                                            <p class="mb-0">@Resource.To @reservation.DateTo.ToString("dd-MM")</p>
+                                            <p class="mb-0">@reservation.DateFrom.Year</p>
+                                        }
+                                        else
+                                        {
+                                            <h3 class="mb-0">@reservation.DateFrom.ToString("dd")</h3>
+                                            <p class="mb-0">@reservation.DateTo.ToString("MM/yyyy")</p>
+                                            <p class="mb-0">
+                                                @switch (reservation.DateFrom.DayOfWeek)
+                                                {
+                                                    case DayOfWeek.Friday:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                    case DayOfWeek.Monday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Sunday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Saturday:
+                                                        <span>@Resource.Saturday</span>
+                                                        break;
+                                                    case DayOfWeek.Wednesday:
+                                                        <span>@Resource.Wednesday</span>
+                                                        break;
+                                                    case DayOfWeek.Thursday:
+                                                        <span>@Resource.Thursday</span>
+                                                        break;
+                                                    case DayOfWeek.Tuesday:
+                                                        <span>@Resource.Tuesday</span>
+                                                        break;
+                                                    default:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                }
+                                            </p>
+                                        }
+
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <i style="font-size: 60px;" class="icon-calendar-1 text-lg-center"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!Model.Any(c => c.Status == (int)Enums.Status.New))
+            {
+                <div class="text-center">@Resource.NoRecord</div>
+            }
+        </div>
+        <div class="tab-content clearfix" id="oldReservation">
+            @foreach (var reservation in Model.Where(c => c.Status == (int)Enums.Status.Confirmed))
+            {
+                var image = "";
+                if (reservation.Unit.Chalet.ChaletImages.Count > 0)
+                {
+                    var chaletImage = reservation.Unit.Chalet.ChaletImages.OrderByDescending(c => c.IsPrimary).FirstOrDefault();
+                    image = Url.Content("~/" + chaletImage.File.FileContentMin);
+                }
+                <div class="entry col-12 border">
+                    <div class="grid-inner no-gutters">
+                        <div class="row pt-3 pb-3">
+                            <div class="col-auto">
+                                <div class="entry-image mb-0">
+                                    <a href=""><img style="width:100px" src="@image" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image"></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4 col-sm-12">
+                                <div class="entry-title">
+                                    <span>@Resource.ReservationNumber: </span><b>@reservation.ReservationNumber</b>
+                                    <h4>@reservation.Unit.Chalet.ChaletName</h4>
+                                    <h4 class="text-muted">@reservation.Unit.Name</h4>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-12 text-right">
+                                <button class="btn btn-success btn-sm w-50 mb-3">@Resource.Confirmed</button>
+                                <button class="btn btn-primary btn-sm w-50">@Resource.ReservationDetails</button>
+                            </div>
+                            <div class="col-md-3 border-left">
+                                <div class="row">
+                                    <div class="col-md-8 border-right text-center">
+                                        @{
+                                            var date = reservation.DateTo - reservation.DateFrom;
+                                        }
+                                        @if (date.Days > 0)
+                                        {
+                                            <p class="mb-0">@Resource.From @reservation.DateFrom.ToString("dd-MM")</p>
+                                            <p class="mb-0">@Resource.To @reservation.DateTo.ToString("dd-MM")</p>
+                                            <p class="mb-0">@reservation.DateFrom.Year</p>
+                                        }
+                                        else
+                                        {
+                                            <h3 class="mb-0">@reservation.DateFrom.ToString("dd")</h3>
+                                            <p class="mb-0">@reservation.DateTo.ToString("MM/yyyy")</p>
+                                            <p class="mb-0">
+                                                @switch (reservation.DateFrom.DayOfWeek)
+                                                {
+                                                    case DayOfWeek.Friday:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                    case DayOfWeek.Monday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Sunday:
+                                                        <span>@Resource.Monday</span>
+                                                        break;
+                                                    case DayOfWeek.Saturday:
+                                                        <span>@Resource.Saturday</span>
+                                                        break;
+                                                    case DayOfWeek.Wednesday:
+                                                        <span>@Resource.Wednesday</span>
+                                                        break;
+                                                    case DayOfWeek.Thursday:
+                                                        <span>@Resource.Thursday</span>
+                                                        break;
+                                                    case DayOfWeek.Tuesday:
+                                                        <span>@Resource.Tuesday</span>
+                                                        break;
+                                                    default:
+                                                        <span>@Resource.Friday</span>
+                                                        break;
+                                                }
+                                            </p>
+                                        }
+
+                                    </div>
+                                    <div class="col-md-4 text-center">
+                                        <i style="font-size: 60px;" class="icon-calendar-1 text-lg-center"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (!Model.Any(c => c.Status == (int)Enums.Status.Confirmed))
+            {
+                <div class="text-center">@Resource.NoRecord</div>
+            }
+        </div>
+    </div>
+
+</div>
+@section scripts{
+    <script>
+        updateMenu("reservations");
+    </script>
+}

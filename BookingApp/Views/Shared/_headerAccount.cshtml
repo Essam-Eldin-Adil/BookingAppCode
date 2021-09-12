@@ -1,0 +1,78 @@
+﻿<!-- Header
+============================================= -->
+<header id="header" class="full-header">
+    <div id="header-wrap">
+        <div class="container">
+            <div class="header-row">
+
+                <!-- Logo
+                ============================================= -->
+                <div id="logo">
+                    <a asp-controller="Home" asp-action="Index" class="standard-logo" data-dark-logo="~/images/logo.png"><img src="~/images/logo.png" alt="@Domain.Setting.Get(Context,"AppName")"></a>
+                    <a asp-controller="Home" asp-action="Index" class="retina-logo" data-dark-logo="~/images/logo.png"><img src="~/images/logo.png" alt="@Domain.Setting.Get(Context,"AppName")"></a>
+                </div><!-- #logo end -->
+                <div class="header-misc">
+                    <div id="top-search" class="header-misc-icon">
+                        @if (HttpContextAccessor.HttpContext?.Session.GetString("LanguageName")==Resource.Arabic)
+                        {
+                        <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-code="en-US" asp-route-flag="flag-icon-us" asp-route-direction="LTR" asp-route-name="@Resource.English" class="d-inline btn btn-outline-success">@Resource.English <img style="width: 30px;" src="~/images/flags/us.png" alt="@Resource.Image"/></a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Home" asp-action="ChangeLanguage" asp-route-code="ar-EG" asp-route-flag="flag-icon-sa" asp-route-direction="RTL" asp-route-name="@Resource.Arabic" class="d-inline btn btn-outline-success">@Resource.Arabic <img style="width: 30px;" src="~/images/flags/sa.png" alt="@Resource.Image"/></a>
+                        }
+                    </div>
+                    <div id="top-cart" class="header-misc-icon d-none d-sm-block">
+                        <a href="#" id="top-cart-trigger"><i class="icon-bell"></i><span class="top-cart-number">5</span></a>
+                        <div class="top-cart-content">
+                            <div class="top-cart-title">
+                                <h4>Notifications</h4>
+                            </div>
+                            <div class="top-cart-items">
+                                <div class="top-cart-item">
+                                    <div class="top-cart-item-image">
+                                        <a href="#"><img src="images/shop/small/1.jpg" alt="image"/></a>
+                                    </div>
+                                    <div class="top-cart-item-desc">
+                                        <div class="top-cart-item-desc-title">
+                                            <a href="#">Blue Round-Neck Tshirt with a Button</a>
+                                        </div>
+                                        <div class="top-cart-item-quantity">x 2</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="top-cart-action">
+                                <a href="#" class="button button-3d button-small m-0">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div><!-- #top-cart end -->
+
+                </div>
+                <div id="primary-menu-trigger">
+                    <svg class="svg-trigger" viewBox="0 0 100 100"><path d="m 30,33 h 40 c 3.722839,0 7.5,3.126468 7.5,8.578427 0,5.451959 -2.727029,8.421573 -7.5,8.421573 h -20"></path><path d="m 30,50 h 40"></path><path d="m 70,67 h -40 c 0,0 -7.5,-0.802118 -7.5,-8.365747 0,-7.563629 7.5,-8.634253 7.5,-8.634253 h 20"></path></svg>
+                </div>
+                <!-- Primary Navigation
+                ============================================= -->
+                <nav class="primary-menu">
+
+                    <ul class="menu-container">
+                        <li class="menu-item">
+                            <a class="menu-link" href="~/Home/Index"><div>@Resource.Home</div></a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="~/UserAccount/Chalets"><div>@Resource.MyChalets</div></a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="~/UserAccount/Account"><div>@Resource.MyAccount</div></a>
+                        </li>
+                        <li class="menu-item">
+                            <a class="menu-link" href="~/UserAccount/Account"><div>@Resource.Logout</div></a>
+                        </li>
+                    </ul>
+
+                </nav><!-- #primary-menu end -->
+            </div>
+        </div>
+    </div>
+    <div class="header-wrap-clone"></div>
+</header><!-- #header end -->

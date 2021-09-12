@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/BookingApp/wwwroot/_uploads/UnitImages
+/BookingApp/wwwroot/_uploads/ChaletImages

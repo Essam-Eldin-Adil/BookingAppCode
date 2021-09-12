@@ -1,0 +1,352 @@
+﻿@model UnitViewModel
+
+@{
+    ViewData["Title"] = "Chalet";
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.ChaletId;
+}
+<form asp-action="SaveUnit" method="post" class="was-validated" enctype="multipart/form-data">
+
+    <partial name="_unitFeileds" model="Model" />
+    <hr class="mt-5" />
+    @foreach (var modelParameterGroup in Model.ParameterGroups.OrderBy(c => c.Order))
+    {
+        <h5 class="mt-3 text-muted">@modelParameterGroup.Name</h5>
+        <div class="form-row">
+            @foreach (var parameter in modelParameterGroup.Parameters.OrderBy(c => c.Index))
+            {
+                if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                {
+                    var isChecked = "";
+                    if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
+                    {
+                        isChecked = "checked='checked'";
+                    }
+                    <div class="form-group form-check mr-3">
+                        <label class="form-check-label">
+                            <input class="form-check-input" @isChecked type="checkbox" name="checkboxes[]" value="@parameter.Id" /> @Html.DisplayName(parameter.Name)
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    var value = "";
+                    if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
+                    {
+                        value = $"{Model.ChaletParameterValues.FirstOrDefault(c => c.ParameterId == parameter.Id)?.Value}";
+                    }
+                    <div class="form-group col-md-6">
+                        <label for="@parameter.Name" class="control-label">@parameter.Name</label>
+                        <input value="@value" type="text" name="inputValues[]" class="form-control" />
+                        <input type="hidden" name="inputIds[]" value="@parameter.Id" />
+                        <span validation-for="Name" class="text-danger"></span>
+                    </div>
+                }
+
+            }
+        </div>
+    }
+    <hr />
+    <h4>@Resource.Images</h4>
+    <div class="my-4">
+        <div class="row" data-big="3" data-lightbox="gallery">
+            @foreach (var img in Model.UnitImage)
+            {
+                <div class="col-md-2 entry">
+                    <div class="entry-image">
+                        <a href="@Url.Content("~")/@img.File.FileContent" data-lightbox="image"><img src="@Url.Content("~")/@img.File.FileContentMin" alt="Standard Post with Image"></a>
+                        <div>
+                            <a href="~/Chalets/RemoveUnitImage/@img.FileId?unitId=@img.UnitId&chaletId=@Model.ChaletId" class="btn btn-outline-danger btn-sm mt-1"><i class="icon-trash"></i></a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <input id="input-3" name="formFiles[]" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-show-preview="true">
+
+    </div>
+
+    <hr />
+    <h4>@Resource.PaymentInfo</h4>
+    <div class="form-group">
+        <label asp-for="@Model.Unit.DepositAmount" class="control-label"></label>
+        <input asp-for="@Model.Unit.DepositAmount" required="" class="form-control" />sss
+        <span asp-validation-for="@Model.Unit.DepositAmount" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Unit.DayPrice" class="control-label"></label>
+        <input asp-for="@Model.Unit.DayPrice" required="" class="form-control" />
+        <span asp-validation-for="@Model.Unit.DayPrice" class="text-danger"></span>
+    </div>
+    <h5 class="mt-4">@Resource.PricePerDay</h5>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <input type="hidden" asp-for="@Model.PricePerDay.UnitId" value="@Model.Unit.Id" />
+            <label asp-for="@Model.PricePerDay.Saturday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Saturday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Saturday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Sunday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Sunday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Sunday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Monday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Monday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Monday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Tuesday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Tuesday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Tuesday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Wednesday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Wednesday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Wednesday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Thursday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Thursday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Thursday" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="@Model.PricePerDay.Friday" class="control-label"></label>
+            <input asp-for="@Model.PricePerDay.Friday" class="form-control" />
+            <span asp-validation-for="@Model.PricePerDay.Friday" class="text-danger"></span>
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary w-25">@Resource.Save</button>
+    </div>
+</form>
+
+<hr />
+<h4>@Resource.OfferLabel</h4>
+<form asp-action="AddOffer" method="post" class="was-validated">
+    <input type="hidden" asp-for="@Model.Offer.UnitId" value="@Model.Unit.Id" />
+    <input type="hidden" name="chaletId" value="@Model.Unit.ChaletId" />
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label asp-for="@Model.Offer.DateFrom" class="control-label"></label>
+            <input type="text" asp-for="@Model.Offer.DateFrom" placeholder="dd/mm/yyyy" required="" value="" class="form-control datepicker" />
+            <span asp-validation-for="@Model.Offer.DateFrom" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="@Model.Offer.DateTo" class="control-label"></label>
+            <input type="text" asp-for="@Model.Offer.DateTo" placeholder="dd/mm/yyyy" required="" value="" class="form-control datepicker" />
+            <span asp-validation-for="@Model.Offer.DateTo" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="@Model.Offer.Amount" class="control-label"></label>
+            <input asp-for="@Model.Offer.Amount" required="" class="form-control" />
+            <span asp-validation-for="@Model.Offer.Amount" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">&ensp;</label>
+            <button type="submit" class="btn btn-primary w-100">@Resource.Save</button>
+        </div>
+    </div>
+</form>
+
+<div class="mt-4">
+    <table class="table table-bordered">
+        <tr>
+            <th>@Resource.From</th>
+            <th>@Resource.To</th>
+            <th>@Resource.Amount</th>
+            <th></th>
+        </tr>
+        @foreach (var modelOffer in Model.Offers)
+        {
+            <tr>
+                <td>@modelOffer.DateFrom.ToString("dd-MM-yyyy")</td>
+                <td>@modelOffer.DateTo.ToString("dd-MM-yyyy")</td>
+                <td>@modelOffer.Amount</td>
+                <td><a class="btn btn-danger" asp-action="RemoveOffer" asp-route-id="@modelOffer.Id" asp-route-unitId="@modelOffer.UnitId" asp-route-chaletId="@Model.Unit.ChaletId"><i class="icon-trash"></i></a></td>
+            </tr>
+        }
+        @if (!Model.Offers.Any())
+        {
+            <tr>
+                <th class="text-center" colspan="4">@Resource.NoRecord</th>
+            </tr>
+        }
+    </table>
+</div>
+
+<div class="modal fade" id="SimilarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="SaveSimilarChalet" method="post" class="was-validated modal-content" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">@Resource.AddNewUnit</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="hidden" name="originalChaletId" value="@Model.Unit.Id" />
+                        <input type="hidden" name="id" id="SimilarUnitId" value="@Guid.Empty" />
+                        <label for="ChaletName" class="control-label">@Resource.UnitName</label>
+                        <input type="text" id="ChaletName" name="chaletName" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ChaletCode" class="control-label">@Resource.UnitCode</label>
+                        <input type="text" id="ChaletCode" name="chaletCode" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">@Resource.ViewStatus</label>
+                        <select name="chaletViewStatus" id="ChaletViewStatus" class="form-control">
+                            <option value="true">@Resource.ViewStatusShown</option>
+                            <option value="false" selected="selected">@Resource.ViewStatusHidden</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">@Resource.InterfaceImage</label>
+                        <div class="row" data-big="3" data-lightbox="gallery">
+                            <div id="chaletDiv" class="mb-3 d-none">
+                                <div class="col-md-2 entry">
+                                    <div class="entry-image">
+                                        <a id="imgLink" data-lightbox="image"><img id="smilarImg"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input id="input-3" name="formFiles[]" type="file" class="file" multiple data-show-upload="false" data-show-caption="true" data-show-preview="true">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section scripts{
+    <script>
+        $(function() {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: "today",
+                todayHighlight: true,
+                format: "mm/dd/yyyy",
+            });
+        });
+        updateMenu("mychalet");
+
+        function haveSimilar(isSimilar) {
+            if (isSimilar) {
+                $("#Unit_Count").removeAttr("readonly");
+                $("#SimilarDiv").removeClass("d-none");
+                @*var chaletName = $("#Unit_Name").val() + " 1";
+                var chaletCode = $("#Unit_Code").val() + "1";
+                var chalet = `
+                                <tr class="similarRow">
+                                    <td>
+                                        <input name="chleteName[]" value='${chaletName}' placeholder="@Resource.UnitName" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input name="chleteCode[]" value='${chaletCode}' placeholder="@Resource.UnitCode" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <select  name="chleteViewStatus[]" class="form-control">
+                                            <option value="true">@Resource.ViewStatusShown</option>
+                                            <option value="false" selected="selected">@Resource.ViewStatusHidden</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="$(this).parent().parent().remove()"><i class="icon-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                $("#SimilarChalet").html(chalet);*@
+            } else {
+                $("#Unit_Count").val(1);
+                $("#Unit_Count").prop("readonly", "readonly");
+                $("#SimilarDiv").addClass("d-none");
+            }
+        }
+
+        function similar(number) {
+            if (number < @Model.SimilarUnits.Count) {
+                $("#Unit_Count").val(@Model.SimilarUnits.Count);
+                return;
+            }
+            if (number <= 0) {
+                $("#Unit_Count").val(1);
+                return;
+            }
+
+
+            var chalets = "";
+            var rows = $(".similarRow").length;
+            var count = Math.abs(number - rows);
+            if (rows > number) {
+                var elements = $(".similarRow");
+                elements = elements.splice(count, number);
+                $("#SimilarChalet").html(elements);
+            } else {
+                for (var i = 0; i < count; i++) {
+                    var chaletName = $("#Unit_Name").val();
+                    var chaletCode = $("#Unit_Code").val();
+                    chalets += `<tr class="similarRow">
+                                    <td>
+                                        <input name="chleteId[]" type="hidden" value="@Guid.Empty" />
+                                        <input name="chleteName[]" value='${chaletName}' placeholder="@Resource.UnitName" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <input name="chleteCode[]" value='${chaletCode}' placeholder="@Resource.UnitCode" class="form-control" />
+                                    </td>
+                                    <td>
+                                        <select  name="chleteViewStatus[]" class="form-control">
+                                            <option value="true">@Resource.ViewStatusShown</option>
+                                            <option value="false" selected="selected">@Resource.ViewStatusHidden</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="$(this).parent().parent().remove()"><i class="icon-trash"></i></button>
+                                    </td>
+                                </tr>`;
+                }
+                $("#SimilarChalet").append(chalets);
+            }
+
+
+        }
+
+
+        function newSimilar() {
+            $("#chaletDiv").addClass("d-none");
+            $("#ChaletName").val($("#Unit_Name").val());
+            $("#ChaletCode").val("");
+            $("#ChaletViewStatus").val("false");
+            $("#SimilarModal").modal("show");
+        }
+
+
+        function updateSimilar(id, name, code, viewStatus, img,tempImage) {
+            $("#SimilarUnitId").val(id);
+            $("#ChaletName").val(name);
+            $("#ChaletCode").val(code);
+            $("#ChaletViewStatus").val(viewStatus);
+            if (img !== '') {
+                $("#chaletDiv").removeClass("d-none");
+                alert(img);
+                $("#imgLink").prop("href", img);
+                $("#smilarImg").prop("src", tempImage);
+            }
+            $("#SimilarModal").modal("show");
+        }
+    </script>
+}

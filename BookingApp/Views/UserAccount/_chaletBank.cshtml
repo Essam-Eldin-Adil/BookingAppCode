@@ -1,0 +1,45 @@
+﻿@model Data.Models.General.ChaletBank
+
+<h4 class="mt-5">@Resource.AddChaletBank</h4>
+<hr />
+<form asp-action="SaveChaletBank" method="post" class="was-validated">
+    <input type="hidden" asp-for="Id" class="form-control" />
+    <input type="hidden" asp-for="ChaletId" class="form-control" />
+    <input type="hidden" asp-for="Order" class="form-control" />
+    <input type="hidden" asp-for="CreatedDate" class="form-control" />
+    <input type="hidden" class="form-check-input" asp-for="IsDeleted" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="BankId" class="control-label"></label>
+            <select asp-for="BankId" class="form-control" required="" asp-items="ViewBag.Banks">
+                <option selected="" value="">Select option</option>
+            </select>
+            <span asp-validation-for="BankId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="AccountName" class="control-label"></label>
+            <input asp-for="AccountName" class="form-control" />
+            <span asp-validation-for="AccountName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="AccountNumber" class="control-label"></label>
+            <input asp-for="AccountNumber" class="form-control" />
+            <span asp-validation-for="AccountNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="IBan" class="control-label"></label>
+            <input asp-for="IBan" class="form-control" />
+            <span asp-validation-for="IBan" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <input type="submit" value="@Resource.Save" class="btn btn-primary" />
+    </div>
+</form>
+

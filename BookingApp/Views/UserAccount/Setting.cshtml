@@ -1,0 +1,58 @@
+﻿@model Data.ViewModels.ChaletSettingViewModel
+
+@{
+    ViewData["Title"] = "Chalet";
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.ChaletSetting.ChaletId;
+}
+
+<partial name="_setting" model="Model.ChaletSetting" />
+
+<h4>@Resource.Banks</h4>
+<hr />
+@foreach (var modelChaletBank in Model.ChaletBanks)
+{
+    <div class="card border">
+        <div class="row p-2">
+            <div class="col-auto">
+                <div class="entry-image mb-0">
+                    <span><img style="width:70px" src="" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image"></span>
+                </div>
+            </div>
+            <div class="col-md-5 col-lg-4 col-sm-12">
+                <div class="entry-title">
+                    <h4>
+                        @Resource.BANKID: @modelChaletBank.Bank.Name
+                    </h4>
+                    <h4><span class="text-muted">@Resource.ACCOUNTNAME: @modelChaletBank.AccountName</span></h4>
+                </div>
+            </div>
+            <div class="col-md-5 col-sm-12 entry-title">
+                <h4>
+                    @Resource.ACCOUNTNUMBER: @modelChaletBank.AccountNumber
+                </h4>
+                <h4>
+                    @Resource.IBAN: @modelChaletBank.IBan
+                </h4>
+            </div>
+            <div class="col-md-1 border-left">
+                <a href="~/UserAccount/RemoveChaletBank/@modelChaletBank.Id" class="btn btn-danger">
+                    <i class="icon-trash"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+}
+<partial name="_chaletBank" model="Model.ChaletBank" />
+
+
+@section scripts{
+    <script>
+        updateMenu("settings");
+        //$('.datetimepicker1,.datetimepicker2').datetimepicker({
+        //    format: 'LT',
+        //    startDate: "today",
+        //    showClose: true,
+        //});
+    </script>
+}

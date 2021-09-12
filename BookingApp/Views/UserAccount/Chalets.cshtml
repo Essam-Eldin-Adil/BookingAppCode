@@ -1,0 +1,83 @@
+﻿@model IEnumerable<Data.Models.Chalets.ChaletUser>
+
+@{
+    ViewData["Title"] = "Chalets";
+    Layout = "~/Views/Shared/_UserAccountLayout.cshtml";
+    //
+    var link = Url.Action("Chalet");
+}
+
+<div class="container">
+    <h3>@Resource.Chalets</h3>
+    @foreach (var chalet in Model)
+    {
+        var image = "";
+        if (chalet.Chalet.ChaletImages.Count>0)
+        {
+            var chaletImage= chalet.Chalet.ChaletImages.OrderByDescending(c => c. IsPrimary).FirstOrDefault();
+            image = Url.Content("~/"+chaletImage.File.FileContentMin);
+        }
+        <div class="entry col-12 border">
+            <div class="grid-inner no-gutters">
+                <div class="row pt-3 pb-3">
+                    <div class="col-auto">
+                        <div class="entry-image mb-0">
+                            <a href="@link/id=@chalet.Id"><img style="width:100px" src="@image" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image"></a>
+                        </div>
+                    </div>
+                    <div class="col-md-5 col-lg-5 col-sm-12">
+                        <div class="entry-title">
+                            <h4>
+                                <a href="@link/id=@chalet.Id">@chalet.Chalet.ChaletName</a> |
+                                @if (chalet.Chalet.ViewStatus)
+                                {
+                                    <span class="text-success">@Resource.ViewStatusShown</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">@Resource.ViewStatusHidden</span>
+
+                                }
+                            </h4>
+                            <h4><span class="text-muted">@chalet.Chalet.City.CityName</span></h4>
+                        </div>
+                        <div class="mt-3">
+                            <a asp-action="Index" asp-controller="Chalets" asp-route-id="@chalet.ChaletId" class="btn btn-success btn-sm">@Resource.Units (1)</a>
+                            <a href="~/UserAccount/Setting/@chalet.ChaletId" class="btn btn-secondary btn-sm"><i class="icon-settings2"></i> @Resource.Settings</a>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-sm-12 text-right">
+                        <div>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star3"></i>
+                            <i class="icon-star-half-full"></i>
+                        </div>
+                        <a href="@link/@chalet.ChaletId" class="btn btn-success btn-sm"><i class="icon-edit"></i></a>
+                        <button class="btn btn-danger btn-sm"><i class="icon-trash"></i></button>
+                    </div>
+                    <div class="col-md-3 border-left">
+                        <div class="row">
+                            <div class="col-md-6 border-right text-center">
+                                <span class="badge badge-info">1</span><br />
+                                @Resource.Reservations
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <span class="badge badge-info">1</span><br />
+                                @Resource.Bookmark
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (Model.Count()==0)
+    {
+        <div class="alert alert-warning">
+            @Resource.YouDontHaveChalet
+            <br /> <a href="~/UserAccount/Chalet" class="btn btn-warning btn-sm"><i class="icon-plus-circle"></i> @Resource.CreateNewChalet</a>
+        </div>
+    }
+</div>

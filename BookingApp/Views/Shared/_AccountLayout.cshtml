@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="en-US">
+<partial name="_head" />
+<body class="stretched">
+
+    <!-- Document Wrapper
+    ============================================= -->
+    <div id="wrapper">
+
+        <!-- Header
+        ============================================= -->
+        <header id="header" class="full-header">
+            <div id="header-wrap">
+                <div class="container">
+                    <div class="header-row">
+
+                        <!-- Logo
+                        ============================================= -->
+                        <div id="logo">
+                            <a asp-controller="Home" asp-action="Index" class="standard-logo" data-dark-logo="~/images/logo.png"><img src="~/images/logo.png" alt="@Domain.Setting.Get(Context,"AppName")"></a>
+                            <a asp-controller="Home" asp-action="Index" class="retina-logo" data-dark-logo="~/images/logo.png"><img src="~/images/logo.png" alt="@Domain.Setting.Get(Context,"AppName")"></a>
+                        </div><!-- #logo end -->
+                        <div class="primary-menu">
+                            <ul class="menu-container">
+                                <li class="menu-item">
+                                    <a class="menu-link" href="~/Home"> @Resource.Home</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="header-wrap-clone"></div>
+        </header><!-- #header end -->
+
+        <section id="content">
+            <div class="content-wrap">
+                <div class="container">
+                    @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
+                    {
+                        <div class="style-msg @TempData["AlertType"].ToString()msg">
+                            <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        </div>
+                    }
+                </div>
+                <div class="center">
+                    <a href="index.html"><img style="width:150px" src="~/images/logo.png" alt="Canvas Logo"></a>
+                </div>
+                @RenderBody()
+            </div>
+        </section><!-- #content end -->
+        <partial name="_footerAccount" />
+    </div><!-- #wrapper end -->
+    <partial name="_scripts" />
+    @RenderSection("scripts", required: false)
+</body>
+</html>
