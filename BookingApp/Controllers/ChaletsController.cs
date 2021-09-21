@@ -51,6 +51,10 @@ namespace BookingApp.Controllers
             {
                 UnitsViewModel model=new UnitsViewModel();
                 model.Chalet = _chaletRepository.Find(id);
+                if (!model.Chalet.IsConfirmed)
+                {
+                    Warning(Resource.ProrpertNotConfirmed);
+                }
                 model.Units = _unitRepository.Table.Where(c => c.ChaletId == id).ToList();
                 model.ChaletImages = _chaletImageRepository.Table.Include(c=>c.File).Where(c => c.ChaletId == id).ToList();
                 return View(model);
@@ -67,12 +71,21 @@ namespace BookingApp.Controllers
             UnitViewModel model = new UnitViewModel();
             try
             {
+                var chalet = _chaletRepository.Find(chaletId);
+                if (chalet == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.PropertyType = chalet.PropertyType;
+
                 model.ParameterGroups = _groupRepository.Table.Include(c => c.Parameters).ToList();
                 if (id==null)
                 {
                     model.ChaletId = chaletId;
                     return View(model);
                 }
+
+                
                 model.Unit = _unitRepository.Find(id);
                 if (model.Unit == null)
                 {

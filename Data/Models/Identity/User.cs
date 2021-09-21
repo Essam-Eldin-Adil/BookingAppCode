@@ -31,6 +31,7 @@ namespace Data.Models
         [Display(Name = "ConfirmCode", ResourceType = typeof(Resource))]
         public long ConfirmCode { get; set; }
         public bool IsConfirmed { get; set; }
+        public bool Status { get; set; }
         [Display(Name = "Password", ResourceType = typeof(Resource))]
         public string Password { get; set; }
         public bool IsAdmin { get; set; }
@@ -38,6 +39,10 @@ namespace Data.Models
         [Display(Name = "BirthDate", ResourceType = typeof(Resource))]
         public DateTime BirthDate { get; set; }
         public DateTime? LastActivity { get; set; }
+        public bool TemporaryPassword { get; set; } = false;
+        [Display(Name = "JobId", ResourceType = typeof(Resource))]
+        public Guid? JobId { get; set; } = Guid.Empty;
 
+        [NotMapped] public bool WhatsAppNotifications { get; set; }
     }
 }

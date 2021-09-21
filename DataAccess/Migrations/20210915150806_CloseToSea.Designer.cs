@@ -3,14 +3,16 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210915150806_CloseToSea")]
+    partial class CloseToSea
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,9 +46,6 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("DistanceFromSea")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -478,9 +477,6 @@ namespace DataAccess.Migrations
                     b.Property<int?>("Order")
                         .HasColumnType("int");
 
-                    b.Property<bool>("SendWhatsAppNotifications")
-                        .HasColumnType("bit");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -731,29 +727,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Data.Models.General.Job", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Jobs");
-                });
-
             modelBuilder.Entity("Data.Models.General.Neighborhood", b =>
                 {
                     b.Property<Guid>("Id")
@@ -844,9 +817,6 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("JobId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("LastActivity")
                         .HasColumnType("datetime2");
 
@@ -861,12 +831,6 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TemporaryPassword")
-                        .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
@@ -964,7 +928,7 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.Unit", b =>
                 {
                     b.HasOne("Data.Models.Chalets.Chalet", "Chalet")
-                        .WithMany("Units")
+                        .WithMany()
                         .HasForeignKey("ChaletId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1114,8 +1078,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Data.Models.Chalets.Chalet", b =>
                 {
                     b.Navigation("ChaletImages");
-
-                    b.Navigation("Units");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterGroup", b =>

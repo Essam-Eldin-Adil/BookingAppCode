@@ -150,6 +150,15 @@
   <data name="AddNewUnit" xml:space="preserve">
     <value>إضافة وحدة جديدة</value>
   </data>
+  <data name="AddNewUnit1" xml:space="preserve">
+    <value>إضافة شاليه جديد</value>
+  </data>
+  <data name="AddNewUnit2" xml:space="preserve">
+    <value>إضافة إستراحة جديدة</value>
+  </data>
+  <data name="AddNewUnit3" xml:space="preserve">
+    <value>إضافة فيلا جديدة</value>
+  </data>
   <data name="AddReservation" xml:space="preserve">
     <value>إضافة حجز</value>
   </data>
@@ -158,6 +167,21 @@
   </data>
   <data name="AddSimilarChalet" xml:space="preserve">
     <value>إضافة شاليه مشابه</value>
+  </data>
+  <data name="AddSimilarChalet1" xml:space="preserve">
+    <value>إضافة شاليه مشابه</value>
+  </data>
+  <data name="AddSimilarChalet2" xml:space="preserve">
+    <value>إضافة إستراحة مشابهة</value>
+  </data>
+  <data name="AddSimilarChalet3" xml:space="preserve">
+    <value>إضافة فيلا مشابهة</value>
+  </data>
+  <data name="AddUser" xml:space="preserve">
+    <value>إضافة مستخدم </value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>مدير</value>
   </data>
   <data name="Administration" xml:space="preserve">
     <value>إدارة النظام</value>
@@ -188,9 +212,6 @@
   </data>
   <data name="AlertErrorSavingData" xml:space="preserve">
     <value>لقد حدث خطأ أثناء عملية الحفظ</value>
-  </data>
-  <data name="AlertMeetingMinutesIsClosed" xml:space="preserve">
-    <value>تم إعتماد المحضر لا يمكن تغيير الحالة</value>
   </data>
   <data name="AlertSystemError" xml:space="preserve">
     <value>خطأ في النظام</value>
@@ -236,6 +257,9 @@
   </data>
   <data name="BirthDate" xml:space="preserve">
     <value>تاريخ الميلاد</value>
+  </data>
+  <data name="BookingAdmin" xml:space="preserve">
+    <value>مدير عقارات</value>
   </data>
   <data name="Bookmark" xml:space="preserve">
     <value>تفضيلات</value>
@@ -291,6 +315,9 @@
   <data name="Close" xml:space="preserve">
     <value>إغلاق</value>
   </data>
+  <data name="CloseToSea" xml:space="preserve">
+    <value>هل عقارك قريب من البحر؟</value>
+  </data>
   <data name="Comments" xml:space="preserve">
     <value>التعليقات</value>
   </data>
@@ -319,6 +346,9 @@
   <data name="ContactInformation" xml:space="preserve">
     <value>معلومات التواصل</value>
   </data>
+  <data name="ContactInfos" xml:space="preserve">
+    <value />
+  </data>
   <data name="Copyrights" xml:space="preserve">
     <value>جميع الحقوق محفوظة © {0}</value>
   </data>
@@ -327,6 +357,9 @@
   </data>
   <data name="CreateNewChalet" xml:space="preserve">
     <value>إضافة شاليه جديد</value>
+  </data>
+  <data name="CreateNewProperty" xml:space="preserve">
+    <value>إنشاء عقار جديد</value>
   </data>
   <data name="CurrentPassword" xml:space="preserve">
     <value>كلمة المرور الحالية</value>
@@ -380,13 +413,16 @@
     <value>العربون المطلوب لتأكيد الحجز</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>تعريف بالشاليه</value>
+    <value>معلومات إضافية</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>تفاصيل</value>
   </data>
   <data name="Direction" xml:space="preserve">
     <value>الإتجاه</value>
+  </data>
+  <data name="DistanceFromSea" xml:space="preserve">
+    <value>بعد العقار من البحر(متر)</value>
   </data>
   <data name="Domain" xml:space="preserve">
     <value>النطاق</value>
@@ -420,6 +456,9 @@
   </data>
   <data name="EmailSettings" xml:space="preserve">
     <value>إعدادات البريد الإلكتروني</value>
+  </data>
+  <data name="EndUser" xml:space="preserve">
+    <value>مستخدم نهائي</value>
   </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
@@ -514,6 +553,15 @@
   <data name="HaveSimilarChalets" xml:space="preserve">
     <value>يوجد شاليهات مشابهة له في السعر والمواصفات عددها</value>
   </data>
+  <data name="HaveSimilarChalets1" xml:space="preserve">
+    <value>يوجد شاليهات مشابهة له في السعر والمواصفات عددها</value>
+  </data>
+  <data name="HaveSimilarChalets2" xml:space="preserve">
+    <value>توجد إستراحات مشابهة لها في السعر والمواصفات عددها</value>
+  </data>
+  <data name="HaveSimilarChalets3" xml:space="preserve">
+    <value>توجد فلل مشابهة لها في السعر والمواصفات عددها</value>
+  </data>
   <data name="Hegira" xml:space="preserve">
     <value>هجري</value>
   </data>
@@ -537,6 +585,9 @@
   </data>
   <data name="Images" xml:space="preserve">
     <value>الصور</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>غير مفعل</value>
   </data>
   <data name="Index" xml:space="preserve">
     <value>الترتيب</value>
@@ -564,6 +615,9 @@
   </data>
   <data name="January" xml:space="preserve">
     <value>يناير</value>
+  </data>
+  <data name="JobId" xml:space="preserve">
+    <value>الوظيفة</value>
   </data>
   <data name="Jul" xml:space="preserve">
     <value>يوليو</value>
@@ -650,7 +704,7 @@
     <value>يجب إضافة صور للمسبح</value>
   </data>
   <data name="MostPaid" xml:space="preserve">
-    <value>يدفع عند الوصول ويسترجع عند المغادرة في حال تم التأكد من سلامة ممتلكات الشاليه</value>
+    <value>يدفع عند الوصول ويسترجع عند المغادرة في حال تم التأكد من سلامة ممتلكات العقار</value>
   </data>
   <data name="MyAccount" xml:space="preserve">
     <value>حسابي</value>
@@ -664,14 +718,20 @@
   <data name="MyInvoices" xml:space="preserve">
     <value>فواتيري</value>
   </data>
+  <data name="MyProperties" xml:space="preserve">
+    <value>عقاراتي</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>الاسم</value>
   </data>
   <data name="Neighborhood" xml:space="preserve">
-    <value>الحي</value>
+    <value>الشارع</value>
   </data>
   <data name="NewChalet" xml:space="preserve">
     <value>شاليه جديد</value>
+  </data>
+  <data name="NewProperty" xml:space="preserve">
+    <value>عقار جديد</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>التالي</value>
@@ -682,8 +742,23 @@
   <data name="No" xml:space="preserve">
     <value>لا</value>
   </data>
+  <data name="NoChaletInThisDay" xml:space="preserve">
+    <value>لا توجد شاليهات متوفرة بهذا التاريخ</value>
+  </data>
+  <data name="NoChaletInThisDay1" xml:space="preserve">
+    <value>لا توجد شاليهات متوفرة بهذا التاريخ</value>
+  </data>
+  <data name="NoChaletInThisDay2" xml:space="preserve">
+    <value>لا توجد إستراحات متوفرة بهذا التاريخ</value>
+  </data>
+  <data name="NoChaletInThisDay3" xml:space="preserve">
+    <value>لا توجد فلل متوفرة بهذا التاريخ</value>
+  </data>
   <data name="NoRecord" xml:space="preserve">
     <value>لا يوجد عناصر</value>
+  </data>
+  <data name="NormalUser" xml:space="preserve">
+    <value>مستخدم عادي</value>
   </data>
   <data name="NoRoles" xml:space="preserve">
     <value>لم يتم إضافة صلاحيات بعد</value>
@@ -711,9 +786,6 @@
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>التنبيهات</value>
-  </data>
-  <data name="NotSignatured" xml:space="preserve">
-    <value>لم يتم التوقيع</value>
   </data>
   <data name="NoUnits" xml:space="preserve">
     <value>لا توجد وحدات</value>
@@ -763,6 +835,9 @@
   <data name="PasswordComparison" xml:space="preserve">
     <value>كلمة المرور وتأكيد كلمة المرور لم يتطابقا</value>
   </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>سيتم طلب تغيير كلمة المرور مع أول تسجيل دخول</value>
+  </data>
   <data name="PaymentInfo" xml:space="preserve">
     <value>معلومات الدفع</value>
   </data>
@@ -774,6 +849,9 @@
   </data>
   <data name="PleaseSelect" xml:space="preserve">
     <value>-- الرجاء الإختيار --</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>جار المعالجة الرجاء الإنتظار</value>
   </data>
   <data name="PM" xml:space="preserve">
     <value>مساءاً</value>
@@ -799,8 +877,35 @@
   <data name="PromiseChangePrices" xml:space="preserve">
     <value>أتعهد بأني مسؤول عن تحديث الأسعار في حال تغيرها، وأي حجز يتم عن طريق التطبيق او الموقع ولم احدث السعر أتحمل .مسؤولية ذلك وإدارة موقع أو تطبيق سائح غير مسؤولة عن ذلك</value>
   </data>
+  <data name="Properties" xml:space="preserve">
+    <value>العقارات</value>
+  </data>
+  <data name="Property" xml:space="preserve">
+    <value>عقار</value>
+  </data>
+  <data name="PropertyImages" xml:space="preserve">
+    <value>صور العقار</value>
+  </data>
+  <data name="PropertyInfo" xml:space="preserve">
+    <value>معلومات العقار</value>
+  </data>
+  <data name="PropertyName" xml:space="preserve">
+    <value>إسم العقار</value>
+  </data>
+  <data name="PropertySettings" xml:space="preserve">
+    <value>إعدادات العقارات</value>
+  </data>
   <data name="PropertyType" xml:space="preserve">
     <value>نوع العقار</value>
+  </data>
+  <data name="ProprtyAdmin" xml:space="preserve">
+    <value>مدير لكل العقارات</value>
+  </data>
+  <data name="ProrpertNotConfirmed" xml:space="preserve">
+    <value>تم إرسال طلبك للإدارة ليتم مراجعته، سنرسل إليك بريد إلكتروني </value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>المنطقة</value>
   </data>
   <data name="RememberMe" xml:space="preserve">
     <value>تذكرني</value>
@@ -827,7 +932,7 @@
     <value>إقامة لمدة</value>
   </data>
   <data name="RESERVATIONMANAGER" xml:space="preserve">
-    <value>إسم مدير الحجوزات</value>
+    <value>مدير الحجوزات</value>
   </data>
   <data name="ReservationNumber" xml:space="preserve">
     <value>حجز رقم</value>
@@ -844,6 +949,9 @@
   <data name="ReservationUserInfo" xml:space="preserve">
     <value>معلزمات صاحب الحجز</value>
   </data>
+  <data name="ReservedInThisDay" xml:space="preserve">
+    <value>محجوز في هذا البوم</value>
+  </data>
   <data name="Reset" xml:space="preserve">
     <value>إعادة تعيين كلمة المرور</value>
   </data>
@@ -852,6 +960,21 @@
   </data>
   <data name="ResetConfirmationMessage" xml:space="preserve">
     <value>تم إعادة تعيين كلمة المرور الخاصة بك. يرجى النقر على {0} لتسجيل الدخول.</value>
+  </data>
+  <data name="Resort" xml:space="preserve">
+    <value>منتجع</value>
+  </data>
+  <data name="Resorts" xml:space="preserve">
+    <value>منتجعات</value>
+  </data>
+  <data name="Resorts1" xml:space="preserve">
+    <value>الشاليهات</value>
+  </data>
+  <data name="Resorts2" xml:space="preserve">
+    <value>الإستراحات</value>
+  </data>
+  <data name="Resorts3" xml:space="preserve">
+    <value>الفلل</value>
   </data>
   <data name="Restore" xml:space="preserve">
     <value>إستعادة</value>
@@ -904,6 +1027,9 @@
   <data name="SendSignature" xml:space="preserve">
     <value>إرسال للتوقيع</value>
   </data>
+  <data name="SendWhatsAppNotifications" xml:space="preserve">
+    <value>إرسال فواتير الحجوزات على الواتساب لهذا المستخدم</value>
+  </data>
   <data name="Sent" xml:space="preserve">
     <value>تم التحويل</value>
   </data>
@@ -951,6 +1077,9 @@
   </data>
   <data name="SureSaveMinutes" xml:space="preserve">
     <value>هل أنت متأكد من انك تريد حفظ المحضر؟</value>
+  </data>
+  <data name="SystemAdmin" xml:space="preserve">
+    <value>مدير نظام</value>
   </data>
   <data name="SystemAlert" xml:space="preserve">
     <value>رسالة نظام</value>
@@ -1000,17 +1129,44 @@
   <data name="UnitCode" xml:space="preserve">
     <value>كود الشاليه</value>
   </data>
+  <data name="UnitCode1" xml:space="preserve">
+    <value>كود الشاليه</value>
+  </data>
+  <data name="UnitCode2" xml:space="preserve">
+    <value>كود الإستراحة</value>
+  </data>
+  <data name="UnitCode3" xml:space="preserve">
+    <value>كود الفيلا</value>
+  </data>
   <data name="UnitCount" xml:space="preserve">
     <value>عدد الشاليهات</value>
   </data>
   <data name="UnitName" xml:space="preserve">
     <value>إسم الشاليه</value>
   </data>
+  <data name="UnitName1" xml:space="preserve">
+    <value>إسم الشاليه</value>
+  </data>
+  <data name="UnitName2" xml:space="preserve">
+    <value>إسم الإستراحة</value>
+  </data>
+  <data name="UnitName3" xml:space="preserve">
+    <value>إسم الفيلا</value>
+  </data>
   <data name="Units" xml:space="preserve">
     <value>الشاليهات</value>
   </data>
   <data name="UnitSpace" xml:space="preserve">
     <value>مساحة الشاليه</value>
+  </data>
+  <data name="UnitSpace1" xml:space="preserve">
+    <value>مساحة الشاليه  (متر مكعب)</value>
+  </data>
+  <data name="UnitSpace2" xml:space="preserve">
+    <value>مساحة الإستراحة  (متر مكعب)</value>
+  </data>
+  <data name="UnitSpace3" xml:space="preserve">
+    <value>مساحة الفيلا (متر مكعب)</value>
   </data>
   <data name="UpcomingReservations" xml:space="preserve">
     <value>حجوزات قادمة</value>
@@ -1045,6 +1201,9 @@
   <data name="UsersEdit" xml:space="preserve">
     <value>تعديل مستخدم</value>
   </data>
+  <data name="UsersType" xml:space="preserve">
+    <value>نوع المستخدمين</value>
+  </data>
   <data name="UserType" xml:space="preserve">
     <value>نوع المستخدم</value>
   </data>
@@ -1068,6 +1227,9 @@
   </data>
   <data name="ViewStatusShown" xml:space="preserve">
     <value>معروض</value>
+  </data>
+  <data name="Villa" xml:space="preserve">
+    <value>فيلا</value>
   </data>
   <data name="Wed" xml:space="preserve">
     <value>الأربعاء</value>
@@ -1098,6 +1260,9 @@
   </data>
   <data name="YouDontHaveChalet" xml:space="preserve">
     <value>ليس لديك شاليهات </value>
+  </data>
+  <data name="YouDontHaveProperties" xml:space="preserve">
+    <value>ليس لديك عقارات</value>
   </data>
   <data name="YouHaveNotifications" xml:space="preserve">
     <value>لديك &lt;strong class="text-primary"&gt;{0}&lt;/strong&gt; تنبيه.</value>

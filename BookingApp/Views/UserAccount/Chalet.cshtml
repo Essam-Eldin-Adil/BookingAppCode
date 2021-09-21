@@ -11,7 +11,7 @@
 }
 @if (Model.Id == Guid.Empty)
 {
-    <h4>@Resource.NewChalet</h4>
+    <h4>@Resource.NewProperty</h4>
 }
 else
 {
@@ -26,10 +26,27 @@ else
 
         updateMenu("chaletInfo");
 
+        function getRegion(element) {
+            $.ajax({
+                url: "@Url.Action("GetRegions")",
+                data: { cityId: $(element).val() },
+                dataType: "json",
+                type: "GET",
+                success: function(data) {
+                    var options = "<option value=''>Select Option</option>";
+                    for (var i = 0; i < data.length; i++) {
+                        options += `<option value="${data[i].id}">${data[i].name}</option>`;
+                    }
+                    $("#RegionId").html("");
+                    $("#RegionId").append(options);
+                }
+            });
+        }
+
         function getNeighborhood(element) {
             $.ajax({
                 url: "@Url.Action("GetNeighborhoods")",
-                data: { cityId: $(element).val() },
+                data: { regionId: $(element).val() },
                 dataType: "json",
                 type: "GET",
                 success: function(data) {

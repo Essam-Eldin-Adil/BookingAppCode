@@ -12,8 +12,9 @@ namespace Domain
         public enum PropertyType
         {
             All,
-            Chalet,
-            Break
+            Resort,
+            Break,
+            Villa
         }
         public enum Hour
         {

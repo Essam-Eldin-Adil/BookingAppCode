@@ -1,6 +1,6 @@
 ﻿@model Data.Models.Chalets.ChaletSetting
 
-<h4>@Resource.ChaletSetting</h4>
+<h4>@Resource.PropertySettings</h4>
 <hr/>
 <form asp-action="SaveSetting" method="post" class="was-validated">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -54,12 +54,12 @@
         <span asp-validation-for="OtherCondition" class="text-danger"></span>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 d-none">
             <label asp-for="ReservationManager" class="control-label"></label>
             <input asp-for="ReservationManager" class="form-control" />
             <span asp-validation-for="ReservationManager" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 d-none">
             <label asp-for="ReservationPhoneNumber" class="control-label"></label>
             <input asp-for="ReservationPhoneNumber" class="form-control" />
             <span asp-validation-for="ReservationPhoneNumber" class="text-danger"></span>

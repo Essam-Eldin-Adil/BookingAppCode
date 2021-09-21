@@ -9738,25 +9738,6 @@ body:not(.device-touch) .button.button-full strong {
 
 .style-msg2 { border-left: 4px solid rgba(0,0,0,0.2); }
 
-.successmsg {
-	background: #d4edda;
-	color: #155724;
-}
-
-.errormsg {
-	background: #f8d7da;
-	color: #721c24;
-}
-
-.infomsg {
-	background: #d1ecf1;
-	color: #0c5460;
-}
-
-.alertmsg {
-	background: #fff3cd;
-	color: #856404;
-}
 
 .style-msg .sb-msg,
 .style-msg2 .msgtitle,

@@ -11,7 +11,8 @@
     <hr class="mt-5" />
     @foreach (var modelParameterGroup in Model.ParameterGroups.OrderBy(c => c.Order))
     {
-        <h5 class="mt-3 text-muted">@modelParameterGroup.Name</h5>
+        <div class="border p-3 mt-2">
+        <h5 class="text-muted">@modelParameterGroup.Name</h5>
         <div class="form-row">
             @foreach (var parameter in modelParameterGroup.Parameters.OrderBy(c => c.Index))
             {
@@ -35,7 +36,7 @@
                     {
                         value = $"{Model.ChaletParameterValues.FirstOrDefault(c => c.ParameterId == parameter.Id)?.Value}";
                     }
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
                         <label for="@parameter.Name" class="control-label">@parameter.Name</label>
                         <input value="@value" type="text" name="inputValues[]" class="form-control" />
                         <input type="hidden" name="inputIds[]" value="@parameter.Id" />
@@ -45,6 +46,8 @@
 
             }
         </div>
+        </div>
+
     }
     <hr />
     <h4>@Resource.Images</h4>
@@ -70,16 +73,23 @@
     <h4>@Resource.PaymentInfo</h4>
     <div class="form-group">
         <label asp-for="@Model.Unit.DepositAmount" class="control-label"></label>
-        <input asp-for="@Model.Unit.DepositAmount" required="" class="form-control" />sss
+        <input asp-for="@Model.Unit.DepositAmount" required="" class="form-control" />
         <span asp-validation-for="@Model.Unit.DepositAmount" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="@Model.Unit.DayPrice" class="control-label"></label>
+        <label class="control-label">
+
+            <input id="chkDayPrice" onchange="dayPrice($(this).prop('checked'))" asp-for="@Model.Unit.IsDayPrice"/>
+            @Resource.DayPrice
+        </label>
         <input asp-for="@Model.Unit.DayPrice" required="" class="form-control" />
         <span asp-validation-for="@Model.Unit.DayPrice" class="text-danger"></span>
     </div>
-    <h5 class="mt-4">@Resource.PricePerDay</h5>
-    <div class="form-row">
+    <h5 class="mt-4">
+        <input type="checkbox" id="chkPricePerDay" onchange="pricePerDay($(this).prop('checked'))"/>
+        @Resource.PricePerDay
+    </h5>
+    <div class="form-row pricePerDayGroup">
         <div class="form-group col-md-6">
             <input type="hidden" asp-for="@Model.PricePerDay.UnitId" value="@Model.Unit.Id" />
             <label asp-for="@Model.PricePerDay.Saturday" class="control-label"></label>
@@ -153,7 +163,7 @@
     </div>
 </form>
 
-<div class="mt-4">
+<div class="table-responsive mt-4">
     <table class="table table-bordered">
         <tr>
             <th>@Resource.From</th>
@@ -167,7 +177,7 @@
                 <td>@modelOffer.DateFrom.ToString("dd-MM-yyyy")</td>
                 <td>@modelOffer.DateTo.ToString("dd-MM-yyyy")</td>
                 <td>@modelOffer.Amount</td>
-                <td><a class="btn btn-danger" asp-action="RemoveOffer" asp-route-id="@modelOffer.Id" asp-route-unitId="@modelOffer.UnitId" asp-route-chaletId="@Model.Unit.ChaletId"><i class="icon-trash"></i></a></td>
+                <td><a class="btn btn-danger btn-sm" asp-action="RemoveOffer" asp-route-id="@modelOffer.Id" asp-route-unitId="@modelOffer.UnitId" asp-route-chaletId="@Model.Unit.ChaletId"><i class="icon-trash"></i></a></td>
             </tr>
         }
         @if (!Model.Offers.Any())
@@ -250,27 +260,7 @@
             if (isSimilar) {
                 $("#Unit_Count").removeAttr("readonly");
                 $("#SimilarDiv").removeClass("d-none");
-                @*var chaletName = $("#Unit_Name").val() + " 1";
-                var chaletCode = $("#Unit_Code").val() + "1";
-                var chalet = `
-                                <tr class="similarRow">
-                                    <td>
-                                        <input name="chleteName[]" value='${chaletName}' placeholder="@Resource.UnitName" class="form-control" />
-                                    </td>
-                                    <td>
-                                        <input name="chleteCode[]" value='${chaletCode}' placeholder="@Resource.UnitCode" class="form-control" />
-                                    </td>
-                                    <td>
-                                        <select  name="chleteViewStatus[]" class="form-control">
-                                            <option value="true">@Resource.ViewStatusShown</option>
-                                            <option value="false" selected="selected">@Resource.ViewStatusHidden</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="$(this).parent().parent().remove()"><i class="icon-trash"></i></button>
-                                    </td>
-                                </tr>`;
-                $("#SimilarChalet").html(chalet);*@
+
             } else {
                 $("#Unit_Count").val(1);
                 $("#Unit_Count").prop("readonly", "readonly");
@@ -335,7 +325,7 @@
         }
 
 
-        function updateSimilar(id, name, code, viewStatus, img,tempImage) {
+        function updateSimilar(id, name, code, viewStatus, img, tempImage) {
             $("#SimilarUnitId").val(id);
             $("#ChaletName").val(name);
             $("#ChaletCode").val(code);
@@ -347,6 +337,43 @@
                 $("#smilarImg").prop("src", tempImage);
             }
             $("#SimilarModal").modal("show");
+        }
+
+        function dayPrice(isDayPrice) {
+            if (isDayPrice) {
+                $("#Unit_DayPrice").removeAttr("readonly");
+                $(".pricePerDayGroup input").prop("readonly", "readonly");
+                document.getElementById('chkPricePerDay').checked = false;
+            } else {
+                $("#Unit_DayPrice").prop("readonly", "readonly");
+                $(".pricePerDayGroup input").removeAttr("readonly");
+
+                document.getElementById('chkPricePerDay').checked = true;
+            }
+        }
+
+        function pricePerDay(isPricePerDay) {
+            if (isPricePerDay) {
+                document.getElementById('chkDayPrice').checked = false;
+                $("#Unit_DayPrice").prop("readonly", "readonly");
+                $(".pricePerDayGroup input").removeAttr("readonly");
+            } else {
+                $("#Unit_DayPrice").removeAttr("readonly");
+                $(".pricePerDayGroup input").prop("readonly", "readonly");
+                document.getElementById('chkDayPrice').checked = true;
+            }
+        }
+
+        if ('@Model.Unit.IsDayPrice'==='True') {
+            $("#Unit_DayPrice").removeAttr("readonly");
+            $(".pricePerDayGroup input").prop("readonly", "readonly");
+            document.getElementById('chkDayPrice').checked = true;
+            document.getElementById('chkPricePerDay').checked = false;
+        } else {
+            document.getElementById('chkPricePerDay').checked = true;
+            document.getElementById('chkDayPrice').checked = false;
+            $("#Unit_DayPrice").prop("readonly", "readonly");
+            $(".pricePerDayGroup input").removeAttr("readonly");
         }
     </script>
 }

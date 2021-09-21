@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
+using File = Data.Models.File;
 
 namespace BookingApp.Controllers
 {
@@ -26,9 +28,11 @@ namespace BookingApp.Controllers
         private readonly IRepository<ChaletSetting> _chaletSettingRepository;
         private readonly IRepository<Bank> _bankRepository;
         private readonly IRepository<File> _fileRepository;
+        private readonly IRepository<Region> _regionRepository;
+        private readonly IRepository<Job> _jobRepository;
         public UserAccountController(IRepository<User> userRepository, IRepository<ChaletUser> chaletUserRepository,
             IRepository<ChaletImage> chaletImageRepository, IRepository<Chalet> chaletRepository,
-            IRepository<File> fileRepository, IRepository<City> cityRepository, IRepository<Neighborhood> neighborhoodRepository, IRepository<ChaletBank> chaletBankRepository, IRepository<ChaletSetting> chaletSettingRepository, IRepository<Bank> bankRepository)
+            IRepository<File> fileRepository, IRepository<City> cityRepository, IRepository<Neighborhood> neighborhoodRepository, IRepository<ChaletBank> chaletBankRepository, IRepository<ChaletSetting> chaletSettingRepository, IRepository<Bank> bankRepository, IRepository<Region> regionRepository, IRepository<Job> jobRepository)
         {
             _userRepository = userRepository;
             _chaletUserRepository = chaletUserRepository;
@@ -39,6 +43,8 @@ namespace BookingApp.Controllers
             _chaletBankRepository = chaletBankRepository;
             _chaletSettingRepository = chaletSettingRepository;
             _bankRepository = bankRepository;
+            _regionRepository = regionRepository;
+            _jobRepository = jobRepository;
             _cityRepository = cityRepository;
         }
         public IActionResult Index()
@@ -55,8 +61,12 @@ namespace BookingApp.Controllers
             try
             {
                 var user = SessionClass.GetUser(HttpContext);
-                var chaletUser = await _chaletUserRepository.Table.Include(c => c.Chalet.City).Include("Chalet.ChaletImages.File").Where(c=>c.UserId==user.Id).ToListAsync();
-                return View(chaletUser);
+                var chaletUsers = await _chaletUserRepository.Table.Include(c => c.Chalet.Units).Include(c => c.Chalet.City).Include("Chalet.ChaletImages.File").Where(c=>c.UserId==user.Id).ToListAsync();
+                foreach (var chaletUser in chaletUsers.Where(chaletUser => !chaletUser.Chalet.IsConfirmed))
+                {
+                    Warning(Resource.ProrpertNotConfirmed);
+                }
+                return View(chaletUsers);
             }
             catch (Exception ex)
             {
@@ -86,9 +96,14 @@ namespace BookingApp.Controllers
             }
         }
 
-        public IActionResult GetNeighborhoods(Guid cityId)
+        public IActionResult GetRegions(Guid cityId)
         {
-            var neighborhoods = _neighborhoodRepository.Table.Where(c => c.CityId == cityId).ToList();
+            var regions = _regionRepository.Table.Where(c => c.CityId == cityId).ToList();
+            return Json(regions);
+        }
+        public IActionResult GetNeighborhoods(Guid regionId)
+        {
+            var neighborhoods = _neighborhoodRepository.Table.Where(c => c.RegionId == regionId).ToList();
             return Json(neighborhoods);
         }
 
@@ -118,9 +133,11 @@ namespace BookingApp.Controllers
                     chalet.Location = model.Location;
                     chalet.ChaletName = model.ChaletName;
                     chalet.CityId = model.CityId;
+                    chalet.RegionId = model.RegionId;
                     chalet.NeighborhoodId = model.NeighborhoodId;
                     chalet.Description = model.Description;
                     chalet.Direction = model.Direction;
+                    chalet.PropertyType = model.PropertyType;
                     _chaletRepository.Update(chalet);
                 }
                 isHasImages = _chaletImageRepository.Table.Any(c => c.ChaletId == model.Id);
@@ -185,16 +202,12 @@ namespace BookingApp.Controllers
             var model = new ChaletSettingViewModel();
             try
             {
-                model.ChaletSetting = _chaletSettingRepository.Table.FirstOrDefault(c => c.ChaletId == id);
-                if (model.ChaletSetting==null)
-                {
-                    model.ChaletSetting = new ChaletSetting();
-                    model.ChaletSetting.ChaletId = id;
-                }
-
+                model.ChaletSetting = _chaletSettingRepository.Table.FirstOrDefault(c => c.ChaletId == id) ?? new ChaletSetting {ChaletId = id};
                 model.ChaletBank.ChaletId = id;
                 model.ChaletBanks = _chaletBankRepository.Table.Include(c=>c.Bank).Where(c => c.ChaletId == id).ToList();
+                model.ChaletUsers = _chaletUserRepository.Table.Include(c => c.User).Where(c => c.ChaletId == id).ToList();
                 ViewBag.Banks = new SelectList(await _bankRepository.ToListAsync(),"Id","Name");
+                ViewBag.Jobs = new SelectList(await _jobRepository.ToListAsync(),"Id","Name");
             }
             catch (Exception e)
             {
@@ -202,6 +215,55 @@ namespace BookingApp.Controllers
                 throw;
             }
             return View(model);
+        }
+        [HttpPost]
+        public IActionResult SaveChaletUser(User user,Guid chaletId,bool notifications)
+        {
+            try
+            {
+                var userInDb = _userRepository.Find(user.Id);
+                if (userInDb==null)
+                {
+                    user.TemporaryPassword = true;
+                    user.IsConfirmed = true;
+                    _userRepository.Add(user);
+                    var chaletUser = new ChaletUser
+                    {
+                        IsAdmin = user.UserType==(int)Enums.UserType.BookAdmin?true:false,
+                        ChaletId = chaletId,
+                        UserId = user.Id,
+                        SendWhatsAppNotifications = user.WhatsAppNotifications
+                    };
+                    _chaletUserRepository.Add(chaletUser);
+                }
+                else
+                {
+                    userInDb.UserType = user.UserType;
+                    userInDb.PhoneNumber = user.PhoneNumber;
+                    userInDb.WhatsAppNumber = user.WhatsAppNumber;
+                    userInDb.FirstName = user.FirstName;
+                    userInDb.LastName = user.LastName;
+                    userInDb.JobId = user.JobId;
+                    userInDb.Email = user.Email;
+                    userInDb.Password = user.Password;
+                    _userRepository.Update(userInDb);
+                    var chaletUser = _chaletUserRepository.Table.FirstOrDefault(c => c.UserId == userInDb.Id);
+                    if (chaletUser != null)
+                    {
+                        chaletUser.IsAdmin = user.UserType == (int) Enums.UserType.BookAdmin ? true : false;
+                        chaletUser.SendWhatsAppNotifications = user.WhatsAppNotifications;
+                        _chaletUserRepository.Update(chaletUser);
+                    }
+                }
+                Success(Resource.AlertDataSavedSuccessfully);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return RedirectToAction("Setting", new {id = chaletId });
         }
 
         [HttpPost]

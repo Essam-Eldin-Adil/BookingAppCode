@@ -23,6 +23,8 @@ namespace Data.Models.Chalets.ChaletDetails
         public double DepositAmount { get; set; }
         [Display(Name = "DayPrice", ResourceType = typeof(Resource))]
         public double DayPrice { get; set; }
+
+        public bool IsDayPrice { get; set; } = true;
         public ICollection<UnitImage> UnitImages { get; set; }
         public Guid ChaletId { get; set; }
         public Chalet Chalet { get; set; }

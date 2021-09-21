@@ -1,10 +1,8 @@
 ﻿@model UnitViewModel
 @{
-    var isReadonly = "";
     var isHidden = "";
     if (Model.Unit.HaveSimilar)
     {
-        isReadonly = "readonly";
         isHidden = "hidden";
     }
 }
@@ -17,12 +15,16 @@
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 <div class="form-row">
     <div class="form-group col-md-6">
-        <label asp-for="@Model.Unit.Name" class="control-label"></label>
+        <label asp-for="@Model.Unit.Name" class="control-label">
+            @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.UnitName))
+        </label>
         <input asp-for="@Model.Unit.Name" class="form-control" required="" />
         <span asp-validation-for="@Model.Unit.Name" class="text-danger"></span>
     </div>
     <div class="form-group col-md-3">
-        <label asp-for="@Model.Unit.Code" class="control-label"></label>
+        <label asp-for="@Model.Unit.Code" class="control-label">
+             @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.UnitCode))
+        </label>
         <input asp-for="@Model.Unit.Code" class="form-control" required="" />
         <span asp-validation-for="@Model.Unit.Code" class="text-danger"></span>
     </div>
@@ -47,10 +49,12 @@
     <div class="col-md-9">
         <div class="form-group form-check">
             <label class="form-check-label">
-                <input class="form-check-input" onchange="haveSimilar($(this).prop('checked'))" asp-for="@Model.Unit.HaveSimilar" /> @Html.DisplayNameFor(model => model.Unit.HaveSimilar)
+                <input class="form-check-input" onchange="haveSimilar($(this).prop('checked'))" asp-for="@Model.Unit.HaveSimilar" /> 
+                @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.HaveSimilarChalets))
+
                 @if (Model.Unit.HaveSimilar)
                 {
-                    <input style="width: 100px;display: inline;" min="1" asp-for="@Model.Unit.Count" class="form-control" />
+                    <input style="width: 100px;display: inline;" required="" min="1" asp-for="@Model.Unit.Count" class="form-control" />
                 }
                 else
                 {
@@ -60,16 +64,23 @@
         </div>
     </div>
 </div>
-<div id="SimilarDiv" class="form-row @isHidden">
-    <button type="button" onclick="newSimilar()" class="btn btn-primary col-md-3 mb-2">@Resource.AddSimilarChalet</button>
-    <table class="table table-bordered table-responsive">
-        <thead>
+<div id="SimilarDiv" class="form-row d-none @isHidden">
+    <button type="button" onclick="newSimilar()" class="btn btn-primary btn-sm col-md-3 mb-2">
+        @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.AddSimilarChalet))
+    </button>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
             <tr>
                 <th>
-                    <label asp-for="@Model.Unit.Name" class="control-label"></label>
+                    <label asp-for="@Model.Unit.Name" class="control-label">
+                        @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.UnitName))
+                    </label>
                 </th>
                 <th>
-                    <label asp-for="@Model.Unit.Code" class="control-label"></label>
+                    <label asp-for="@Model.Unit.Code" class="control-label">
+                        @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.UnitCode))
+                    </label>
                 </th>
                 <th>
                     <label asp-for="@Model.Unit.ViewStatus" class="control-label"></label>
@@ -81,8 +92,8 @@
 
                 </th>
             </tr>
-        </thead>
-        <tbody id="SimilarChalet">
+            </thead>
+            <tbody id="SimilarChalet">
             @foreach (var item in Model.SimilarUnits.OrderBy(c => c.Name))
             {
                 var image = "";
@@ -93,45 +104,56 @@
                     smallImage = Url.Content("~/") + item.UnitImages.FirstOrDefault()?.File.FileContentMin;
                 }
 
-            <tr class="similarRow">
-                <td>
-                    @item.Name
-                </td>
-                <td>
-                    @item.Code
-                </td>
-                <td>
-                    @if (item.ViewStatus)
-                    {
-                        <span class="text-success">
-                            @Resource.ViewStatusShown
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="text-danger">@Resource.ViewStatusHidden</span>
-                    }
-                </td>
-                <td>
-                    <div data-big="3" data-lightbox="gallery">
-                        <div class="entry">
-                            <div class="entry-image">
-                                <a href="@image" data-lightbox="image"><img style="width: 100px" src="@smallImage"></a>
+                <tr class="similarRow">
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Code
+                    </td>
+                    <td>
+                        @if (item.ViewStatus)
+                        {
+                            <span class="text-success">
+                                @Resource.ViewStatusShown
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="text-danger">@Resource.ViewStatusHidden</span>
+                        }
+                    </td>
+                    <td>
+                        <div data-big="3" data-lightbox="gallery">
+                            <div class="entry">
+                                <div class="entry-image">
+                                    <a href="@image" data-lightbox="image"><img style="width: 100px" src="@smallImage"></a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-                <td class="text-center">
-                    <a href="@Url.Action("RemoveUnit",new {id=item.Id,referUrl=Url.Action("Unit",new {id=item.OriginId,chaletId=item.ChaletId})})" class="btn btn-danger btn-sm"><i class="icon-trash"></i></a>
-                    <button type="button" href="~/Chalets/Remove" class="btn btn-primary btn-sm" onclick="updateSimilar('@item.Id','@item.Name','@item.Code','@item.ViewStatus.ToString().ToLower()','@image','@smallImage')"><i class="icon-edit"></i></button>
-                </td>
-            </tr>
+                    </td>
+                    <td class="text-center">
+                        <a href="@Url.Action("RemoveUnit",new {id=item.Id,referUrl=Url.Action("Unit",new {id=item.OriginId,chaletId=item.ChaletId})})" class="btn btn-danger btn-sm"><i class="icon-trash"></i></a>
+                        <button type="button" href="~/Chalets/Remove" class="btn btn-primary btn-sm" onclick="updateSimilar('@item.Id','@item.Name','@item.Code','@item.ViewStatus.ToString().ToLower()','@image','@smallImage')"><i class="icon-edit"></i></button>
+                    </td>
+                </tr>
             }
-        </tbody>
-    </table>
-</div>
+            @if (!Model.SimilarUnits.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-center">
+                        @Resource.NoRecord
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    </div>
 <div class="form-group">
-    <label asp-for="@Model.Unit.Space" class="control-label"></label>
+    <label asp-for="@Model.Unit.Space" class="control-label">
+        @PropertyTypeHelper.GetResource(ViewBag.PropertyType, nameof(Resource.UnitSpace))
+    </label>
     <input asp-for="@Model.Unit.Space" required="" class="form-control" />
     <span asp-validation-for="@Model.Unit.Space" class="text-danger"></span>
 </div>

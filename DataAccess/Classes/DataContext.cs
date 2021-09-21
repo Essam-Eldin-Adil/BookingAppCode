@@ -32,6 +32,7 @@ public class DataContext : DbContext,IDataContext
     public virtual DbSet<Country> Countries { get; set; }
     public virtual DbSet<City> Cities { get; set; }
     public virtual DbSet<Neighborhood> Neighborhoods { get; set; }
+    public virtual DbSet<Region> Regions { get; set; }
     public virtual DbSet<Chalet> Chalets { get; set; }
     public virtual DbSet<ChaletImage> ChaletImages { get; set; }
     public virtual DbSet<ChaletUser> ChaletUsers { get; set; }
@@ -46,7 +47,8 @@ public class DataContext : DbContext,IDataContext
     public virtual DbSet<PricePerDay> PricePerDays { get; set; }
     public virtual DbSet<Offer> Offers { get; set; }
     public virtual DbSet<Reservation> Reservations { get; set; }
-    public void BeginTransaction()
+        public virtual DbSet<Job> Jobs { get; set; }
+public void BeginTransaction()
     {
         _transaction = Database.BeginTransaction();
     }

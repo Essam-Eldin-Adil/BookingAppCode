@@ -28,26 +28,32 @@
             </select>
         </div>
     </div>
-    
-    
+
+
 
     <div class="form-row">
-
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label asp-for="CityId" class="control-label"></label>
-            <select required="" onchange="getNeighborhood(this)" asp-for="CityId" class="form-control" asp-items="ViewBag.Cities">
+            <select required="" onchange="getRegion(this)" asp-for="CityId" class="form-control" asp-items="ViewBag.Cities">
                 <option value="" selected>Select Option</option>
             </select>
             <span asp-validation-for="CityId" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
+            <label asp-for="RegionId" class="control-label"></label>
+            <select required="" onchange="getNeighborhood(this)" asp-for="RegionId" class="form-control" asp-items="ViewBag.Neighborhoods">
+                <option value="" selected>Select Option</option>
+            </select>
+            <span asp-validation-for="RegionId" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
             <label asp-for="NeighborhoodId" class="control-label"></label>
             <select required="" asp-for="NeighborhoodId" class="form-control" asp-items="ViewBag.Neighborhoods">
                 <option value="" selected>Select Option</option>
             </select>
             <span asp-validation-for="NeighborhoodId" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-3">
             <label asp-for="Direction" class="control-label"></label>
             <select required="" asp-for="Direction" class="form-control">
                 <option value="" selected>Select Option</option>
@@ -63,9 +69,24 @@
             <span asp-validation-for="Direction" class="text-danger"></span>
         </div>
     </div>
+    <div class="col-12 form-group mb-4">
+        <label for="website-cost-cms" class="mb-3">@Resource.PropertyType</label><br>
+        <div class="btn-group btn-group-toggle flex-wrap w-100" data-toggle="buttons">
+            <label for="r1" class="btn btn-outline-secondary px-4 font-weight-semibold ls0 nott">
+                <input type="radio" asp-for="PropertyType" id="r1" value="@((int)Enums.PropertyType.Resort)" > <i class="icon-umbrella-beach"></i> @Resource.Resort
+            </label>
+            <label for="r2" class="btn btn-outline-secondary px-4 font-weight-semibold ls0 nott">
+                <input type="radio" asp-for="PropertyType" id="r2"value="@((int)Enums.PropertyType.Break)"> <i class="icon-building"></i> @Resource.Break
+            </label>
+            <label for="r3" class="btn btn-outline-secondary px-4 font-weight-semibold ls0 nott">
+                <input type="radio" asp-for="PropertyType" id="r3" value="@((int)Enums.PropertyType.Villa)"> <i class="icon-building2"></i> @Resource.Villa
+            </label>
+        </div>
+    </div>
+
     <div class="form-group">
         <label asp-for="Description" class="control-label"></label>
-        <textarea rows="7" asp-for="Description" class="form-control" placeholder="Add the chalet description..."></textarea>
+        <textarea rows="7" asp-for="Description" class="form-control" placeholder="@Resource.Description..."></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -75,8 +96,8 @@
     </div>
     <div id="gmap" style="height:300px"></div>
 
-    <div class="form-group bottommargin">
-        <h4 class="mb-2">@Resource.CHALETIMAGES</h4>
+    <div class="form-group bottommargin mt-3">
+        <h4 class="mb-2">@Resource.PropertyImages</h4>
         <div class="widget_links mb-2">
             <ul>
                 <b>@Resource.ConditionOfAddImages:</b>

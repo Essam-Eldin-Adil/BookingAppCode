@@ -9,5 +9,4 @@ namespace Data.Models.General
         public string Name { get; set; }
         public Guid? Image { get; set; }
     }
-
 }
