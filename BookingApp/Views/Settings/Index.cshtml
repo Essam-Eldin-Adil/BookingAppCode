@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = @Resource.Settings;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h4>@Resource.Settings</h4>
+
+<form method="post" asp-action="SaveSetting">
+    <div class="form-row">
+        <div class="col-md-12 form-group">
+            <label>@Resource.Name</label>
+            <input type="text" name="AppName" value="@Setting.Get(HttpContextAccessor.HttpContext,"AppName")" class="form-control" />
+        </div>
+        @*<div class="col-md-12 form-group">
+            <label>@Resource.Copyrights</label>
+            <textarea type="text" name="Copyrights" class="form-control">@Setting.Get(HttpContextAccessor.HttpContext,"Copyrights")</textarea>
+        </div>*@
+        <hr />
+        <h6>@Resource.ContactInfos</h6>
+        <div class="col-md-12 form-group">
+            <label>@Resource.CustomerServicePhoneNumber</label>
+            <input type="text" name="CompanyPhoneNumber" value="@Setting.Get(HttpContextAccessor.HttpContext,"CompanyPhoneNumber")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.ReservationPhoneNumbers</label>
+            <input type="text" name="ReservationPhoneNumber" value="@Setting.Get(HttpContextAccessor.HttpContext,"ReservationPhoneNumber")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.CustomerServiceFrom</label>
+            <input type="text" name="CustomerServiceFrom" value="@Setting.Get(HttpContextAccessor.HttpContext,"CustomerServiceFrom")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.CustomerServiceTo</label>
+            <input type="text" name="CustomerServiceTo" value="@Setting.Get(HttpContextAccessor.HttpContext,"CustomerServiceTo")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.ContactPhone</label>
+            <input type="text" name="ContactPhone" value="@Setting.Get(HttpContextAccessor.HttpContext,"ContactPhone")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.OfficeAddress</label>
+            <input type="text" name="OfficeAddress" value="@Setting.Get(HttpContextAccessor.HttpContext,"OfficeAddress")" class="form-control" />
+        </div>
+        <div class="col-md-12 form-group">
+            <label>@Resource.CompanyEmail</label>
+            <input type="text" name="OfficeAddress" value="@Setting.Get(HttpContextAccessor.HttpContext,"CompanyEmail")" class="form-control" />
+        </div>
+        <hr />
+        @Resource.Reservations
+        <div class="col-md-12 form-group">
+            <label>@Resource.PleaseVisitOurOffice</label>
+            <textarea type="text" name="PleaseVisitOurOfficeToPay" class="form-control">@Setting.Get(HttpContextAccessor.HttpContext, "PleaseVisitOurOfficeToPay")</textarea>
+        </div>
+        <div class="col-md-12 form-group">
+            <button type="submit" class="btn btn-primary">@Resource.SaveChanges</button>
+        </div>
+    </div>
+</form>
+
+@section scripts
+{
+    <script>
+        updateMenu("settings");
+    </script>
+}

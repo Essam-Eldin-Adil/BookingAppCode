@@ -1,30 +1,41 @@
 ﻿<html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="@HttpContextAccessor.HttpContext.Session.GetString("Language")">
 <partial name="_head" />
+@RenderSection("css", required: false)
 <body class="stretched">
-
     <!-- Document Wrapper
     ============================================= -->
     <div id="wrapper">
-
         <partial name="_headerAccount" />
+
+        <section class="py-4" id="page-title">
+            <div class="container clearfix">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="~/Home">@Resource.Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a>@ViewBag.Title</a></li>
+                </ol>
+            </div>
+        </section><!-- #page-title end -->
         <section id="content">
             <div class="content-wrap">
                 <div class="container">
-                    <div class="card rounded-top bg-white border-0 w-100 shadow p-3">
-                        @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
-                        {
-                            <div class="style-msg @TempData["AlertType"].ToString()msg">
-                                <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            </div>
-                        }
+                    @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
+                    {
+                        <div class="style-msg @TempData["AlertType"].ToString()msg">
+                            <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        </div>
+                    }
+                    <div>
                         @RenderBody()
                     </div>
                 </div>
             </div>
         </section><!-- #content end -->
-        <partial name="_footerAccount" />
-
+        <footer id="footer" class="dark">
+            <!-- Copyrights
+        ============================================= -->
+            <partial name="_footerAccount" />
+        </footer>
 
     </div><!-- #wrapper end -->
     <partial name="_scripts" />

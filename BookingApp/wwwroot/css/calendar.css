@@ -315,7 +315,6 @@
 
 .fc-calendar .fc-row > div > div a,button,
 .fc-calendar .fc-row > div > div span {
-    width: 100%;
     position: relative;
 	z-index: 1;
 	color: #FFF;

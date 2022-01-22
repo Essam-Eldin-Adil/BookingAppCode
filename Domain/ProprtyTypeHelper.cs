@@ -15,8 +15,8 @@ namespace Domain
                 case (int)Enums.PropertyType.Resort:
                     key += (int)Enums.PropertyType.Resort;
                     break;
-                case (int)Enums.PropertyType.Break:
-                    key += (int)Enums.PropertyType.Break; 
+                case (int)Enums.PropertyType.Reset:
+                    key += (int)Enums.PropertyType.Reset; 
                     break;
                 case (int)Enums.PropertyType.Villa:
                     key += (int)Enums.PropertyType.Villa;

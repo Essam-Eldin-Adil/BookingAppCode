@@ -1,0 +1,165 @@
+﻿@model Data.Models.Chalets.Reservation
+@{
+    ViewData["Title"] = Resource.DetailsReservationNumber + " " + Model.ReservationNumber;
+    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewBag.chaletId = Model.Unit.ChaletId;
+    var TotalPrice = Model.TotalDays * Model.DayPrice;
+    var UnPaidAmount = TotalPrice - Model.Invoices.Sum(c => c.Amount);
+}
+<h4>@ViewBag.Title</h4>
+<div class="style-msg2 successmsg">
+
+</div>
+<div class="style-msg2">
+    @if (Model.Status == (int)Enums.Status.Cancled)
+    {
+        <div class="msgtitle dangermsg">
+            @Resource.ReservationCancledForResone (@Model.CancelResones)
+        </div>
+    }
+    else if (Model.Status == (int)Enums.Status.Confirmed)
+    {
+        <div class="msgtitle successmsg">
+            @Resource.Confirmed
+        </div>
+    }
+    else if (Model.Status == (int)Enums.Status.New)
+    {
+        <div class="msgtitle warningmsg">
+            @Resource.ConfirmPending
+        </div>
+    }
+
+    <div class="sb-msg">
+        <div class="row">
+            <div class="col-md-6">
+                <strong>@Resource.PropertyName:</strong> @Model.Unit.Name
+            </div>
+            <div class="col-md-6">
+                <strong>@Resource.UnitCode:</strong> @Model.Unit.Code
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.ArriveDate:</strong> @Model.DateFrom.ToString("dd-MM-yyyy")
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.LeaveDate:</strong> @Model.DateTo.ToString("dd-MM-yyyy")
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.TotalDays:</strong> @Model.TotalDays
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.DayPrice:</strong> @Model.DayPrice
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.TotalPrice:</strong> @TotalPrice
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.Paid:</strong> @Model.Invoices.Sum(c => c.Amount)
+            </div>
+            <div class="col-md-6">
+                <strong>@Resource.UnPaidAmount:</strong> @UnPaidAmount
+            </div>
+            <div class="col-md-6">
+                <strong>@Resource.InvoiceByName:</strong> @Model.User.FirstName
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.LastName:</strong> @Model.User.LastName
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.PhoneNumber:</strong> @Model.User.PhoneNumber
+            </div>
+
+            <div class="col-md-6">
+                <strong>@Resource.WhatsAppNumber:</strong> @Model.User.WhatsAppNumber
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+@foreach (var invoice in Model.Invoices)
+{
+<div class="toggle mb-1">
+    <div class="toggle-header justify-content-between flex-row-reverse">
+        <div class="toggle-title font-weight-semibold">
+            فاتورة بتاريخ @invoice.PaymentDateTime.ToString("f")
+        </div>
+        <div class="toggle-icon">
+            <i class="toggle-closed icon-angle-down1"></i>
+            <i class="toggle-open icon-angle-up1"></i>
+        </div>
+    </div>
+    <div class="toggle-content">
+
+        <div class="row">
+            <div class="col-md-6">
+                <strong>تم الدفع بواسطة:</strong> @invoice.User.FirstName @invoice.User.LastName
+            </div>
+            <div class="col-md-6">
+                <strong>@Resource.PaidAmount:</strong> @invoice.Amount
+            </div>
+            <div class="col-md-6">
+                <strong>الرقم المرجعي:</strong> @invoice.RefNo
+            </div>
+            <div class="col-md-6">
+                <a href="@Url.Content("~/Invoices"+@Model.Id+"/"+@invoice.Id+".pdf")"><i class="icon-file-pdf"></i> تحميل الفاتورة</a>
+            </div>
+        </div>
+    </div>
+</div>
+}
+<br />
+
+@if (Model.Invoices.Sum(c => c.Amount) <= TotalPrice)
+{
+<span class="text-success">المبلغ مدفوع بالكامل</span>
+    <button class="btn btn-primary" readonly="">@Resource.Pay</button>
+}
+else
+{
+    <button class="btn btn-primary" data-toggle="modal" data-target="#newInvoiceModal">@Resource.Pay</button>
+}
+
+<div class="modal fade" id="newInvoiceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="Payment" asp-controller="Chalets" method="post" class="modal-content was-validated">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Resource.ConfirmReservation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="ReservationId" value="@Model.Id" />
+                    <p>@Resource.TotalPrice <span id="totalAmountText">@TotalPrice</span> @Resource.Currency</p>
+                    <p>@Resource.Paid <span id="amountText">@Model.Invoices.Sum(c => c.Amount)</span> @Resource.Currency</p>
+
+                    <p>@Resource.UnPaidAmount @UnPaidAmount @Resource.Currency</p>
+                    <div class="form-group">
+                        <label>@Resource.Amount</label>
+                        <input type="number" name="Amount" max="@UnPaidAmount" required="" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Close</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Pay</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        updateMenu("reservations");
+    </script>
+}

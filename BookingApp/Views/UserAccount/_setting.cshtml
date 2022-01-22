@@ -1,77 +1,76 @@
-﻿@model Data.Models.Chalets.ChaletSetting
+﻿@model Data.Models.Chalets.Chalet
+@using System.Globalization;
 
-<h4>@Resource.PropertySettings</h4>
-<hr/>
-<form asp-action="SaveSetting" method="post" class="was-validated">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="ChaletId" class="form-control" />
-    <input type="hidden" asp-for="Id" value="@Model.Id" class="form-control" />
-    <input type="hidden" asp-for="Order" class="form-control" />
-    <input type="hidden" asp-for="CreatedDate" class="form-control" />
-    <input type="hidden" class="form-check-input" asp-for="IsDeleted" />
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <label asp-for="EnterTime" class="control-label"></label>
-
-            <div class="input-group text-left" data-target-input="nearest" data-target=".datetimepicker1">
-                <input type="text" asp-for="EnterTime" value="@Model.EnterTime.ToString("tt zzz")" class="form-control datetimepicker-input datetimepicker1" data-target=".datetimepicker1" placeholder="00:00 AM/PM" />
-                <div class="input-group-append" data-target=".datetimepicker1" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="icon-clock"></i></div>
+    <h4>@Resource.PropertySettings</h4>
+    <hr />
+    <form asp-action="SaveSetting" method="post" class="was-validated">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" value="@Model.Id" class="form-control" />
+        <input type="hidden" asp-for="Order" class="form-control" />
+        <input type="hidden" asp-for="CreatedDate" class="form-control" />
+        <input type="hidden" class="form-check-input" asp-for="IsDeleted" />
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="EnterTime" class="control-label"></label>
+                <div class="input-group text-left">
+                    <input type="time" asp-for="EnterTime" value="@Model.EnterTime.ToString("hh:mm",CultureInfo.InvariantCulture)" class="form-control" placeholder="00:00 AM/PM" />
+                    <span class="input-group-append">
+                        <span class="input-group-text">@Model.EnterTime.ToString("hh:mm tt")</span>
+                    </span>
                 </div>
+                <span asp-validation-for="EnterTime" class="text-danger"></span>
             </div>
-            <span asp-validation-for="EnterTime" class="text-danger"></span>
-        </div>
-        <div class="form-group col-md-6">
-            <label asp-for="ExitTime" class="control-label"></label>
-            <div class="input-group text-left" data-target-input="nearest" data-target=".datetimepicker2">
-                <input type="text" asp-for="ExitTime" value="@Model.EnterTime" class="form-control datetimepicker-input datetimepicker2" data-target=".datetimepicker2" placeholder="00:00 AM/PM" />
-                <div class="input-group-append" data-target=".datetimepicker2" data-toggle="datetimepicker">
-                    <div class="input-group-text"><i class="icon-clock"></i></div>
+            <div class="form-group col-md-6">
+                <label asp-for="ExitTime" class="control-label"></label>
+                <div class="input-group text-left">
+                    <input type="time" asp-for="ExitTime" value="@Model.ExitTime.ToString("hh:mm")" class="form-control" placeholder="00:00 AM/PM" />
+                    <span class="input-group-append">
+                        <span class="input-group-text">@Model.ExitTime.ToString("hh:mm tt")</span>
+                    </span>
                 </div>
-            </div>            
-            <span asp-validation-for="ExitTime" class="text-danger"></span>
+                <span asp-validation-for="ExitTime" class="text-danger"></span>
+            </div>
         </div>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="CleanCondition" /> @Html.DisplayNameFor(model => model.CleanCondition)
-        </label>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="InsuranceCondition" />
-            @Resource.thereInsurance <input asp-for="InsuranceAmount" class="form-control" style="width: 100px; display: inline" /> @Resource.MostPaid
-        </label>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="FamilyCondition" /> @Html.DisplayNameFor(model => model.FamilyCondition)
-        </label>
-    </div>
-    <div class="form-group">
-        <label asp-for="OtherCondition" class="control-label"></label>
-        <input asp-for="OtherCondition" class="form-control" />
-        <span asp-validation-for="OtherCondition" class="text-danger"></span>
-    </div>
-    <div class="form-row">
-        <div class="form-group col-md-6 d-none">
-            <label asp-for="ReservationManager" class="control-label"></label>
-            <input asp-for="ReservationManager" class="form-control" />
-            <span asp-validation-for="ReservationManager" class="text-danger"></span>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="CleanCondition" /> @Html.DisplayNameFor(model => model.CleanCondition)
+            </label>
         </div>
-        <div class="form-group col-md-6 d-none">
-            <label asp-for="ReservationPhoneNumber" class="control-label"></label>
-            <input asp-for="ReservationPhoneNumber" class="form-control" />
-            <span asp-validation-for="ReservationPhoneNumber" class="text-danger"></span>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="InsuranceCondition" />
+                @Resource.thereInsurance <input asp-for="InsuranceAmount" class="form-control" style="width: 100px; display: inline" /> @Resource.MostPaid
+            </label>
         </div>
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" asp-for="MoneyTransferCondition" /> @Html.DisplayNameFor(model => model.MoneyTransferCondition)
-        </label>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="@Resource.Save" class="btn btn-primary" />
-    </div>
-</form>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="FamilyCondition" /> @Html.DisplayNameFor(model => model.FamilyCondition)
+            </label>
+        </div>
+        <div class="form-group">
+            <label asp-for="OtherCondition" class="control-label"></label>
+            <input asp-for="OtherCondition" class="form-control" />
+            <span asp-validation-for="OtherCondition" class="text-danger"></span>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6 d-none">
+                <label asp-for="ReservationManager" class="control-label"></label>
+                <input asp-for="ReservationManager" class="form-control" />
+                <span asp-validation-for="ReservationManager" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6 d-none">
+                <label asp-for="ReservationPhoneNumber" class="control-label"></label>
+                <input asp-for="ReservationPhoneNumber" class="form-control" />
+                <span asp-validation-for="ReservationPhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="MoneyTransferCondition" /> @Html.DisplayNameFor(model => model.MoneyTransferCondition)
+            </label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="@Resource.Save" class="btn btn-primary" />
+        </div>
+    </form>
 

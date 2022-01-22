@@ -20,7 +20,7 @@
 @font-face {
     font-family: 'Tajawal';
     font-weight: normal;
-    src: url('../css/fonts/Tajawal-Regular.tff') format('truetype');
+    src: url('../css/fonts/Tajawal-Regular.ttf') format('truetype');
 }
 
 body {
@@ -5412,7 +5412,7 @@ body:not(.top-search-open) .top-search-parent .header-misc > *:not(#top-search) 
 
 .side-push-panel.side-panel-open.stretched.device-xl .slider-inner,
 .side-push-panel.side-panel-open.stretched.device-lg .slider-inner {
-    right: -300px;
+    right: 0;
 }
 
 .side-panel-left.side-push-panel.side-panel-open.stretched #wrapper,
@@ -6344,9 +6344,9 @@ body:not(.has-plugin-html5video) .video-wrap video {
     position: absolute !important;
     width: auto !important;
     top: 50% !important;
-    right: auto !important;
+/*    right: auto !important;
     left: 15px !important;
-    margin: 0 !important;
+*/    margin: 0 !important;
     background-color: transparent !important;
     padding: 0 !important;
     font-size: 90%;

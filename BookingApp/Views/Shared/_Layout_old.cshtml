@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="ar-EG">
+<partial name="_head_website" />
+@RenderSection("css", required: false)
+<body class="stretched @HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")">
+
+    <style>
+        .list-group-item.active {
+            z-index: 2;
+            color: #252525;
+            background-color: #e0e0e0;
+            border-color: #d5d8da;
+        }
+    </style>
+    <!-- Document Wrapper
+    ============================================= -->
+    <div id="wrapper" class="clearfix">
+        <partial name="_endUser_header" />
+        <section class="py-4" id="page-title">
+            <div class="container clearfix">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="~/Home">@Resource.Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a>@ViewBag.Title</a></li>
+                </ol>
+            </div>
+        </section><!-- #page-title end -->
+        <section id="content">
+            <div class="content-wrap pt-1">
+                <div class="container clearfix">
+                    @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
+                    {
+                        <div class="style-msg @TempData["AlertType"].ToString()msg">
+                            <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        </div>
+                    }
+                    @RenderBody()
+                </div>
+            </div>
+        </section><!-- #content end -->
+        <!-- Footer
+        ============================================= -->
+        <footer id="footer" class="dark" style="background-color: #222;">
+
+            <partial name="_footerAccount" />
+        </footer><!-- #footer end -->
+
+    </div><!-- #wrapper end -->
+    <!-- Go To Top
+    ============================================= -->
+    <div id="gotoTop" class="icon-angle-up"></div>
+    <partial name="_scripts" />
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: "today",
+                todayHighlight: true,
+                format: "mm/dd/yyyy",
+            });
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+
+
+
+

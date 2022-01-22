@@ -1,0 +1,129 @@
+/* ----------------------------------------------------------------
+	Canvas: Crowd-Funding
+-----------------------------------------------------------------*/
+
+.i-products {
+	position: relative;
+	overflow: hidden;
+	border-radius: 4px;
+}
+
+.i-products:hover { box-shadow: 0 4px 6px rgba(0,0,0,.04); }
+
+.i-products .products-image,
+.i-products .products-image img {
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+
+.i-products .products-image img {
+	-webkit-transform: translateY(0);
+	transform: translateY(0);
+	-webkit-transition: transform .2s ease-in-out;
+    transition: transform .2s ease-in-out;
+    -webkit-backface-visibility: hidden;
+}
+
+.i-products:hover .products-image img {
+	-webkit-transform: translateY(-10px);
+	transform: translateY(-10px);
+}
+
+.i-products .products-image .badge {
+	position: absolute;
+	display: block;
+	top: 10px;
+	left: 10px;
+	color: #222;
+	background-color: #FFF;
+	padding: 5px;
+	border-radius: 3px;
+}
+
+.i-products .products-desc {
+	position: relative;
+	padding: 25px;
+	background-color: #FFF;
+	border: solid #EEE;
+	border-width: 0 1px 1px;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	min-height: 250px;
+	-webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    -webkit-backface-visibility: hidden;
+}
+
+.i-products:hover .products-desc {
+	margin-top: -123px;
+	min-height: 373px;
+	box-shadow: 0 -3px 20px 3px rgba(0,0,0,.4);
+}
+
+.i-products .products-desc h3 {
+	font-size: 20px;
+	margin-bottom: 8px;
+}
+
+.i-products .products-desc p,
+.i-products .products-desc .counter,
+.i-products .products-hoverlays .list-group-item,
+.i-products .products-hoverlays .product-user a,
+.i-products .products-hoverlays .products-location { color: #999; }
+
+.i-products .products-desc p {
+	font-weight: 400;
+	margin-bottom: 25px;
+}
+
+.i-products .products-desc .counter {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.i-products .products-desc h3 a,
+.i-products .products-desc .counter span,
+.i-products .products-desc .counter strong,
+.i-products .products-hoverlays .list-group-item strong { color: #333 }
+
+.i-products .products-hoverlays .list-group-item {
+	padding-left: 0;
+	font-size: 14px;
+}
+
+.i-products .products-hoverlays .product-user img {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.i-products .products-hoverlays {
+	position: absolute;
+	opacity: 0;
+	left: 0;
+	right: 0;
+	bottom: -100px;
+	width: 100%;
+	padding-left: 25px;
+	padding-right: 25px;
+	background-color: #FFF;
+	visibility: hidden;
+	-webkit-transform: translateY(-20px);
+	transform: translateY(-20px);
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+	z-index: 1;
+	transition: all .2s ease-in-out;
+	-webkit-backface-visibility: hidden;
+}
+
+.i-products:hover .products-hoverlays {
+	bottom: 0;
+	opacity: 1;
+	visibility: visible;
+	transition: all .2s ease-in-out;
+}
+
+.skills li > span { top: -30px; }

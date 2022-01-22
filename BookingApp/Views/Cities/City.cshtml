@@ -1,0 +1,131 @@
+﻿@model CityViewModel
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (Model.City.Id==Guid.Empty)
+{
+<h4>@Resource.AddNew</h4>
+}
+else
+{
+    <h4>@Resource.Edit | @Model.City.CityName</h4>
+
+}
+<form asp-action="SaveCity" method="post" class="was-validated" enctype="multipart/form-data">
+    <input type="hidden" asp-for="City.Id" />
+    <div class="form-group">
+        <label asp-for="City.CountryId">@Resource.CountryName</label>
+        <select asp-items="ViewBag.Countries" asp-for="City.CountryId" class="form-control" required="">
+            <option value="">@Resource.PleaseSelect</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="City.CityName"></label>
+        <input type="text" asp-for="City.CityName" class="form-control" required="" />
+    </div>
+    <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,Model.City.Image))" class="img-thumbnail w-25 d-block">
+
+    <div class="form-group mt-3">
+        <label asp-for="City.Image"></label>
+        <input asp-for="City.Image" name="formFiles[]" type="file" class="file" data-show-upload="false" data-show-caption="true" data-show-preview="true">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">@Resource.Save</button>
+    </div>
+</form>
+
+@if (Model.City.Id != Guid.Empty)
+{
+    <hr />
+
+    <h4>@Resource.Translations</h4>
+    <button type="button" onclick="addCityTranslation()" class="btn btn-success btn-sm"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+    <div class="table-responsive mt-2">
+        <table class="table table-striped table-bordered datatable" width="100%">
+            <thead>
+                <tr>
+                    <th>@Resource.CityName</th>
+                    <th>@Resource.Language</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>@Resource.Language</th>
+                    <th>@Resource.Language</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var cityCityTranslation in Model.City.CityTranslations)
+                {
+                    <tr>
+                        <td>@cityCityTranslation.CityName</td>
+                        <td>@cityCityTranslation.Language.Name</td>
+                        <td class="w-25">
+                            <button onclick="updateCityTranslation('@cityCityTranslation.Id','@cityCityTranslation.CityName','@cityCityTranslation.LanguageId')" type="button" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                            <a href="@Url.Action("RemoveCityTranslation",new {id=cityCityTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-body">
+                <form asp-action="SaveCityTranslation" method="post" class="was-validated modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">@Resource.AddUser</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="CityTranslation.Id" />
+                        <input type="hidden" asp-for="CityTranslation.CityId" value="@Model.City.Id" />
+                        <div class="form-group">
+                            <label asp-for="CityTranslation.LanguageId">@Resource.Language</label>
+                            <select asp-items="ViewBag.Languages" asp-for="CityTranslation.LanguageId" class="form-control" required="">
+                                <option value="">@Resource.PleaseSelect</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CityTranslation.CityName">@Resource.CityName</label>
+                            <input type="text" asp-for="CityTranslation.CityName" class="form-control" required="" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                        <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts
+{
+    <script>
+        updateMenu("cities");
+
+        function updateCityTranslation(id, name,langId) {
+            $("#myModalLabel").html('@Resource.Edit :' + name);
+            $("#CityTranslation_Id").val(id);
+            $("#CityTranslation_CityName").val(name);
+            $("#CityTranslation_LanguageId").val(langId);
+            $("#myModal").modal("show");
+        }
+
+        function addCityTranslation() {
+            $("#myModalLabel").html('@Resource.Edit');
+            $("#CityTranslation_Id").val("");
+            $("#CityTranslation_Name").val("");
+            $("#myModal").modal("show");
+        }
+    </script>
+}

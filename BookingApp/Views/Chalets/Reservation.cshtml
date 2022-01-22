@@ -2,7 +2,7 @@
 @using System.Resources
 @model Data.ViewModels.ReservationViewModel
 @{
-    ViewData["Title"] = "Reservation";
+    ViewData["Title"] = Model.Chalet.ChaletName;
     Layout = "~/Views/Shared/_ChaletLayout.cshtml";
     ViewBag.chaletId = Model.Chalet.Id;
     var image = "";
@@ -61,7 +61,7 @@
                 <div class="row pt-3 pb-3">
                     <div class="col-auto">
                         <div class="entry-image mb-0">
-                            <img id="unitImg" style="width:100px" src="@selectedUnitImage" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image">
+                            <img id="unitImg" style="width:60px" src="@selectedUnitImage" onerror="this.onerror = null; this.src = '@Url.Content("~/Images/noimg.jpg")';" alt="Image">
                         </div>
                     </div>
                     <div class="col-md-5 col-lg-5 col-sm-12">
@@ -70,13 +70,6 @@
                                 @Model.SelectedUnit.Name
                             </h4>
                             <h4 id="unitDescription"><span class="text-muted">@Model.SelectedUnit.Description</span></h4>
-                        </div>
-                        <div id="unitRate">
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star3"></i>
-                            <i class="icon-star-half-full"></i>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-12 text-right">
@@ -112,8 +105,17 @@
                             <div class="col-md-3 col-sm-12 text-right">
                                 <span class="text-success mb-3">@Resource.Confirmed</span>
                                 <br />
-                                <button class="btn btn-primary btn-sm mt-3">@Resource.Details</button>
-                                <button class="btn btn-danger btn-sm mt-3">@Resource.Delete</button>
+                                <button class="btn btn-info w-100 btn-sm mt-3">@Resource.Details</button>
+                                @if (@reservation.ReservedBy == (int)Enums.ReservedBy.ProprityUser || @reservation.ReservedBy == (int)Enums.ReservedBy.SystemAdmin)
+                                {
+                                    <a href="~/Chalets/UpdateReservation/@reservation.Id" class="btn btn-primary btn-sm mt-1 w-100">@Resource.UpdateReservation</a>
+                                    <a href="~/Chalets/CancelReservation/@reservation.Id" class="btn btn-danger btn-sm mt-1 w-100">@Resource.CancelReservation</a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-sm mt-1 w-100 disabled">@Resource.UpdateReservation</button>
+                                    <button class="btn btn-danger btn-sm mt-1 w-100 disabled">@Resource.CancelReservation</button>
+                                }
                             </div>
                             <div class="col-md-3 border-left">
                                 <div class="row">
@@ -191,7 +193,7 @@
                     <div class="modal-body">
                         <h5>@Resource.AddReservationFor <span class="mr-2">@Model.SelectedUnit.Name</span> @Resource.ForDay <span class="mr-2">@Model.Date.ToString("dd-MM-yyyy")</span></h5>
                         <input type="hidden" name="unitId" id="selectedUnitId" value="@Model.SelectedUnit.Id" />
-                        <input type="hidden" name="date" id="selectedDate" value="@Model.Date.ToString("MM-dd-yyyy")" />
+
                         <input type="hidden" name="chaletId" value="@Model.SelectedUnit.ChaletId" />
                         <div class="form-group">
                             <label for="FirstName" class="control-label">@Resource.FirstName</label>
@@ -210,9 +212,18 @@
                             <input type="number" id="ReservationPrice" name="ReservationPrice" class="form-control" required="" />
                         </div>
                         <div class="form-group">
+                            <label for="CheckOut" class="control-label">@Resource.ArriveDate</label>
+                            <input type="text" id="CheckOut" value="@Model.Date.ToString("MM/dd/yyyy")" name="CheckOut" class="form-control datepicker" required="" />
+                        </div>
+                        <div class="form-group">
+                            <label for="CheckIn" class="control-label">@Resource.LeaveDate</label>
+                            <input type="text" id="CheckIn" name="CheckIn" value="@Model.Date.AddDays(1).ToString("MM/dd/yyyy")" class="form-control datepicker" required="" />
+                        </div>
+                        <div class="form-group">
                             <label for="Description" class="control-label">@Resource.Note</label>
                             <textarea rows="3" name="Description" id="Description" class="form-control" placeholder="@Resource.Note"></textarea>
                         </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>

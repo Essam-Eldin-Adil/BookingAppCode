@@ -1,0 +1,74 @@
+﻿@model UserAccountViewModel
+@{
+    ViewData["Title"] = "التسجيل";
+    //Layout = "~/Views/Shared/_EndUser_Profile_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout_old.cshtml";
+}
+
+
+<div class="container">
+    <h4>@ViewBag.Title</h4>
+    <form asp-action="CompleteRegister" method="post">
+        <input type="hidden" asp-for="User.Id" class="form-control" />
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="User.FirstName" class="control-label"></label>
+                <input asp-for="User.FirstName" class="form-control" />
+                <span asp-validation-for="User.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="User.LastName" class="control-label"></label>
+                <input asp-for="User.LastName" class="form-control" />
+                <span asp-validation-for="User.LastName" class="text-danger"></span>
+            </div>
+
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="User.CityId" class="control-label"></label>
+                <input value="@Model.User.CityId" class="form-control" />
+                <span asp-validation-for="User.CityId" class="text-danger"></span>
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="User.Region" class="control-label"></label>
+                <input asp-for="User.Region" class="form-control" />
+                <span asp-validation-for="User.Region" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label asp-for="User.PhoneNumber" class="control-label"></label>
+                <input id="phone" value="@Model.User.PhoneNumber" class="form-control" />
+            </div>
+            <div class="form-group col-md-6">
+                <label asp-for="User.WhatsAppNumber" class="control-label"></label>
+                <input asp-for="User.WhatsAppNumber" class="form-control" />
+                <span asp-validation-for="User.WhatsAppNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="User.Email" class="control-label"></label>
+            <input asp-for="User.Email" class="form-control" />
+            <span asp-validation-for="User.Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="@Resource.Save" class="w-100 button button-circle button-blue" />
+        </div>
+    </form>
+</div>
+
+@section scripts
+{
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: "today",
+                todayHighlight: true,
+                format: "mm/dd/yyyy",
+            });
+        });
+    </script>
+}
+
+

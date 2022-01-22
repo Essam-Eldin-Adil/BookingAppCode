@@ -6,9 +6,8 @@ using System.Text;
 namespace Data.Models.General
 {
     [TranslationFor(typeof(Setting))]
-    public class SettingTranslation
+    public class SettingTranslation:Entity
     {
-        public int Id { get; set; }
         public Guid SettingId { get; set; }
         public string Name { get; set; }
         public Setting Setting { get; set; }

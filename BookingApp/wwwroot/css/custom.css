@@ -143,3 +143,20 @@
     background: #fff3cd;
     color: #856404;
 }
+
+
+
+
+
+
+
+@media (min-width: 992px) {
+    body.rtl .primary-menu.style-2 ul li .mega-menu-content {
+        left: 0;
+        right: -15px;
+    }
+
+    body:not(.device-sm):not(.device-xs):not(.device-xxs).rtl .primary-menu.style-2.center > div > ul {
+        text-align: right;
+    }
+}

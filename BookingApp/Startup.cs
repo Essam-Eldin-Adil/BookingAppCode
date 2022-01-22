@@ -32,11 +32,11 @@ namespace BookingApp
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options =>
+            services.AddDbContextFactory<DataContext>(options =>
             { 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            services.AddTransient<DataContext>();
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             );
@@ -97,8 +97,9 @@ namespace BookingApp
             {
                 options.AutomaticAuthentication = false;
             });
-            services.AddSingleton(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
             services.ServicesRegister();
+            //services.AddCloudscribePagination();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -121,7 +122,7 @@ namespace BookingApp
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Accounts}/{action=Login}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
             DataSeed.SeedAsync(app.ApplicationServices).Wait();
         }

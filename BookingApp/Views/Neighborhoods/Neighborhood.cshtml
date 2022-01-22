@@ -1,0 +1,125 @@
+﻿@model NeighborhoodViewModel
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@if (Model.Neighborhood.Id==Guid.Empty)
+{
+<h4>@Resource.AddNew</h4>
+}
+else
+{
+    <h4>@Resource.Edit | @Model.Neighborhood.Name</h4>
+
+}
+<form asp-action="SaveNeighborhood" method="post" class="was-validated">
+    <input type="hidden" asp-for="Neighborhood.Id" />
+    <div class="form-group">
+        <label asp-for="Neighborhood.RegionId">@Resource.RegionName</label>
+        <select asp-items="ViewBag.Regions" asp-for="Neighborhood.RegionId" class="form-control" required="">
+            <option value="">@Resource.PleaseSelect</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Neighborhood.Name"></label>
+        <input type="text" asp-for="Neighborhood.Name" class="form-control" required="" />
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">@Resource.Save</button>
+    </div>
+</form>
+
+@if (Model.Neighborhood.Id != Guid.Empty)
+{
+    <hr />
+
+    <h4>@Resource.Translations</h4>
+    <button type="button" onclick="addRegionTranslation()" class="btn btn-success btn-sm"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+    <div class="table-responsive mt-2">
+        <table class="table table-striped table-bordered datatable" width="100%">
+            <thead>
+                <tr>
+                    <th>@Resource.Neighborhood</th>
+                    <th>@Resource.Language</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>@Resource.Language</th>
+                    <th>@Resource.Language</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var NeighborhoodTranslation in Model.Neighborhood.NeighborhoodTranslations)
+                {
+                    <tr>
+                        <td>@NeighborhoodTranslation.Name</td>
+                        <td>@NeighborhoodTranslation.Language.Name</td>
+                        <td class="w-25">
+                            <button onclick="updateRegionTranslation('@NeighborhoodTranslation.Id','@NeighborhoodTranslation.Name','@NeighborhoodTranslation.LanguageId')" type="button" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                            <a href="@Url.Action("RemoveNeighborhoodTranslation",new {id=NeighborhoodTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-body">
+                <form asp-action="SaveNeighborhoodTranslation" method="post" class="was-validated modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">@Resource.AddNew</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="NeighborhoodTranslation.Id" />
+                        <input type="hidden" asp-for="NeighborhoodTranslation.NeighborhoodId" value="@Model.Neighborhood.Id" />
+                        <div class="form-group">
+                            <label asp-for="NeighborhoodTranslation.LanguageId">@Resource.Language</label>
+                            <select asp-items="ViewBag.Languages" asp-for="NeighborhoodTranslation.LanguageId" class="form-control" required="">
+                                <option value="">@Resource.PleaseSelect</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="NeighborhoodTranslation.Name">@Resource.NeighborhoodName</label>
+                            <input type="text" asp-for="NeighborhoodTranslation.Name" class="form-control" required="" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                        <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts
+{
+    <script>
+        updateMenu("neighborhoods");
+
+        function updateRegionTranslation(id, name,langId) {
+            $("#myModalLabel").html('@Resource.Edit :' + name);
+            $("#RegionTranslation_Id").val(id);
+            $("#RegionTranslation_Name").val(name);
+            $("#RegionTranslation_LanguageId").val(langId);
+            $("#myModal").modal("show");
+        }
+
+        function addRegionTranslation() {
+            $("#myModalLabel").html('@Resource.Edit');
+            $("#RegionTranslation_Id").val("");
+            $("#RegionTranslation_Name").val("");
+            $("#RegionTranslation_LanguageId").val("");
+            $("#myModal").modal("show");
+        }
+    </script>
+}

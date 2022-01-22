@@ -1,0 +1,1776 @@
+﻿@model UtilitiesViewModel
+@{
+    ViewData["Title"] = Resource.ParameterManagement;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section css{
+    <link href="~/css/treeview.css" rel="stylesheet" />
+
+    <style>
+        .toggle-header, .accordion-header {
+            position: relative;
+            display: -ms-flexbox;
+            display: inline;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin: 0 0px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 100;
+        }
+
+        .toggle {
+            display: contents !important;
+        }
+    </style>
+}
+
+<div class="tabs tabs-bb clearfix" id="tab-9">
+
+    <ul class="tab-nav clearfix">
+        <li><a href="#forAllTab">@Resource.AllProperty</a></li>
+        <li><a href="#chaletTab">@Resource.ChaletUtilities</a></li>
+        <li><a href="#resetTab">@Resource.ResetUtilities</a></li>
+        <li><a href="#villsTab">@Resource.VillsUtilities</a></li>
+        <li><a href="#resortTab">@Resource.ResortUtilities</a></li>
+    </ul>
+
+    <div class="tab-container">
+        <div class="tab-content clearfix" id="forAllTab">
+            <button type="button" onclick="newMenu(@((int)Enums.PropertyType.All))" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewMenu</button>
+            <ul id="myUL" class="list-group">
+                @foreach (var item in Model.ItemTree.Where(c => c.Type == (int)Enums.PropertyType.All))
+                {
+                    <li class="list-group-item">
+                        <span class="btn icon-line-square-plus"></span>
+                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,item.ParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+                        @item.ParameterGroup.Name
+                        <ul class="nested">
+                            <li>
+
+                                <button onclick="updateMyMenu('@item.ParameterGroup.Id', '@item.ParameterGroup.Name', '@item.ParameterGroup.Filterable', @item.ParameterGroup.PropertyType, '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext, item.ParameterGroup.Image))')" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                <button type="button" onclick="newSubMenu('@item.ParameterGroup.Id',@item.ParameterGroup.PropertyType)" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewSubMenu</button>
+                                <button type="button" onclick="newParameter('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                <button type="button" onclick="addGroupTranslation('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                            </li>
+                            @if (item.HaveNodes)
+                            {
+                                <li>
+                                    <h5 class="mb-1">@Resource.SubGroups</h5>
+                                </li>
+                                @foreach (var itemParameterGroup in item.ParameterGroups)
+                                {
+
+                                    <li class="list-group-item bg-light">
+                                        <span class="btn icon-line-square-plus"></span>
+
+                                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,itemParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+
+                                        @itemParameterGroup.Name
+
+                                        <ul class="nested list-group">
+                                            <li>
+                                                <button onclick="updateMyMenu('@itemParameterGroup.Id','@itemParameterGroup.Name','@itemParameterGroup.Filterable',@itemParameterGroup.PropertyType)" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                <button type="button" onclick="newParameter('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                                <button type="button" onclick="addGroupTranslation('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                                            </li>
+                                            @if (itemParameterGroup.Parameters.Any())
+                                            {
+                                                <li class="list-group-item">
+                                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                                    <table class="table table-bordered mt-2 table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>@Resource.InputName</th>
+                                                                <th>@Resource.InputType</th>
+                                                                <th>@Resource.Index</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var parameter in itemParameterGroup.Parameters)
+                                                        {
+                                                            <tbody class="toggle">
+                                                                <tr>
+                                                                    <td>
+                                                                        @parameter.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                                        {
+                                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@parameter.Index</td>
+                                                                    <td>
+                                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                                            <span class="toggle-icon">
+                                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                                            </span>
+                                                                            <span class="toggle-title">
+                                                                                @Resource.Translations
+                                                                            </span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="toggle-content">
+                                                                    <td colspan="4">
+                                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>@Resource.InputName</th>
+                                                                                    <th>@Resource.Language</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@parameterTranslation.Name</td>
+                                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                                        <td>
+                                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td class="text-center" colspan="3">
+                                                                                            @Resource.NoRecord
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        }
+                                                    </table>
+                                                </li>
+                                            }
+                                            <li class="list-group-item">
+                                                <h5 class="mb-2">@Resource.Translations</h5>
+                                                <table class="table table-bordered mt-2 datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var groupTranslation in itemParameterGroup.ParameterGroupTranslations)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @groupTranslation.Name
+                                                                </td>
+                                                                <td>
+                                                                    @groupTranslation.Language.Name
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                            @if (item.ParameterGroup.Parameters.Any())
+                            {
+                                <li class="list-group-item">
+                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                    <table class="table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.InputName</th>
+                                                <th>@Resource.InputType</th>
+                                                <th>@Resource.Index</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var parameter in item.ParameterGroup.Parameters.OrderBy(c => c.Index))
+                                        {
+                                            <tbody class="toggle">
+                                                <tr>
+                                                    <td>
+                                                        @parameter.Name
+                                                    </td>
+                                                    <td>
+                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                        {
+                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                        }
+                                                    </td>
+                                                    <td>@parameter.Index</td>
+                                                    <td>
+                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                            <span class="toggle-icon">
+                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                            </span>
+                                                            <span class="toggle-title">
+                                                                @Resource.Translations
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="toggle-content">
+                                                    <td colspan="4">
+                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>@Resource.InputName</th>
+                                                                    <th>@Resource.Language</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@parameterTranslation.Name</td>
+                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                        <td>
+                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="3">
+                                                                            @Resource.NoRecord
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        }
+                                    </table>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <h5 class="mb-2">@Resource.Translations</h5>
+                                <table class="table table-bordered mt-2 datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var groupTranslation in item.ParameterGroup.ParameterGroupTranslations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @groupTranslation.Name
+                                                </td>
+                                                <td>
+                                                    @groupTranslation.Language.Name
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="tab-content clearfix" id="chaletTab">
+            <button type="button" onclick="newMenu(@((int)Enums.PropertyType.Resort))" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewMenu</button>
+            <ul id="myUL" class="list-group">
+                @foreach (var item in Model.ItemTree.Where(c => c.Type == (int)Enums.PropertyType.Resort))
+                {
+                    <li class="list-group-item">
+                        <span class="btn icon-line-square-plus"></span>
+                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,item.ParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+                        @item.ParameterGroup.Name
+                        <ul class="nested">
+                            <li>
+
+                                <button onclick="updateMyMenu('@item.ParameterGroup.Id', '@item.ParameterGroup.Name', '@item.ParameterGroup.Filterable', @item.ParameterGroup.PropertyType, '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext, item.ParameterGroup.Image))')" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                <button type="button" onclick="newSubMenu('@item.ParameterGroup.Id',@item.ParameterGroup.PropertyType)" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewSubMenu</button>
+                                <button type="button" onclick="newParameter('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                <button type="button" onclick="addGroupTranslation('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                            </li>
+                            @if (item.HaveNodes)
+                            {
+                                <li>
+                                    <h5 class="mb-1">@Resource.SubGroups</h5>
+                                </li>
+                                @foreach (var itemParameterGroup in item.ParameterGroups)
+                                {
+
+                                    <li class="list-group-item bg-light">
+                                        <span class="btn icon-line-square-plus"></span>
+
+                                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,itemParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+
+                                        @itemParameterGroup.Name
+
+                                        <ul class="nested list-group">
+                                            <li>
+                                                <button onclick="updateMyMenu('@itemParameterGroup.Id','@itemParameterGroup.Name','@itemParameterGroup.Filterable',@itemParameterGroup.PropertyType)" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                <button type="button" onclick="newParameter('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                                <button type="button" onclick="addGroupTranslation('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                                            </li>
+                                            @if (itemParameterGroup.Parameters.Any())
+                                            {
+                                                <li class="list-group-item">
+                                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                                    <table class="table table-bordered mt-2 table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>@Resource.InputName</th>
+                                                                <th>@Resource.InputType</th>
+                                                                <th>@Resource.Index</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var parameter in itemParameterGroup.Parameters)
+                                                        {
+                                                            <tbody class="toggle">
+                                                                <tr>
+                                                                    <td>
+                                                                        @parameter.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                                        {
+                                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@parameter.Index</td>
+                                                                    <td>
+                                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                                            <span class="toggle-icon">
+                                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                                            </span>
+                                                                            <span class="toggle-title">
+                                                                                @Resource.Translations
+                                                                            </span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="toggle-content">
+                                                                    <td colspan="4">
+                                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>@Resource.InputName</th>
+                                                                                    <th>@Resource.Language</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@parameterTranslation.Name</td>
+                                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                                        <td>
+                                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td class="text-center" colspan="3">
+                                                                                            @Resource.NoRecord
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        }
+                                                    </table>
+                                                </li>
+                                            }
+                                            <li class="list-group-item">
+                                                <h5 class="mb-2">@Resource.Translations</h5>
+                                                <table class="table table-bordered mt-2 datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var groupTranslation in itemParameterGroup.ParameterGroupTranslations)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @groupTranslation.Name
+                                                                </td>
+                                                                <td>
+                                                                    @groupTranslation.Language.Name
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                            @if (item.ParameterGroup.Parameters.Any())
+                            {
+                                <li class="list-group-item">
+                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                    <table class="table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.InputName</th>
+                                                <th>@Resource.InputType</th>
+                                                <th>@Resource.Index</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var parameter in item.ParameterGroup.Parameters.OrderBy(c => c.Index))
+                                        {
+                                            <tbody class="toggle">
+                                                <tr>
+                                                    <td>
+                                                        @parameter.Name
+                                                    </td>
+                                                    <td>
+                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                        {
+                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                        }
+                                                    </td>
+                                                    <td>@parameter.Index</td>
+                                                    <td>
+                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                            <span class="toggle-icon">
+                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                            </span>
+                                                            <span class="toggle-title">
+                                                                @Resource.Translations
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="toggle-content">
+                                                    <td colspan="4">
+                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>@Resource.InputName</th>
+                                                                    <th>@Resource.Language</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@parameterTranslation.Name</td>
+                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                        <td>
+                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="3">
+                                                                            @Resource.NoRecord
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        }
+                                    </table>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <h5 class="mb-2">@Resource.Translations</h5>
+                                <table class="table table-bordered mt-2 datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var groupTranslation in item.ParameterGroup.ParameterGroupTranslations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @groupTranslation.Name
+                                                </td>
+                                                <td>
+                                                    @groupTranslation.Language.Name
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="tab-content clearfix" id="resetTab">
+            <button type="button" onclick="newMenu(@((int)Enums.PropertyType.Reset))" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewMenu</button>
+            <ul id="myUL" class="list-group">
+                @foreach (var item in Model.ItemTree.Where(c => c.Type == (int)Enums.PropertyType.Reset))
+                {
+                    <li class="list-group-item">
+                        <span class="btn icon-line-square-plus"></span>
+                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,item.ParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+                        @item.ParameterGroup.Name
+                        <ul class="nested">
+                            <li>
+
+                                <button onclick="updateMyMenu('@item.ParameterGroup.Id', '@item.ParameterGroup.Name', '@item.ParameterGroup.Filterable', @item.ParameterGroup.PropertyType, '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext, item.ParameterGroup.Image))')" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                <button type="button" onclick="newSubMenu('@item.ParameterGroup.Id',@item.ParameterGroup.PropertyType)" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewSubMenu</button>
+                                <button type="button" onclick="newParameter('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                <button type="button" onclick="addGroupTranslation('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                            </li>
+                            @if (item.HaveNodes)
+                            {
+                                <li>
+                                    <h5 class="mb-1">@Resource.SubGroups</h5>
+                                </li>
+                                @foreach (var itemParameterGroup in item.ParameterGroups)
+                                {
+
+                                    <li class="list-group-item bg-light">
+                                        <span class="btn icon-line-square-plus"></span>
+
+                                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,itemParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+
+                                        @itemParameterGroup.Name
+
+                                        <ul class="nested list-group">
+                                            <li>
+                                                <button onclick="updateMyMenu('@itemParameterGroup.Id','@itemParameterGroup.Name','@itemParameterGroup.Filterable',@itemParameterGroup.PropertyType)" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                <button type="button" onclick="newParameter('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                                <button type="button" onclick="addGroupTranslation('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                                            </li>
+                                            @if (itemParameterGroup.Parameters.Any())
+                                            {
+                                                <li class="list-group-item">
+                                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                                    <table class="table table-bordered mt-2 table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>@Resource.InputName</th>
+                                                                <th>@Resource.InputType</th>
+                                                                <th>@Resource.Index</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var parameter in itemParameterGroup.Parameters)
+                                                        {
+                                                            <tbody class="toggle">
+                                                                <tr>
+                                                                    <td>
+                                                                        @parameter.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                                        {
+                                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@parameter.Index</td>
+                                                                    <td>
+                                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                                            <span class="toggle-icon">
+                                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                                            </span>
+                                                                            <span class="toggle-title">
+                                                                                @Resource.Translations
+                                                                            </span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="toggle-content">
+                                                                    <td colspan="4">
+                                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>@Resource.InputName</th>
+                                                                                    <th>@Resource.Language</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@parameterTranslation.Name</td>
+                                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                                        <td>
+                                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td class="text-center" colspan="3">
+                                                                                            @Resource.NoRecord
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        }
+                                                    </table>
+                                                </li>
+                                            }
+                                            <li class="list-group-item">
+                                                <h5 class="mb-2">@Resource.Translations</h5>
+                                                <table class="table table-bordered mt-2 datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var groupTranslation in itemParameterGroup.ParameterGroupTranslations)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @groupTranslation.Name
+                                                                </td>
+                                                                <td>
+                                                                    @groupTranslation.Language.Name
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                            @if (item.ParameterGroup.Parameters.Any())
+                            {
+                                <li class="list-group-item">
+                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                    <table class="table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.InputName</th>
+                                                <th>@Resource.InputType</th>
+                                                <th>@Resource.Index</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var parameter in item.ParameterGroup.Parameters.OrderBy(c => c.Index))
+                                        {
+                                            <tbody class="toggle">
+                                                <tr>
+                                                    <td>
+                                                        @parameter.Name
+                                                    </td>
+                                                    <td>
+                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                        {
+                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                        }
+                                                    </td>
+                                                    <td>@parameter.Index</td>
+                                                    <td>
+                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                            <span class="toggle-icon">
+                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                            </span>
+                                                            <span class="toggle-title">
+                                                                @Resource.Translations
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="toggle-content">
+                                                    <td colspan="4">
+                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>@Resource.InputName</th>
+                                                                    <th>@Resource.Language</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@parameterTranslation.Name</td>
+                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                        <td>
+                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="3">
+                                                                            @Resource.NoRecord
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        }
+                                    </table>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <h5 class="mb-2">@Resource.Translations</h5>
+                                <table class="table table-bordered mt-2 datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var groupTranslation in item.ParameterGroup.ParameterGroupTranslations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @groupTranslation.Name
+                                                </td>
+                                                <td>
+                                                    @groupTranslation.Language.Name
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="tab-content clearfix" id="villsTab">
+            <button type="button" onclick="newMenu(@((int)Enums.PropertyType.Villa))" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewMenu</button>
+            <ul id="myUL" class="list-group">
+                @foreach (var item in Model.ItemTree.Where(c => c.Type == (int)Enums.PropertyType.Villa))
+                {
+                    <li class="list-group-item">
+                        <span class="btn icon-line-square-plus"></span>
+                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,item.ParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+                        @item.ParameterGroup.Name
+                        <ul class="nested">
+                            <li>
+
+                                <button onclick="updateMyMenu('@item.ParameterGroup.Id', '@item.ParameterGroup.Name', '@item.ParameterGroup.Filterable', @item.ParameterGroup.PropertyType, '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext, item.ParameterGroup.Image))')" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                <button type="button" onclick="newSubMenu('@item.ParameterGroup.Id',@item.ParameterGroup.PropertyType)" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewSubMenu</button>
+                                <button type="button" onclick="newParameter('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                <button type="button" onclick="addGroupTranslation('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                            </li>
+                            @if (item.HaveNodes)
+                            {
+                                <li>
+                                    <h5 class="mb-1">@Resource.SubGroups</h5>
+                                </li>
+                                @foreach (var itemParameterGroup in item.ParameterGroups)
+                                {
+
+                                    <li class="list-group-item bg-light">
+                                        <span class="btn icon-line-square-plus"></span>
+
+                                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,itemParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+
+                                        @itemParameterGroup.Name
+
+                                        <ul class="nested list-group">
+                                            <li>
+                                                <button onclick="updateMyMenu('@itemParameterGroup.Id','@itemParameterGroup.Name','@itemParameterGroup.Filterable',@itemParameterGroup.PropertyType)" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                <button type="button" onclick="newParameter('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                                <button type="button" onclick="addGroupTranslation('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                                            </li>
+                                            @if (itemParameterGroup.Parameters.Any())
+                                            {
+                                                <li class="list-group-item">
+                                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                                    <table class="table table-bordered mt-2 table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>@Resource.InputName</th>
+                                                                <th>@Resource.InputType</th>
+                                                                <th>@Resource.Index</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var parameter in itemParameterGroup.Parameters)
+                                                        {
+                                                            <tbody class="toggle">
+                                                                <tr>
+                                                                    <td>
+                                                                        @parameter.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                                        {
+                                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@parameter.Index</td>
+                                                                    <td>
+                                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                                            <span class="toggle-icon">
+                                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                                            </span>
+                                                                            <span class="toggle-title">
+                                                                                @Resource.Translations
+                                                                            </span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="toggle-content">
+                                                                    <td colspan="4">
+                                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>@Resource.InputName</th>
+                                                                                    <th>@Resource.Language</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@parameterTranslation.Name</td>
+                                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                                        <td>
+                                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td class="text-center" colspan="3">
+                                                                                            @Resource.NoRecord
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        }
+                                                    </table>
+                                                </li>
+                                            }
+                                            <li class="list-group-item">
+                                                <h5 class="mb-2">@Resource.Translations</h5>
+                                                <table class="table table-bordered mt-2 datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var groupTranslation in itemParameterGroup.ParameterGroupTranslations)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @groupTranslation.Name
+                                                                </td>
+                                                                <td>
+                                                                    @groupTranslation.Language.Name
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                            @if (item.ParameterGroup.Parameters.Any())
+                            {
+                                <li class="list-group-item">
+                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                    <table class="table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.InputName</th>
+                                                <th>@Resource.InputType</th>
+                                                <th>@Resource.Index</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var parameter in item.ParameterGroup.Parameters.OrderBy(c => c.Index))
+                                        {
+                                            <tbody class="toggle">
+                                                <tr>
+                                                    <td>
+                                                        @parameter.Name
+                                                    </td>
+                                                    <td>
+                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                        {
+                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                        }
+                                                    </td>
+                                                    <td>@parameter.Index</td>
+                                                    <td>
+                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                            <span class="toggle-icon">
+                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                            </span>
+                                                            <span class="toggle-title">
+                                                                @Resource.Translations
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="toggle-content">
+                                                    <td colspan="4">
+                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>@Resource.InputName</th>
+                                                                    <th>@Resource.Language</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@parameterTranslation.Name</td>
+                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                        <td>
+                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="3">
+                                                                            @Resource.NoRecord
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        }
+                                    </table>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <h5 class="mb-2">@Resource.Translations</h5>
+                                <table class="table table-bordered mt-2 datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var groupTranslation in item.ParameterGroup.ParameterGroupTranslations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @groupTranslation.Name
+                                                </td>
+                                                <td>
+                                                    @groupTranslation.Language.Name
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="tab-content clearfix" id="resortTab">
+            <button type="button" onclick="newMenu(@((int)Enums.PropertyType.MainResort))" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewMenu</button>
+            <ul id="myUL" class="list-group">
+                @foreach (var item in Model.ItemTree.Where(c => c.Type == (int)Enums.PropertyType.MainResort))
+                {
+                    <li class="list-group-item">
+                        <span class="btn icon-line-square-plus"></span>
+                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,item.ParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+                        @item.ParameterGroup.Name
+                        <ul class="nested">
+                            <li>
+
+                                <button onclick="updateMyMenu('@item.ParameterGroup.Id', '@item.ParameterGroup.Name', '@item.ParameterGroup.Filterable', @item.ParameterGroup.PropertyType, '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext, item.ParameterGroup.Image))')" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                <button type="button" onclick="newSubMenu('@item.ParameterGroup.Id',@item.ParameterGroup.PropertyType)" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewSubMenu</button>
+                                <button type="button" onclick="newParameter('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                <button type="button" onclick="addGroupTranslation('@item.ParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                            </li>
+                            @if (item.HaveNodes)
+                            {
+                                <li>
+                                    <h5 class="mb-1">@Resource.SubGroups</h5>
+                                </li>
+                                @foreach (var itemParameterGroup in item.ParameterGroups)
+                                {
+
+                                    <li class="list-group-item bg-light">
+                                        <span class="btn icon-line-square-plus"></span>
+
+                                        <img alt="@Resource.Image" src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,itemParameterGroup.Image))" style="width: 50px;height: 50px" class="img-thumbnail mb-2">
+
+                                        @itemParameterGroup.Name
+
+                                        <ul class="nested list-group">
+                                            <li>
+                                                <button onclick="updateMyMenu('@itemParameterGroup.Id','@itemParameterGroup.Name','@itemParameterGroup.Filterable',@itemParameterGroup.PropertyType)" class="btn btn-success btn-sm mb-2"><i class="icon-trash"></i> @Resource.Edit</button>
+                                                <a class="btn btn-danger btn-sm text-white mb-2"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                <button type="button" onclick="newParameter('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddNewField</button>
+                                                <button type="button" onclick="addGroupTranslation('@itemParameterGroup.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+                                            </li>
+                                            @if (itemParameterGroup.Parameters.Any())
+                                            {
+                                                <li class="list-group-item">
+                                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                                    <table class="table table-bordered mt-2 table-striped">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>@Resource.InputName</th>
+                                                                <th>@Resource.InputType</th>
+                                                                <th>@Resource.Index</th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        @foreach (var parameter in itemParameterGroup.Parameters)
+                                                        {
+                                                            <tbody class="toggle">
+                                                                <tr>
+                                                                    <td>
+                                                                        @parameter.Name
+                                                                    </td>
+                                                                    <td>
+                                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                                        {
+                                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                                        }
+                                                                    </td>
+                                                                    <td>@parameter.Index</td>
+                                                                    <td>
+                                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                                            <span class="toggle-icon">
+                                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                                            </span>
+                                                                            <span class="toggle-title">
+                                                                                @Resource.Translations
+                                                                            </span>
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="toggle-content">
+                                                                    <td colspan="4">
+                                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                                        <table class="table table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>@Resource.InputName</th>
+                                                                                    <th>@Resource.Language</th>
+                                                                                    <th></th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td>@parameterTranslation.Name</td>
+                                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                                        <td>
+                                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                                {
+                                                                                    <tr>
+                                                                                        <td class="text-center" colspan="3">
+                                                                                            @Resource.NoRecord
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                }
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        }
+                                                    </table>
+                                                </li>
+                                            }
+                                            <li class="list-group-item">
+                                                <h5 class="mb-2">@Resource.Translations</h5>
+                                                <table class="table table-bordered mt-2 datatable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var groupTranslation in itemParameterGroup.ParameterGroupTranslations)
+                                                        {
+                                                            <tr>
+                                                                <td>
+                                                                    @groupTranslation.Name
+                                                                </td>
+                                                                <td>
+                                                                    @groupTranslation.Language.Name
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <th>@Resource.GroupName</th>
+                                                            <th>@Resource.Language</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                }
+                            }
+                            @if (item.ParameterGroup.Parameters.Any())
+                            {
+                                <li class="list-group-item">
+                                    <h5 class="mb-2">@Resource.Parameters</h5>
+                                    <table class="table table-bordered mt-2">
+                                        <thead>
+                                            <tr>
+                                                <th>@Resource.InputName</th>
+                                                <th>@Resource.InputType</th>
+                                                <th>@Resource.Index</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+
+                                        @foreach (var parameter in item.ParameterGroup.Parameters.OrderBy(c => c.Index))
+                                        {
+                                            <tbody class="toggle">
+                                                <tr>
+                                                    <td>
+                                                        @parameter.Name
+                                                    </td>
+                                                    <td>
+                                                        @if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                                                        {
+                                                            <span class="text-info"><i class="icon-line-square-check"></i> @Resource.Checkbox</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="text-primary"><i class="icon-pen-alt"></i> @Resource.InputField</span>
+                                                        }
+                                                    </td>
+                                                    <td>@parameter.Index</td>
+                                                    <td>
+                                                        <button type="button" onclick="updateParameter('@parameter.Id', '@parameter.Name', @parameter.Type, '@parameter.Index')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                        <button type="button" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</button>
+                                                        <button type="button" class="btn btn-danger btn-sm toggle-header">
+                                                            <span class="toggle-icon">
+                                                                <i class="toggle-closed icon-ok-circle"></i>
+                                                                <i class="toggle-open icon-remove-circle"></i>
+                                                            </span>
+                                                            <span class="toggle-title">
+                                                                @Resource.Translations
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr class="toggle-content">
+                                                    <td colspan="4">
+                                                        <h5 class="mb-2">@Resource.Translations</h5>
+                                                        <button type="button" onclick="addParameterTranslation('@parameter.Id')" class="btn btn-primary btn-sm mb-2"><i class="icon-plus"></i> @Resource.AddTranslation</button>
+
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>@Resource.InputName</th>
+                                                                    <th>@Resource.Language</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach (var parameterTranslation in parameter.ParameterTranslations)
+                                                                {
+                                                                    <tr>
+                                                                        <td>@parameterTranslation.Name</td>
+                                                                        <td>@parameterTranslation.Language.Name</td>
+                                                                        <td>
+                                                                            <button type="button" onclick="updateParameterTranslate('@parameterTranslation.Id','@parameterTranslation.ParameterId', '@parameterTranslation.Name', '@parameterTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                                            <a href="@Url.Action("RemoveParameterTranslation",new {id=parameterTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                                @if (parameter.ParameterTranslations.Count == 0)
+                                                                {
+                                                                    <tr>
+                                                                        <td class="text-center" colspan="3">
+                                                                            @Resource.NoRecord
+                                                                        </td>
+                                                                    </tr>
+                                                                }
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                            </tbody>
+
+                                        }
+                                    </table>
+                                </li>
+                            }
+                            <li class="list-group-item">
+                                <h5 class="mb-2">@Resource.Translations</h5>
+                                <table class="table table-bordered mt-2 datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var groupTranslation in item.ParameterGroup.ParameterGroupTranslations)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @groupTranslation.Name
+                                                </td>
+                                                <td>
+                                                    @groupTranslation.Language.Name
+                                                </td>
+                                                <td>
+                                                    <button type="button" onclick="updateGroupTranslate('@groupTranslation.Id','@groupTranslation.ParameterGroupId', '@groupTranslation.Name', '@groupTranslation.LanguageId')" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</button>
+                                                    <a href="@Url.Action("RemoveGroupTranslation",new {id=groupTranslation.Id})" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>@Resource.GroupName</th>
+                                            <th>@Resource.Language</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="modal fade" id="myParameterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="SaveParameter" method="post" class="was-validated modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">@Resource.AddNewField</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" asp-for="Parameter.Id" />
+                    <input type="hidden" asp-for="Parameter.ParameterGroupId" />
+                    <div class="form-group">
+                        <label asp-for="Parameter.Name"></label>
+                        <input type="text" asp-for="Parameter.Name" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Parameter.Index"></label>
+                        <input type="text" asp-for="Parameter.Index" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Parameter.Type">@Resource.ParameterType</label>
+                        <select asp-for="Parameter.Type" class="form-control" required="">
+                            <option value="" selected="">@Resource.PleaseSelect</option>
+                            <option value="@((int)Enums.ParameterType.Checkbox)">@Resource.Checkbox</option>
+                            <option value="@((int)Enums.ParameterType.Text)">@Resource.InputField</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mySubMenuModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="SaveSubGroup" method="post" class="was-validated modal-content" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myMenuModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" asp-for="ParameterGroup.Id" />
+                    <input type="hidden" asp-for="ParameterGroup.ParentId" />
+                    <input type="hidden" asp-for="ParameterGroup.PropertyType" />
+                    <div class="form-group">
+                        <label asp-for="ParameterGroup.Name"></label>
+                        <input type="text" asp-for="ParameterGroup.Name" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ParameterGroup.Image"></label>
+                        <input asp-for="ParameterGroup.Image" name="formFiles[]" type="file" class="file" data-show-upload="false" data-show-caption="true" data-show-preview="true">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" asp-for="ParameterGroup.Filterable" />
+                        <label asp-for="ParameterGroup.Filterable">@Resource.Filterable</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myGroupTranslaterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="SaveGroupTranslation" method="post" class="was-validated modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myMenuModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" asp-for="ParameterGroupTranslation.Id" />
+                    <input type="hidden" asp-for="ParameterGroupTranslation.ParameterGroupId" />
+                    <div class="form-group">
+                        <label asp-for="ParameterGroupTranslation.Name"></label>
+                        <input type="text" asp-for="ParameterGroupTranslation.Name" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ParameterGroupTranslation.LanguageId">@Resource.Language</label>
+                        <select asp-for="ParameterGroupTranslation.LanguageId" asp-items="ViewBag.Languages" class="form-control" required="">
+                            <option value="" selected="">@Resource.PleaseSelect</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myParameterTranslaterModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-body">
+            <form asp-action="SaveParameterTranslation" method="post" class="was-validated modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myMenuModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" asp-for="ParameterTranslation.Id" />
+                    <input type="hidden" asp-for="ParameterTranslation.ParameterId" />
+                    <div class="form-group">
+                        <label asp-for="ParameterTranslation.Name">@Resource.InputName</label>
+                        <input type="text" asp-for="ParameterTranslation.Name" class="form-control" required="" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ParameterTranslation.LanguageId">@Resource.Language</label>
+                        <select asp-for="ParameterTranslation.LanguageId" asp-items="ViewBag.Languages" class="form-control" required="">
+                            <option value="" selected="">@Resource.PleaseSelect</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Cancel</button>
+                    <button type="submit" class="btn btn-primary">@Resource.Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+
+    <script src="~/js/treeview.js"></script>
+    <script>
+        var toggler = document.getElementsByClassName("icon-line-square-plus");
+        var i;
+
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("icon-line-square-minus");
+            });
+        }
+        updateMenu("parameters");
+        function newMenu(propType) {
+            $("#proprityType").removeClass("d-none");
+            $("#ParameterGroup_Id").val("");
+            $("#ParameterGroup_Name").val("");
+            $("#ParameterGroup_PropertyType").val(propType);
+            $("#ParameterGroup_ParentId").val("");
+            //document.getElementById("groupImage").src = '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext,Guid.Empty))';
+            document.getElementById('ParameterGroup_Filterable').checked = true;
+            $("#myMenuModalLabel").html('@Resource.AddNewMenu');
+            $("#mySubMenuModal").modal("show");
+        }
+        function newSubMenu(groupId, PropertyType) {
+            $("#proprityType").addClass("d-none");
+            $("#ParameterGroup_Id").val("");
+            $("#ParameterGroup_Name").val("");
+            $("#ParameterGroup_PropertyType").val(PropertyType);
+            $("#ParameterGroup_ParentId").val(groupId);
+            //document.getElementById("groupImage").src = '@Url.Content(Domain.File.GetImage(HttpContextAccessor.HttpContext,Guid.Empty))';
+            document.getElementById('ParameterGroup_Filterable').checked = true;
+            $("#myMenuModalLabel").html('@Resource.AddNewSubMenu');
+            $("#mySubMenuModal").modal("show");
+        }
+        function updateMyMenu(id, name, filterable, propertyType, image) {
+            $("#ParameterGroup_Id").val(id);
+            $("#ParameterGroup_Name").val(name);
+            $("#ParameterGroup_PropertyType").val(propertyType);
+
+            //console.log(image);
+            //document.getElementById("groupImage").src = image;
+            if (filterable === 'true') {
+                document.getElementById('ParameterGroup_Filterable').checked = true;
+            } else {
+                document.getElementById('ParameterGroup_Filterable').checked = false;
+            }
+            $("#mySubMenuModal").modal("show");
+        }
+
+
+
+        function newParameter(groupId) {
+            $("#Parameter_ParameterGroupId").val(groupId);
+            $("#myParameterModal").modal("show");
+        }
+
+
+        function updateParameter(id, name, type, index) {
+            $("#Parameter_Id").val(id);
+            $("#Parameter_Name").val(name);
+            $("#Parameter_Type").val(type);
+            $("#Parameter_Index").val(index);
+            $("#myParameterModal").modal("show");
+        }
+
+
+        function addGroupTranslation(groupId) {
+            $("#ParameterGroupTranslation_ParameterGroupId").val(groupId);
+            $("#ParameterGroupTranslation_LanguageId").val("");
+            $("#myGroupTranslaterModal").modal("show");
+        }
+
+        function updateGroupTranslate(id,groupId, name, languageId) {
+            $("#ParameterGroupTranslation_Id").val(id);
+            $("#ParameterGroupTranslation_ParameterGroupId").val(groupId);
+            $("#ParameterGroupTranslation_Name").val(name);
+            $("#ParameterGroupTranslation_LanguageId").val(languageId);
+            $("#myGroupTranslaterModal").modal("show");
+        }
+
+
+
+
+        function addParameterTranslation(groupId) {
+            $("#ParameterTranslation_ParameterId").val(groupId);
+            $("#ParameterTranslation_LanguageId").val("");
+            $("#myParameterTranslaterModal").modal("show");
+        }
+
+        function updateParameterTranslate(id, paramId, name, languageId) {
+            $("#ParameterTranslation_Id").val(id);
+            $("#ParameterTranslation_ParameterId").val(paramId);
+            $("#ParameterTranslation_Name").val(name);
+            $("#ParameterTranslation_LanguageId").val(languageId);
+            $("#myParameterTranslaterModal").modal("show");
+        }
+    </script>
+}

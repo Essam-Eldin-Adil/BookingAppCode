@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.Models.Chalets.ChaletDetails;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 
 namespace Domain
@@ -182,6 +185,51 @@ namespace Domain
             }
         }
 
+        public static void GetPricePerDay(HttpContext httpContext,Unit myUnit, int dayIndex)
+        {
+            var _unitRepository = (IRepository<Data.Models.Chalets.ChaletDetails.Unit>)httpContext.RequestServices.GetService(typeof(IRepository<Data.Models.Chalets.ChaletDetails.Unit>));
+            var _priceRepository = (IRepository<Data.Models.Chalets.ChaletDetails.PricePerDay>)httpContext.RequestServices.GetService(typeof(IRepository<Data.Models.Chalets.ChaletDetails.PricePerDay>));
+            if (myUnit.IsDayPrice)
+            {
+                if (myUnit.IsSimilar)
+                {
+                    myUnit = _unitRepository.Table.Include(c => c.PricePerDays).FirstOrDefault(c => c.Id == myUnit.OriginId);
+                    
+                }
+                var pricePerDays = _priceRepository.Table.FirstOrDefault(c=>c.UnitId==myUnit.Id);
+                if (pricePerDays == null)
+                {
+                    return;
+                }
+                switch (dayIndex)
+                {
+                    case 5:
+                        myUnit.DayPrice = pricePerDays.Friday;
+                        break;
+                    case 6:
+                        myUnit.DayPrice = pricePerDays.Saturday;
+                        break;
+                    case 0:
+                        myUnit.DayPrice = pricePerDays.Monday;
+                        break;
+                    case 1:
+                        myUnit.DayPrice = pricePerDays.Sunday;
+                        break;
+                    case 2:
+                        myUnit.DayPrice = pricePerDays.Tuesday;
+                        break;
+                    case 3:
+                        myUnit.DayPrice = pricePerDays.Wednesday;
+                        break;
+                    case 4:
+                        myUnit.DayPrice = pricePerDays.Thursday;
+                        break;
+                }
+
+            }
+
+
+        }
         public static bool IsGreg(string greg)
         {
             if (greg.Length <= 0)

@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Neighborhoods";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h4>@Resource.NeighborhoodManagement</h4>
+<a href="@Url.Action("Neighborhood")" class="btn btn-success btn-sm"><i class="icon-plus"></i> @Resource.AddNew</a>
+
+<div class="table-responsive mt-2">
+    <table id="datatable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>@Resource.City</th>
+                <th>@Resource.Neighborhood</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>@Resource.City</th>
+                <th>@Resource.Neighborhood</th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody></tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script>
+        updateMenu("neighborhoods");
+        $('#datatable1').dataTable({
+            "ajax": '@Url.Action("GetData")',
+            language: lang,
+            length: true,
+            serverSide: true,
+            retrieve: true,
+            dom: 'Bfrtip',
+            columns: [
+                {
+                    "data": "region.name",
+                    "render": function(data, type, full, meta) {
+                        if (data) {
+
+                            return data;
+                        } else {
+                            return `--`;
+                        }
+                    }
+                },
+                {
+                    "data": "name",
+                    "render": function(data, type, full, meta) {
+                        if (data) {
+
+                            return data;
+                        } else {
+                            return `--`;
+                        }
+                    }
+                },
+                {
+                    "data": "id",
+                    "className": "text-center w-25",
+                    "render": function(data, type, full, meta) {
+                        console.log(full);
+                        return `<a href="@Url.Action("Neighborhood")/${full.id}" class="btn btn-success btn-sm"><i class="icon-edit"></i> @Resource.Edit</a>
+                                    <a href="@Url.Action("RemoveNeighborhood")/${full.id}" class="btn btn-danger btn-sm"><i class="icon-trash"></i> @Resource.Delete</a>`;
+                    }
+                }
+            ]
+        });
+    </script>
+}

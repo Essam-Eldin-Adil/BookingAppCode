@@ -1,87 +1,187 @@
-﻿@model LoginViewModel
-@{
-    ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_AccountLayout.cshtml";
-    var actionName = "Login";
-    if (!Model.isPassword && Model.isRegistration)
-    {
-        actionName = "Register";
-    }
+﻿@{
+    Layout = "~/Views/Shared/_Layout_Auth.cshtml";
+    ViewBag.Title = "دخول/تسجيل";
+}
+<!-- Content
+============================================= -->
+<section id="content">
+    <div class="content-wrap py-0">
+
+        <div class="section p-0 m-0 h-100 position-absolute" style="background: url('@Url.Content("~/website/images/login-bg.jpg")') center center no-repeat; background-size: cover;"></div>
+
+        <div class="section bg-transparent min-vh-100 p-0 m-0">
+            <div class="vertical-middle">
+                <div class="container-fluid py-5 mx-auto">
+                    
+                    <div class="row mt-5">
+                        <div class="col-md-6 offset-2">
+                            <div class="mb-4 ml-5">
+                                <a href="~/Home"><img src="~/website/images/logo.png" alt="Trusita Logo"></a>
+                            </div>
+                            <h1 class="text-white text-dark">
+                                سجل عقارك و أبداء بإستقبال الضيوف
+                            </h1>
+                            <h3 class="text-light">استقبل حجوزات أكثر بكل سهوله وزد من مبيعات عقارك.</h3>
+                        </div>
+                        <div class="col-auto text-center">
+                            <div class="card ml-5 rounded-0 border-0" style="max-width: 400px; background-color: rgba(255,255,255,0.93);">
+                                <div class="card-body" style="padding: 40px;">
+                                    @if (TempData["AlertMessage"] != null)
+                                    {
+                                        <div class="alert alert-warning">@TempData["AlertMessage"]</div>
+                                    }
+                                    <form id="login-form" name="login-form" class="mb-0 was-validated" asp-action="Login" method="post">
+                                        <h3>تسجيل دخول</h3>
+                                        <h5>أدخل رقم الجوال لإنشاء حساب أو تسجيل الدخول</h5>
+                                        <div class="row">
+                                            @if ((bool)ViewBag.CodeSent)
+                                            {
+                                                <p class="alert alert-warning">user @ViewBag.Code to confirm your account, just for testing</p>
+
+                                                <div class="col-12 form-group">
+                                                    @if (!(bool)ViewBag.IsExist)
+                                                    {
+                                                        <label>سيتم إرسال رسالة الكود على الرقم (@ViewBag.MobileNo)</label>
+                                                    }
+                                                    <label for="login-form-username">ادخل الرمز المرسل هنا</label>
+                                                    <input type="number" id="code" name="code" placeholder="123-456" required="" class="form-control not-dark" />
+                                                    <input type="hidden" name="mobileno" id="mobileno" value="@ViewBag.MobileNo" />
+                                                    <input type="hidden" name="confirm" value="true" />
+                                                </div>
+                                                @if ((bool)ViewBag.IsExist)
+                                                {
+                                                    <div class="col-12 form-group">
+                                                        <button class="button button-3d button-primary m-0 w-100" id="login-form-submit" name="login-form-submit" value="login">دخول</button>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="col-12 form-group">
+                                                        <button class="button button-3d button-primary m-0 w-100" id="login-form-submit" name="login-form-submit" value="login">التسجيل</button>
+                                                    </div>
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                                <div class="col-12 form-group">
+                                                    <label for="login-form-username">أدخل رقم جوالك</label>
+                                                    <input type="text" id="phone" value="" required="" class="form-control not-dark" />
+                                                    <input type="hidden" name="mobileno" id="mobileno" />
+                                                </div>
+                                                <div class="col-12 form-group">
+                                                    <button class="button button-3d button-primary m-0 w-100" id="login-form-submit" name="login-form-submit" value="login">دخول / تسجيل</button>
+                                                </div>
+
+                                            }
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="dark center ml-5 mt-3"><small>@Domain.Setting.Get(Context, "Copyrights")</small></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section><!-- #content end -->
+@section scripts{
+
+    <script src="~/js/PhoneNumberTemp/intlTelInput.js"></script>
+    <script>
+        var input = document.querySelector("#phone");
+            window.intlTelInput(input, {
+                hiddenInput: "mobileno",
+                utilsScript: "@Url.Content("~/js/PhoneNumberTemp/utils.js?1613236686837")" // just for formatting/placeholders etc
+            });
+    </script>
 }
 
-<div class="bg-transparent p-0 m-0">
-    <div class="vertical-middle">
-        <div class="container-fluid mx-auto">
-            <div class="card mx-auto rounded-0 border" style="max-width: 400px; background-color: rgba(255,255,255,0.93);">
-                <div class="card-body" style="padding: 40px;">
-                    <form id="login-form" asp-action="@actionName" class="mb-0 was-validated" method="post">
-                        <h3>@Resource.LoginRegister</h3>
 
-                        <div class="row">
-                            <input type="hidden" asp-for="Id" value="@Model.Id" />
-                            <input type="hidden" asp-for="isPassword" value="@Model.isPassword" />
-                            <input type="hidden" asp-for="isRegistration" value="@Model.isRegistration" />
-                            <input type="hidden" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
-                            <input type="hidden" asp-for="isPostback" value="@Model.isPostback" />
-                            <input type="hidden" asp-for="UserType" value="@((int)Enums.UserType.BookAdmin)" />
-                            <input type="hidden" asp-for="Country" value="0834580c-e11b-4263-b359-321410c41af0" />
-                            @if (!Model.isPassword && !Model.isRegistration)
-                            {
-                                <div class="col-12 form-group">
-                                    <label asp-for="Email" class="control-label"></label>
-                                    <input asp-for="Email" required="" class="form-control" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                                <div class="col-12 form-group">
-                                    <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Next</button>
-                                    <a asp-action="ForgetPassword" class="float-right">@Resource.ForgotPassword?</a>
-                                </div>
-                            }
-                            else if (Model.isPassword && !Model.isRegistration)
-                            {
-                                <input type="hidden" asp-for="Email" value="@Model.Email" />
 
-                                <div class="col-12 form-group">
-                                    <label asp-for="Password"></label>
-                                    <input type="password" asp-for="Password" required="" class="form-control not-dark" />
-                                </div>
-                                <div class="col-12 form-group">
-                                    <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Login</button>
-                                    <a asp-action="ForgetPassword" class="float-right">@Resource.ForgotPassword?</a>
-                                </div>
-                            }
-                            else if (!Model.isPassword && Model.isRegistration)
-                            {
-                                <div class="col-12 form-group">
-                                    @Resource.YouDontHaveAccount
-                                </div>
-                                <div class="col-12 form-group">
-                                    
-                                    <label asp-for="Email" class="control-label"></label>
-                                    <input asp-for="Email" required="" class="form-control" />
-                                    <span asp-validation-for="Email" class="text-danger"></span>
+@*@@model LoginViewModel
+    @{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_AccountLayout.cshtml";
+        var actionName = "Login";
+        if (!Model.isPassword && Model.isRegistration)
+        {
+            actionName = "Register";
+        }
+    }
 
-                                    
-                                    
-                                    
-                                    @*<label for="phone"></label>
+    <div class="bg-transparent p-0 m-0">
+        <div class="vertical-middle">
+            <div class="container-fluid mx-auto">
+                <div class="card mx-auto rounded-0 border" style="max-width: 400px; background-color: rgba(255,255,255,0.93);">
+                    <div class="card-body" style="padding: 40px;">
+                        <form id="login-form" asp-action="@actionName" class="mb-0 was-validated" method="post">
+                            <h3>@Resource.LoginRegister</h3>
 
-                                    <input type="tel" id="phone" value="@Model.PhoneNumber" class="form-control not-dark" />
-                                    <input type="hidden" asp-for="PhoneNumber" class="form-control not-dark" />*@
-                                </div>
-                                <div class="col-12 form-group">
-                                    <label asp-for="Password"></label>
-                                    <input type="password" asp-for="Password" required="" class="form-control not-dark" />
-                                </div>
-                                <div class="col-12 form-group">
-                                    <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Send</button>
-                                </div>
-                            }
-                        </div>
-</form>
+                            <div class="row">
+                                <input type="hidden" asp-for="Id" value="@Model.Id" />
+                                <input type="hidden" asp-for="isPassword" value="@Model.isPassword" />
+                                <input type="hidden" asp-for="isRegistration" value="@Model.isRegistration" />
+                                <input type="hidden" asp-for="PhoneNumber" value="@Model.PhoneNumber" />
+                                <input type="hidden" asp-for="isPostback" value="@Model.isPostback" />
+                                <input type="hidden" asp-for="UserType" value="@((int)Enums.UserType.BookAdmin)" />
+                                <input type="hidden" asp-for="Country" value="0834580c-e11b-4263-b359-321410c41af0" />
+                                @if (!Model.isPassword && !Model.isRegistration)
+                                {
+                                    <div class="col-12 form-group">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" required="" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-12 form-group">
+                                        <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Next</button>
+                                        <a asp-action="ForgetPassword" class="float-right">@Resource.ForgotPassword?</a>
+                                    </div>
+                                }
+                                else if (Model.isPassword && !Model.isRegistration)
+                                {
+                                    <input type="hidden" asp-for="Email" value="@Model.Email" />
+
+                                    <div class="col-12 form-group">
+                                        <label asp-for="Password"></label>
+                                        <input type="password" asp-for="Password" required="" class="form-control not-dark" />
+                                    </div>
+                                    <div class="col-12 form-group">
+                                        <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Login</button>
+                                        <a asp-action="ForgetPassword" class="float-right">@Resource.ForgotPassword?</a>
+                                    </div>
+                                }
+                                else if (!Model.isPassword && Model.isRegistration)
+                                {
+                                    <div class="col-12 form-group">
+                                        @Resource.YouDontHaveAccount
+                                    </div>
+                                    <div class="col-12 form-group">
+
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input asp-for="Email" required="" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>-->
+    <!--</div>
+                                    <div class="col-12 form-group">
+                                        <label asp-for="Password"></label>
+                                        <input type="password" asp-for="Password" required="" class="form-control not-dark" />
+                                    </div>
+                                    <div class="col-12 form-group">
+                                        <button class="button button-3d button-black m-0" id="login-form-submit" name="login-form-submit" value="login">@Resource.Send</button>
+                                    </div>
+                                }
+                            </div>
+    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    <label for="phone"></label>
 
+    <input type="tel" id="phone" value="@Model.PhoneNumber" class="form-control not-dark" />
+    <input type="hidden" asp-for="PhoneNumber" class="form-control not-dark" />*@

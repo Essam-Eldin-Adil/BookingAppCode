@@ -1,0 +1,388 @@
+﻿@model SearchViewModel
+@{
+    Layout = "~/Views/Shared/_Layout_old.cshtml";
+}
+@{
+    <link rel="stylesheet" href="~/css/components/ion.rangeslider.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/components/datepicker.css" type="text/css" />
+    <!-- Radio Ckeckbox Plugin -->
+    <link rel="stylesheet" href="~/css/components/radio-checkbox.css" type="text/css" />
+    <link href="~/css/jquery.skeleton.css" rel="stylesheet">
+    <style>
+        .entry::after {
+            content: '';
+            position: relative;
+            height: 2px;
+            margin-top: 0 !important;
+            background: none !important;
+        }
+    </style>
+}
+<section>
+    <form id="filterForm">
+        <div class="container clearfix mt-5">
+            <div class="row gutter-40 col-mb-80">
+                <!-- Post Content
+                ============================================= -->
+                <div class="postcontent col-lg-9 order-lg-last">
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label>@Resource.City</label>
+                            <select class="selectpicker form-control" multiple data-live-search="true" data-size="6" style="width:100%;" id="City" name="City">
+                                @if (Model.City.Contains(Guid.Empty))
+                                {
+                                    <option selected value="@Guid.Empty">@Resource.ViewAll</option>
+                                }
+                                else
+                                {
+                                    <option value="@Guid.Empty">@Resource.ViewAll</option>
+                                }
+                                @foreach (var item in Model.Cities)
+                                {
+                                    if (Model.City.Contains(item.Id))
+                                    {
+                                        <option selected value="@item.Id">@item.CityName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.CityName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>@Resource.ArriveDate</label>
+                                <input type="text" name="ArriveDate" value="@(((DateTime)Model.DateFrom).ToString("MM/dd/yyyy"))" class="form-control datepicker" />
+                            </div>
+                            
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>@Resource.LeaveDate</label>
+                                <input type="text" name="LeaveDate" value="@(((DateTime)Model.DateTo).ToString("MM/dd/yyyy"))" class="form-control datepicker" />
+                            </div>
+                        </div>
+                        @*<div class="col-8 text-right">
+                            <div class="btn-group">
+                                <div class="dropdown">
+                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Listing</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <button class="dropdown-item" type="button">New Listing</button>
+                                        <button class="dropdown-item" type="button">Home Opens</button>
+                                    </div>
+                                </div>
+                                <div class="dropdown ml-2">
+                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Popular Listed</button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                        <button class="dropdown-item" type="button">A - Z Listed</button>
+                                        <button class="dropdown-item" type="button">Price: Lowest First</button>
+                                        <button class="dropdown-item" type="button">Price: Highest First</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                    <div id="units"></div>
+                </div>
+
+                <!-- Sidebar
+                ============================================= -->
+                <div class="sidebar col-lg-3">
+                    <div class="sidebar-widgets-wrap">
+                        <div class="toggle toggle-border">
+                            <div class="toggle-header">
+                                <div class="toggle-icon">
+                                    <i class="toggle-closed icon-angle-down1"></i>
+                                    <i class="toggle-open icon-angle-up1"></i>
+                                </div>
+                                <div class="toggle-title">
+                                    @Resource.AdvancedSearch
+                                </div>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="">@Resource.PropertyName</label>
+                                        <input type="text" id="PropertyName" name="PropertyName" class="sm-form-control" placeholder="@Resource.PropertyName" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="">@Resource.Neighborhood</label>
+                                        <input id="Neighborhood" name="Neighborhood" class="sm-form-control" placeholder="@Resource.Neighborhood" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">@Resource.Direction</label>
+                                        <select id="Direction" name="Direction" class="sm-form-control">
+                                            <option selected value="100">@Resource.AllDirection</option>
+                                            <option value="@((int) Enums.Direction.East)">@Resource.East</option>
+                                            <option value="@((int) Enums.Direction.West)">@Resource.West</option>
+                                            <option value="@((int) Enums.Direction.North)">@Resource.North</option>
+                                            <option value="@((int) Enums.Direction.South)">@Resource.South</option>
+                                            <option value="@((int) Enums.Direction.Northeast)">@Resource.Northeast</option>
+                                            <option value="@((int) Enums.Direction.NorthWest)">@Resource.NorthWest</option>
+                                            <option value="@((int) Enums.Direction.Southeast)">@Resource.Southeast</option>
+                                            <option value="@((int) Enums.Direction.Southwest)">@Resource.Southwest</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">@Resource.UnitCode</label>
+                                        <input type="number" name="UnitCode" id="UnitCode" class="sm-form-control" placeholder="@Resource.UnitCode" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="toggle toggle-border">
+                            <div class="toggle-header">
+                                <div class="toggle-icon">
+                                    <i class="toggle-closed icon-angle-down1"></i>
+                                    <i class="toggle-open icon-angle-up1"></i>
+                                </div>
+                                <div class="toggle-title">
+                                    @Resource.Price
+                                </div>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="">@Resource.From</label>
+                                        <input type="number" name="PriceFrom" value="0" class="sm-form-control" placeholder="@Resource.From" />
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="">@Resource.To</label>
+                                        <input type="number" name="PriceTo" value="5000" class="sm-form-control" placeholder="@Resource.To" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="toggle toggle-border">
+                            <div class="toggle-header">
+                                <div class="toggle-icon">
+                                    <i class="toggle-closed icon-angle-down1"></i>
+                                    <i class="toggle-open icon-angle-up1"></i>
+                                </div>
+                                <div class="toggle-title">
+                                    @Resource.PropertyType
+                                </div>
+                            </div>
+                            <div class="toggle-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input id="Resort" name="propType[]" value="@((int)Enums.PropertyType.Resort)" checked="checked" class="checkbox-style" type="checkbox">
+                                        <label for="Resort" class="checkbox-style-2-label checkbox-small">@Resource.Chalets</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input id="Break" name="propType[]" value="@((int)Enums.PropertyType.Reset)" checked="checked" class="checkbox-style" type="checkbox">
+                                        <label for="Break" class="checkbox-style-2-label checkbox-small">@Resource.Resets</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input id="Villa" name="propType[]" value="@((int)Enums.PropertyType.Villa)" checked="checked" class="checkbox-style" type="checkbox">
+                                        <label for="Villa" class="checkbox-style-2-label checkbox-small">@Resource.Vills</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @foreach (var group in Model.ParameterGroups)
+                        {
+                            <div class="toggle toggle-border">
+                                <div class="toggle-header">
+                                    <div class="toggle-icon">
+                                        <i class="toggle-closed icon-angle-down1"></i>
+                                        <i class="toggle-open icon-angle-up1"></i>
+                                    </div>
+                                    <div class="toggle-title">
+                                        @group.Name
+                                    </div>
+                                </div>
+                                <div class="toggle-content">
+                                    <div class="row">
+                                        @foreach (var param in group.Parameters.OrderBy(c=>c.Type))
+                                        {
+                                        <div class="col-md-12">
+                                            @if (param.Type == (int)Enums.ParameterType.Checkbox)
+                                            {
+                                                <input id="@param.Name" name="param[]" value="@param.Id" class="checkbox-style" type="checkbox">
+                                                <label for="@param.Name" class="checkbox-style-2-label checkbox-small">@param.Name</label>
+                                            }
+                                            else
+                                            {
+                                                <label for="@param.Name" class="control-label">@param.Name</label>
+                                                <input id="@param.Name" name="inputValues[]" value="" class="sm-form-control" type="number">
+                                                <input name="inputIds[]" value="@param.Id" class="sm-form-control" type="hidden">
+                                            }
+                                        </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+        <input type="hidden" name="parameters" id="parameters" />
+        <input type="hidden" name="propType" id="propType" />
+    </form>
+</section>
+
+<div class="d-none" id="loadingContent">
+    <div class="entry card card-body mb-2 pb-3 pt-3 col-12">
+        <div class="grid-inner row">
+            <div class="col-lg-4">
+                <a href="" data-lightbox="image">
+                    <img style="width:288px;height:200px" class="img-thumbnail" onerror="this.onerror = null; this.src='@Url.Content("~/Images/noimg.jpg")';" alt="Image">
+                </a>
+            </div>
+            <div class="col-lg col-md-8 mt-4 mt-lg-0">
+                <div class="entry-title title-sm">
+                    <h2><a href="blog-single.html">&ensp;</a></h2>
+                    <h5><a href="blog-single.html">&ensp;</a></h5>
+                    <h6><a href="blog-single.html">&ensp;</a></h6>
+                </div>
+                <div class="entry-meta">
+                </div>
+                <div class="entry-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="entry card card-body mb-2 pb-3 pt-3 col-12">
+        <div class="grid-inner row">
+            <div class="col-lg-4">
+                <a href="" data-lightbox="image">
+                    <img style="width:288px;height:200px" class="img-thumbnail" onerror="this.onerror = null; this.src='@Url.Content("~/Images/noimg.jpg")';" alt="Image">
+                </a>
+            </div>
+            <div class="col-lg col-md-8 mt-4 mt-lg-0">
+                <div class="entry-title title-sm">
+                    <h2><a href="blog-single.html">&ensp;</a></h2>
+                    <h5><a href="blog-single.html">&ensp;</a></h5>
+                    <h6><a href="blog-single.html">&ensp;</a></h6>
+                </div>
+                <div class="entry-meta">
+                </div>
+                <div class="entry-content">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="entry card card-body mb-2 pb-3 pt-3 col-12">
+        <div class="grid-inner row">
+            <div class="col-lg-4">
+                <a href="" data-lightbox="image">
+                    <img style="width:288px;height:200px" class="img-thumbnail" onerror="this.onerror = null; this.src='@Url.Content("~/Images/noimg.jpg")';" alt="Image">
+                </a>
+            </div>
+            <div class="col-lg col-md-8 mt-4 mt-lg-0">
+                <div class="entry-title title-sm">
+                    <h2><a href="blog-single.html">&ensp;</a></h2>
+                    <h5><a href="blog-single.html">&ensp;</a></h5>
+                    <h6><a href="blog-single.html">&ensp;</a></h6>
+                </div>
+                <div class="entry-meta">
+                </div>
+                <div class="entry-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/components/rangeslider.min.js"></script>
+    <script src="~/js/jquery.scheletrone.js"></script>
+    <script src="~/js/components/daterangepicker.js"></script>
+    <script>
+        $("#Price").ionRangeSlider({
+            type: "double",
+            prefix: "$",
+            min: 0,
+            max: 20000,
+            from: 0,
+            to: 20000
+        });
+        getData(1);
+        $('#filterForm input').change(function () {
+            
+            getData(1); // get the current value of the input field.
+        });
+
+        $('#filterForm select').change(function () {
+            getData(1); // get the current value of the input field.
+        });
+        $('#units').scheletrone();
+        function getData(pageNumber) {
+            var params = "";
+            var propType = "";
+            $("input[name='param[]']").each(function (index, element) {
+                if (this.checked) {
+                    params += $(this).val()+",";
+                }
+            });
+            $("input[name='propType[]']").each(function (index, element) {
+                if (this.checked) {
+                    propType += $(this).val() + ",";
+                }
+            });
+            $("#propType").val(propType);
+            $("#parameters").val(params);
+            $("#units").html($("#loadingContent").html());
+            $('#units').scheletrone();
+            var data = $('#filterForm').serialize();
+            $.ajax({
+                url: "@Url.Action("GetProperty")",
+                data: data + "&pageNumber=" + pageNumber,
+                type: "Get",
+                dataType: "html",
+                success: function (result) {
+                    $("#units").html(result);
+                }
+            });
+        }
+        jQuery(document).ready(function () {
+            // .daterange1
+            $(".daterange").daterangepicker({
+                "buttonClasses": "button button-rounded button-mini m-0",
+                "applyClass": "button-color",
+                "cancelClass": "button-light",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            });
+
+            $('#City').on('change', function () {
+                var thisObj = $(this);
+                var isAllSelected = thisObj.find('option[value="@Guid.Empty"]').prop('selected');
+                var lastAllSelected = $(this).data('all');
+                var selectedOptions = (thisObj.val()) ? thisObj.val() : [];
+                var allOptionsLength = thisObj.find('option[value!="@Guid.Empty"]').length;
+
+                console.log(selectedOptions);
+                var selectedOptionsLength = selectedOptions.length;
+
+                if (isAllSelected == lastAllSelected) {
+
+                    if ($.inArray("@Guid.Empty", selectedOptions) >= 0) {
+                        selectedOptionsLength -= 1;
+                    }
+
+                    if (allOptionsLength <= selectedOptionsLength) {
+
+                        thisObj.find('option[value="@Guid.Empty"]').prop('selected', true).parent().selectpicker('refresh');
+                        isAllSelected = true;
+                    } else {
+                        thisObj.find('option[value="@Guid.Empty"]').prop('selected', false).parent().selectpicker('refresh');
+                        isAllSelected = false;
+                    }
+
+                } else {
+                    thisObj.find('option').prop('selected', isAllSelected).parent().selectpicker('refresh');
+                }
+
+                $(this).data('all', isAllSelected);
+            }).trigger('change');
+        });
+    </script>
+}

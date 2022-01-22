@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="ar-EG">
+<partial name="_head_website" />
+@RenderSection("css", required: false)
+<body class="stretched @HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")">
+    
+    <style>
+        .list-group-item.active {
+            z-index: 2;
+            color: #252525;
+            background-color: #e0e0e0;
+            border-color: #d5d8da;
+        }
+    </style>
+    <!-- Document Wrapper
+    ============================================= -->
+    <div id="wrapper" class="clearfix">
+    <partial name="_endUser_header" />
+        <section class="py-4" id="page-title">
+            <div class="container clearfix">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="~/Home">@Resource.Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><a>@ViewBag.Title</a></li>
+                </ol>
+            </div>
+        </section><!-- #page-title end -->
+        <section id="content">
+            <div class="content-wrap">
+                <div class="container clearfix">
+                    @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
+                    {
+                        <div class="style-msg @TempData["AlertType"].ToString()msg">
+                            <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        </div>
+                    }
+                    <div class="row gutter-40 col-mb-80">
+
+                        <div class="sidebar sticky-sidebar-wrap col-lg-3">
+                            <div class="sidebar-widgets-wrap">
+                                <div class="sticky-sidebar">
+                                    <div class="widget quick-contact-widget form-widget clearfix">
+
+                                        <div class="card bg-dark border-0">
+                                            <div class="card-header row mx-0">
+                                                <div class="col-md-4 col-sm-12">
+                                                    <img src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,SessionClass.GetUser(HttpContextAccessor.HttpContext).Image))" />
+                                                </div>
+                                                <div class="col-md-8 col-sm-12 text-center ">
+                                                    <h5 class="text-white">@SessionClass.GetUser(HttpContextAccessor.HttpContext).FirstName</h5>
+                                                    <a class="text-white" href="~/Accounts/Logout"><i class="icon-power-off"></i> @Resource.Logout</a>
+                                                </div>
+                                            </div>
+                                            <div class="card-body p-0">
+                                                <div class="list-group">
+                                                    <a href="~/User/Infos" id="info" class="list-group-item list-group-item-action"><i class="icon-user-alt"></i> صفحتي</a>
+                                                    <a href="~/User/Reservations" id="reservation" class="list-group-item list-group-item-action"><i class="icon-calendar-1"></i> حجوزاتي</a>
+                                                    <a href="~/User/Fiverates" id="fiverates" class="list-group-item list-group-item-action"><i class="icon-heart text-danger"></i> مفضلتي</a>
+                                                    <a href="~/User/Profile" id="profile" class="list-group-item list-group-item-action"><i class="icon-id-card"></i> الملف الشخصي </a>
+                                                    <a href="~/User/ContactUs" id="contactUs" class="list-group-item list-group-item-action"><i class="icon-mail-bulk"></i> تواصل معنا </a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="postcontent col-lg-9">
+                            @RenderBody()
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- #content end -->
+        <!-- Footer
+    ============================================= -->
+        <footer id="footer" class="dark" style="background-color: #222;">
+
+            <partial name="_footerAccount" />
+        </footer><!-- #footer end -->
+
+    </div><!-- #wrapper end -->
+    <!-- Go To Top
+    ============================================= -->
+    <div id="gotoTop" class="icon-angle-up"></div>
+    <partial name="_scripts" />
+    <script>
+        $(function () {
+            $('.datepicker').datepicker({
+                autoclose: true,
+                startDate: "today",
+                todayHighlight: true,
+                format: "mm/dd/yyyy",
+            });
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

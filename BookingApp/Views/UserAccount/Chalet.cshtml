@@ -1,32 +1,53 @@
-﻿@model Data.Models.Chalets.Chalet
+﻿@model ChaletViewModel
 
 @{
-    ViewData["Title"] = "Chalet";
-    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
-    ViewBag.chaletId = Model.Id;
+    
+    Layout = "~/Views/Shared/_UserAccountLayout.cshtml";
+    //ViewBag.chaletId = Model.Chalet.Id;
 }
 @section css
 {
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&display=swap" rel="stylesheet" type="text/css" />
 }
-@if (Model.Id == Guid.Empty)
-{
-    <h4>@Resource.NewProperty</h4>
-}
-else
-{
-    <h4>@Model.ChaletName | @Resource.Edit</h4>
-}
+
 
 <partial name="_chaletFeilds" model="Model" />
+
+
+
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBMvk54X0cJtOPiSu60rk-OdX8alzz7Htk&callback=initMap"
         type="text/javascript"></script>
 @section scripts{
     <script>
+        function closeToSea(isClose) {
+            if (isClose) {
+                $("#seaArea").removeClass("d-none");
+            } else {
+                $("#seaArea").addClass("d-none");
+            }
+            }
+            @*if ('@Model.Chalet.Id' == '@Guid.Empty') {
+                //getProprityFeilds(@((int)Enums.PropertyType.Resort), '@Model.Chalet.Id');
+                document.getElementById('r1').checked = true;
+            } else {
+                //getProprityFeilds(@Model.Chalet.PropertyType, '@Model.Chalet.Id');
+            }*@
 
+        function getProprityFeilds(proprityType, chaletId) {
+            $("#proprityFeilds").html("<div class='text-center my-3'>@Resource.PleaseWait</div>");
+            $.ajax({
+                url: "@Url.Action("GetProprityFeilds")",
+                data: { proprityType:proprityType,chaletId: chaletId },
+                dataType: "html",
+                type: "GET",
+                success: function(data) {
+                    $("#proprityFeilds").html(data);
+                }
+            });
+        }
         updateMenu("chaletInfo");
 
-        function getRegion(element) {
+        @*function getRegion(element) {
             $.ajax({
                 url: "@Url.Action("GetRegions")",
                 data: { cityId: $(element).val() },
@@ -58,19 +79,16 @@ else
                     $("#NeighborhoodId").append(options);
                 }
             });
-        }
+        }*@
 
         let map, infoWindow;
 
 
         function initMap() {
-            var lat = 13.07403,
-                lng = 32.90783,
-                latlng = new google.maps.LatLng(lat, lng),
                 image = 'http://maps.google.com/mapfiles/kml/paddle/wht-circle.png';
             var option = {
-                center: { lat: lat, lng: lng },
-                zoom: 15,
+                center: { lat: 0, lng: 0 },
+                zoom: 12,
                 mapTypeId: "satellite",
                 panControl: true,
                 panControlOptions: {
@@ -83,21 +101,33 @@ else
                 }
             };
             map = new google.maps.Map(document.getElementById("gmap"), option);
-            var infowindow = new google.maps.InfoWindow();
+            
             var postion  = new google.maps.LatLng(0, 0);
-            if ($("#Latitude").val() !== "") {
-                var l = (Number($("#Latitude").val())).toFixed(5);
-                var n = (Number($("#Longitude").val())).toFixed(5);
+            if ($("#Chalet_Latitude").val() !== "") {
+                var l = (Number($("#Chalet_Latitude").val())).toFixed(5);
+                var n = (Number($("#Chalet_Longitude").val())).toFixed(5);
                 postion = new google.maps.LatLng(l, n);
                 console.log(new google.maps.LatLng(l, n));
+                var marker = new google.maps.Marker({
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    position: postion
+                });
+                marker.setPosition(postion);
+                map.panTo(postion);
+            } else {
+                var marker = new google.maps.Marker({
+                    map: map,
+                    draggable: true,
+                    animation: google.maps.Animation.DROP,
+                    position: { lat: 0, lng: 0 },
+                });
             }
+            
 
-            var marker = new google.maps.Marker({
-                position: postion,
-                map: map,
-                icon: image
-            });
 
+            var infowindow = new google.maps.InfoWindow();
             google.maps.event.addListener(map, 'click', function (event) {
                 //alert(event.latLng.lat());
                 //$('.MapLon').val(event.latLng.lng());
@@ -111,9 +141,81 @@ else
                 marker.setPosition(latlng);
                 infowindow.setContent(latlng + "");
                 infowindow.open(map, marker);
-                $("#Latitude").val(lng);
-                $("#Longitude").val(lat);
+                $("#Chalet_Latitude").val(lat);
+                $("#Chalet_Longitude").val(lng);
             }
+            }
+
+            function addUser() {
+            $("#User_Id").val('@Guid.Empty');
+            $("#User_FirstName").val("");
+            $("#User_LastName").val("");
+            $("#User_Email").val("");
+            $("#userModal").modal("show");
+            $("#User_PhoneNumber").val("");
+            $("#User_Password").val("");
+            $("#User_WhatsAppNumber").val("");
+            $("#passwordArea").removeClass("d-none");
+            $("#User_Password").prop("required", "required");
+            $("#User_WhatsAppNotifications").removeAttr("checked");
+        }
+
+
+        function updateUser(id, firstName, lastName, email, phoneNumber, whatsAppNumber, jobId, notifications, userUserType) {
+            $("#User_Id").val(id);
+            $("#User_FirstName").val(firstName);
+            $("#User_LastName").val(lastName);
+            $("#User_Email").val(email);
+            $("#User_PhoneNumber").val(phoneNumber);
+            $("#User_WhatsAppNumber").val(whatsAppNumber);
+            $("#User_JobId").val(jobId);
+            $("#User_UserType").val(userUserType);
+            $("#passwordArea").addClass("d-none");
+            $("#User_Password").removeAttr("required");
+
+            $("#userModal").modal("show");
+            if (notifications === 'true') {
+                $("#User_WhatsAppNotifications").prop("checked", "checked");
+            } else {
+                $("#User_WhatsAppNotifications").removeAttr("checked");
+            }
+        }
+
+        
+        function dayPrice(isDayPrice) {
+            if (isDayPrice) {
+                $("#Unit_DayPrice").removeAttr("readonly");
+                $(".pricePerDayGroup input").prop("readonly", "readonly");
+                document.getElementById('chkPricePerDay').checked = false;
+                document.getElementById('chkDayPrice').checked = true;
+            } else {
+                $("#Unit_DayPrice").prop("readonly", "readonly");
+                $(".pricePerDayGroup input").removeAttr("readonly");
+
+                document.getElementById('chkPricePerDay').checked = true;
+                document.getElementById('chkDayPrice').checked = false;
+            }
+        }
+
+        function pricePerDay(isPricePerDay) {
+            if (isPricePerDay) {
+                document.getElementById('chkPricePerDay').checked = true;
+                document.getElementById('chkDayPrice').checked = false;
+                $("#Unit_DayPrice").prop("readonly", "readonly");
+                $(".pricePerDayGroup input").removeAttr("readonly");
+            } else {
+                $("#Unit_DayPrice").removeAttr("readonly");
+                $(".pricePerDayGroup input").prop("readonly", "readonly");
+                document.getElementById('chkDayPrice').checked = true;
+                document.getElementById('chkPricePerDay').checked = false;
+
+            }
+        }
+        
+        if ('@Model.Unit.IsDayPrice.ToString().ToLower()' == 'true') {
+            pricePerDay(true);
+        } else {
+            pricePerDay(false);
         }
     </script>
 }

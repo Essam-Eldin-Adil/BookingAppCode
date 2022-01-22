@@ -11,6 +11,9 @@ namespace Data.Models
 {
     public class User:Entity
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "UserNo", ResourceType = typeof(Resource))]
+        public int UserNo { get; set; }
         [Display(Name = "FirstName", ResourceType = typeof(Resource))]
         public string FirstName { get; set; }
         [Display(Name = "LastName", ResourceType = typeof(Resource))]
@@ -42,6 +45,10 @@ namespace Data.Models
         public bool TemporaryPassword { get; set; } = false;
         [Display(Name = "JobId", ResourceType = typeof(Resource))]
         public Guid? JobId { get; set; } = Guid.Empty;
+        [Display(Name = "City", ResourceType = typeof(Resource))]
+        public Guid? CityId { get; set; } = Guid.Empty;
+        [Display(Name = "Region", ResourceType = typeof(Resource))]
+        public string Region { get; set; }
 
         [NotMapped] public bool WhatsAppNotifications { get; set; }
     }

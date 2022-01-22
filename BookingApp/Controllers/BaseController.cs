@@ -19,6 +19,7 @@ namespace BookingApp.Controllers
     {
         public string IdentityId { get; set; }
         public string IdentityImage { get; set; }
+        public string Lang { get; set; }
 
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -37,10 +38,15 @@ namespace BookingApp.Controllers
             {
                 Language("ar-EG", "flag-icon-sa", Resource.Arabic, "RTL");
             }
-
+            else
+            {
+                Lang = HttpContext.Session.GetString("Language");
+            }
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo(HttpContext.Session.GetString("Language"));
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator = ".";
+            Thread.CurrentThread.CurrentCulture.DateTimeFormat.DateSeparator = "/";
         }
         public void Language(string code, string flag, string name, string direction)
         {
@@ -49,9 +55,11 @@ namespace BookingApp.Controllers
             HttpContext.Session.SetString("LanguageFlag", flag);
             HttpContext.Session.SetString("LanguageName", name);
             HttpContext.Session.SetString("LanguageDirection", direction);
-
+            Lang = code;
             Thread.CurrentThread.CurrentCulture = new CultureInfo(HttpContext.Session.GetString("Language"));
             Thread.CurrentThread.CurrentUICulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator = ".";
+            Thread.CurrentThread.CurrentCulture.DateTimeFormat.DateSeparator = "/";
         }
         public void SavedSuccess()
         {

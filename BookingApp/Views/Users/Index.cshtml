@@ -1,9 +1,10 @@
 ﻿@model Data.Models.User
 @{
-    ViewData["Title"] = "Chalet";
-    Layout = "~/Views/Shared/_ChaletLayout.cshtml";
+    ViewData["Title"] = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<h4>@Resource.UserManagement</h4>
 
 
 <input type="hidden" id="userType" value="@((int)Enums.UserType.Admin)" />
@@ -114,7 +115,7 @@
         var oTable;
         function initDataTable() {
             oTable = $('#datatable1').dataTable({
-                "ajax": '@Url.Action("GetData")' + '?userType=' + $("#userType").val(),
+                "ajax": '@Url.Action("GetData")?userType='+$("#userType").val(),
                 language: lang,
                 length: true,
                 data: { userType : $("#userType").val()},
@@ -246,5 +247,7 @@
             $("#userType").val(userType);
             reloadDataTable();
         }
+
+        updateMenu("users");
     </script>
 }

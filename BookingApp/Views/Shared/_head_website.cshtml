@@ -1,0 +1,45 @@
+﻿<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="author" content="TURSITA" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Stylesheets
+    ============================================= -->
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700|Poppins:300,400,500,600,700|PT+Serif:400,400i&display=swap" rel="stylesheet" type="text/css" />
+    @if (HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection") == "RTL")
+    {
+        <link href="~/css/bootstrap-rtl.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/style-rtl.css" type="text/css" />
+        <link href="~/css/enduser-rtl.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/intlTelInput-rtl.css">
+    }
+    else
+    {
+        <link href="~/css/bootstrap.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/style.css" type="text/css" />
+        <link href="~/css/enduser.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/intlTelInput.css">
+    }
+    <link rel="stylesheet" href="~/css/dark.css" type="text/css" />
+
+    <link href="~/website/website.css" rel="stylesheet" />
+    <link href="~/website/css/font-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/font-icons.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/animate.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/magnific-popup.css" type="text/css" />
+    <link href="~/website/fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/components/bs-select.css" type="text/css" />
+    <link rel="stylesheet" href="~/css/components/daterangepicker.css" type="text/css" />
+
+
+
+    <!-- Document Title
+    ============================================= -->
+    <title>@Domain.Setting.Get(Context, "AppName") @ViewBag.Title</title>
+    <style>
+        .mlink::before {
+            content: '' !important
+        }
+    </style>
+</head>

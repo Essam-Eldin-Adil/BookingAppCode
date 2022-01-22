@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = @Resource.Chalets;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<h4>@Resource.Chalets</h4>
+<div class="table-responsive mt-2">
+    <table id="datatable1" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>@Resource.PropertyName</th>
+                <th>@Resource.PropertyType</th>
+                <th>@Resource.City</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>@Resource.PropertyName</th>
+                <th>@Resource.PropertyType</th>
+                <th>@Resource.City</th>
+                <th></th>
+            </tr>
+        </tfoot>
+        <tbody></tbody>
+    </table>
+</div>
+@section scripts
+{
+    <script>
+        updateMenu("properties");
+        $('#datatable1').dataTable({
+            "ajax": '@Url.Action("GetData")',
+            language: lang,
+            length: true,
+            serverSide: true,
+            retrieve: true,
+            dom: 'Bfrtip',
+            columns: [
+                {
+                    "data": "chaletName"
+                }, {
+                    "data": "propertyType",
+                    "render": function (data, type, full, meta) {
+                        switch (data) {
+                            case @((int)Enums.PropertyType.Reset):
+                                return `<span class="text-success">@Resource.Break</span>`;
+                                break;
+                            case @((int)Enums.PropertyType.Resort):
+                                return `<span class="text-info">@Resource.Resort</span>`;
+                                break;
+                            case @((int)Enums.PropertyType.Villa):
+                                return `<span class="text-warning">@Resource.Villa</span>`;
+                                break;
+                            default:
+                        }
+                    }
+                },
+                {
+                    "data": "city.cityName"
+                },{
+                    "data": "id",
+                    "render": function (data, type, full, meta) {
+                        var btn = "";
+                        btn = `<a class="btn btn-primary btn-sm" href="@Url.Action("Chalet", "UserAccount")/${data}">@Resource.PropertyInfo</a> `;
+                        if (full.isConfirmed===true) {
+                            btn += `<a class="btn btn-danger btn-sm" href="@Url.Action("ConfirmProperty")/${data}?confirm=false">@Resource.UnConfirm</a>`;
+                        } else {
+                            btn += `<a class="btn btn-success btn-sm" href="@Url.Action("ConfirmProperty")/${data}?confirm=true">@Resource.Confirm</a>`;
+                        }
+                        return btn;
+                    }
+                }
+            ]
+        });
+    </script>
+}
