@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Resources;
 
 namespace Data.Models.Chalets.ChaletDetails
@@ -17,9 +15,5 @@ namespace Data.Models.Chalets.ChaletDetails
 
         public ParameterGroup ParameterGroup { get; set; }
         public Guid ParameterGroupId { get; set; }
-        public ICollection<ParameterTranslation> ParameterTranslations { get; set; }
-
-        [NotMapped]
-        public string Value { get; set; }
     }
 }

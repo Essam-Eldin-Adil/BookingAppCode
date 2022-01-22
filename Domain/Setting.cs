@@ -10,10 +10,6 @@ namespace Domain
         {
             var settingRepository = (IRepository<Data.Models.Setting>)httpContext.RequestServices.GetService(typeof(IRepository<Data.Models.Setting>));
             var setting = settingRepository.Table.FirstOrDefault(c => c.Key.Equals(Key));
-            if (setting==null)
-            {
-                return "N/A";
-            }
             return setting.Value;
         }
     }

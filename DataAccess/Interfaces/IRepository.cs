@@ -28,8 +28,6 @@ public interface IRepository<Entity> : IDisposable where Entity : Data.Entity
     Task AddRangeAsync(IEnumerable<Entity> entities, CancellationToken cancellationToken = default);
 
     Task<List<Entity>> ToListAsync();
-    void UserUpdate(Entity entity);
-    void ReservationUpdate(Entity entity);
 
     void Update(Entity entity);
     Task UpdateAsync(Entity entity);

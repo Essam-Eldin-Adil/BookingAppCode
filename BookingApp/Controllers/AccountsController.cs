@@ -1,10 +1,8 @@
 ﻿using Data.Models;
-using Data.Models.General;
 using Data.ViewModels;
 using Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Resources;
 using System;
 using System.Collections.Generic;
@@ -16,130 +14,18 @@ namespace BookingApp.Controllers
     public class AccountsController : BaseController
     {
         private readonly IRepository<User> _userRepository;
-        private readonly IRepository<City> _cityRepository;
-        public AccountsController(IRepository<User> userRepository, IRepository<City> cityRepository)
+        public AccountsController(IRepository<User> userRepository)
         {
             _userRepository = userRepository;
-            _cityRepository = cityRepository;
         }
-
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            SessionClass.Remove(HttpContext);
-            return RedirectToAction("Index","Home");
-        }
-
         public IActionResult Login()
         {
             var model = new LoginViewModel();
-            ViewBag.CodeSent = false;
-            return View(model);
-        }
-        [HttpPost]
-        public IActionResult Login(string mobileno, int code, bool confirm = false)
-        {
-            var user = _userRepository.Table.FirstOrDefault(c => c.PhoneNumber == mobileno);
-            if (user != null)
-            {
-                if (user.UserType == (int)Enums.UserType.EndUser)
-                {
-                    ViewBag.IsExist = false;
-                    ViewBag.CodeSent = false;
-                    ViewBag.MobileNo = mobileno;
-                    Error(Resource.YouCannotLoginWithEndUserAccount);
-                    return View();
-                }
-            }
-            if (confirm)
-            {
-                if (user.ConfirmCode == code)
-                {
-                    SessionClass.SetUser(HttpContext, user);
-                    if (user.IsConfirmed)
-                    {
-                        return RedirectToAction("Chalets", "UserAccount");
-                    }
-
-                    return RedirectToAction(nameof(CompleteRegister), new { id = user.Id });
-                }
-                if (user.IsConfirmed)
-                {
-                    ViewBag.IsExist = true;
-                }
-                else
-                {
-                    ViewBag.IsExist = false;
-                }
-                ViewBag.MobileNo = mobileno;
-                ViewBag.CodeSent = true;
-                ViewBag.Code = user.ConfirmCode;
-                Error(Resource.WrongeVerificationCode);
-                return View();
-            }
-            if (user == null)
-            {
-                user = new User();
-                user.UserType = (int)Enums.UserType.BookAdmin;
-                user.Email = "";
-                user.Status = true;
-                user.IsAdmin = false;
-                user.BirthDate = DateTime.Now.Date;
-                user.TemporaryPassword = false;
-                user.CreatedDate = DateTime.Now;
-                user.IsConfirmed = false;
-                user.PhoneNumber = mobileno;
-                user.ConfirmCode = long.Parse(getCode());
-                _userRepository.Add(user);
-                ViewBag.IsExist = false;
-            }
-            else
-            {
-                user.ConfirmCode = long.Parse(getCode());
-                _userRepository.UserUpdate(user);
-                ViewBag.IsExist = true;
-            }
-            ViewBag.MobileNo = mobileno;
-            ViewBag.CodeSent = true;
-            ViewBag.Code = user.ConfirmCode;
-            return View();
-        }
-
-        public IActionResult CompleteRegister(Guid id)
-        {
-            var model = new UserAccountViewModel();
-            model.User = _userRepository.Find(id);
-            ViewBag.CityId = new SelectList(_cityRepository.Table.ToList(),"Id", "CityName");
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult CompleteRegister(UserAccountViewModel model)
-        {
-            try
-            {
-                var user = _userRepository.Find(model.User.Id);
-                user.IsConfirmed = true;
-                user.FirstName = model.User.FirstName;
-                user.LastName = model.User.LastName;
-                user.CityId = model.User.CityId;
-                user.Region = model.User.Region;
-                user.WhatsAppNumber = model.User.WhatsAppNumber;
-                user.Email = model.User.Email;
-                _userRepository.UserUpdate(user);
-                SessionClass.SetUser(HttpContext, user);
-                Success(Resource.ProrpertNotConfirmed);
-                return RedirectToAction("Index", "Home");
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-
-        [HttpPost]
-        public IActionResult Login1(LoginViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
             try
             {
@@ -227,7 +113,7 @@ namespace BookingApp.Controllers
         private string getCode()
         {
             Random generator = new Random();
-            return generator.Next(999999, 99999999).ToString("D6").Substring(0, 6);
+            return generator.Next(1, 1000000).ToString("D6");
         }
 
         [HttpGet]
@@ -257,7 +143,7 @@ namespace BookingApp.Controllers
                 
                 return redirectUser(model);
             }
-            return Redirect(redirectUrl);
+            return RedirectToAction(redirectUrl);
         }
 
         private IActionResult redirectUser(User user)
@@ -265,9 +151,9 @@ namespace BookingApp.Controllers
             switch (user.UserType)
             {
                 case (int)Enums.UserType.BookAdmin:
-                    return RedirectToAction("Chalets", "UserAccount");
+                    return RedirectToAction("Index","UserAccount");
                 case (int)Enums.UserType.Admin:
-                    return RedirectToAction("Index", "CPanel");
+                    return RedirectToAction("Index", "Administrator");
                 case (int)Enums.UserType.EndUser:
                     return RedirectToAction("Index", "Home");
                 default:

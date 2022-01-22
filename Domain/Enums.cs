@@ -9,19 +9,12 @@ namespace Domain
 {
     public static partial class Enums
     {
-        public enum ReservedBy{
-            ProprityUser,
-            SystemAdmin,
-            Website,
-            Application
-        }
         public enum PropertyType
         {
             All,
             Resort,
-            Reset,
-            Villa,
-            MainResort
+            Break,
+            Villa
         }
         public enum Hour
         {
@@ -54,12 +47,7 @@ namespace Domain
             NorthWest,
             Southwest
         }
-        public enum PaymentMethod
-        {
-            Cash,
-            CreditCard,
-            PaymentInvoice
-        }
+
         public enum Status
         {
             New,

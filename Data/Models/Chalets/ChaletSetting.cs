@@ -4,7 +4,7 @@ using Resources;
 
 namespace Data.Models.Chalets
 {
-    public class ChaletSetting1:Entity
+    public class ChaletSetting:Entity
     {
         [DataType(DataType.Time)]
         [Display(Name= "ENTERTIME", ResourceType = typeof(Resource))]

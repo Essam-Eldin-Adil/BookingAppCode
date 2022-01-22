@@ -4,105 +4,51 @@
     ViewData["Title"] = "Chalet";
     Layout = "~/Views/Shared/_ChaletLayout.cshtml";
     ViewBag.chaletId = Model.ChaletId;
-    if (ViewBag.PropertyType == (int)Enums.PropertyType.Resort)
-    {
-        ViewBag.IsResort = Model.ChaletId;
-    }
 }
 <form asp-action="SaveUnit" method="post" class="was-validated" enctype="multipart/form-data">
 
     <partial name="_unitFeileds" model="Model" />
     <hr class="mt-5" />
-    @if (Model.Unit.Chalet != null)
-    {
-        @foreach (var modelParameterGroup in Model.ParameterGroups.Where(c => c.PropertyType == Model.Unit.Chalet.PropertyType&&!c.IsChild).OrderBy(c => c.Order))
-        {
-<div class="border p-3 mt-2">
-    <h5 class="text-muted">@modelParameterGroup.Name</h5>
-    <div class="form-row">
-        @foreach (var parameter in modelParameterGroup.Parameters.OrderBy(c => c.Index))
-        {
-            if (parameter.Type == (int)Enums.ParameterType.Checkbox)
-            {
-                var isChecked = "";
-                if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
-                {
-                    isChecked = "checked='checked'";
-                }
-                <div class="form-group form-check mr-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" @isChecked type="checkbox" name="checkboxes[]" value="@parameter.Id" /> @Html.DisplayName(parameter.Name)
-                    </label>
-                </div>
-            }
-            else
-            {
-                var value = "";
-                if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
-                {
-                    value = $"{Model.ChaletParameterValues.FirstOrDefault(c => c.ParameterId == parameter.Id)?.Value}";
-                }
-                <div class="form-group col-md-3">
-                    <label for="@parameter.Name" class="control-label">@parameter.Name</label>
-                    <input value="@value" type="text" name="inputValues[]" class="form-control" />
-                    <input type="hidden" name="inputIds[]" value="@parameter.Id" />
-                    <span validation-for="Name" class="text-danger"></span>
-                </div>
-            }
-
-        }
-    </div>
-
-    @foreach (var modelParameterGroupitem in Model.ParameterGroups.Where(c => c.PropertyType == Model.Unit.Chalet.PropertyType && c.ParentId==modelParameterGroup.Id).OrderBy(c => c.Order))
+    @foreach (var modelParameterGroup in Model.ParameterGroups.OrderBy(c => c.Order))
     {
         <div class="border p-3 mt-2">
-            <h5 class="text-muted">@modelParameterGroupitem.Name</h5>
-            <div class="form-row">
-                @foreach (var parameter in modelParameterGroupitem.Parameters.OrderBy(c => c.Index))
+        <h5 class="text-muted">@modelParameterGroup.Name</h5>
+        <div class="form-row">
+            @foreach (var parameter in modelParameterGroup.Parameters.OrderBy(c => c.Index))
+            {
+                if (parameter.Type == (int)Enums.ParameterType.Checkbox)
                 {
-                    if (parameter.Type == (int)Enums.ParameterType.Checkbox)
+                    var isChecked = "";
+                    if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
                     {
-                        var isChecked = "";
-                        if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
-                        {
-                            isChecked = "checked='checked'";
-                        }
-                        <div class="form-group form-check mr-3">
-                            <label class="form-check-label">
-                                <input class="form-check-input" @isChecked type="checkbox" name="checkboxes[]" value="@parameter.Id" /> @Html.DisplayName(parameter.Name)
-                            </label>
-                        </div>
+                        isChecked = "checked='checked'";
                     }
-                    else
-                    {
-                        var value = "";
-                        if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
-                        {
-                            value = $"{Model.ChaletParameterValues.FirstOrDefault(c => c.ParameterId == parameter.Id)?.Value}";
-                        }
-                        <div class="form-group col-md-3">
-                            <label for="@parameter.Name" class="control-label">@parameter.Name</label>
-                            <input value="@value" type="text" name="inputValues[]" class="form-control" />
-                            <input type="hidden" name="inputIds[]" value="@parameter.Id" />
-                            <span validation-for="Name" class="text-danger"></span>
-                        </div>
-                    }
-
+                    <div class="form-group form-check mr-3">
+                        <label class="form-check-label">
+                            <input class="form-check-input" @isChecked type="checkbox" name="checkboxes[]" value="@parameter.Id" /> @Html.DisplayName(parameter.Name)
+                        </label>
+                    </div>
                 }
-            </div>
+                else
+                {
+                    var value = "";
+                    if (Model.ChaletParameterValues.Select(c => c.ParameterId).Contains(parameter.Id))
+                    {
+                        value = $"{Model.ChaletParameterValues.FirstOrDefault(c => c.ParameterId == parameter.Id)?.Value}";
+                    }
+                    <div class="form-group col-md-3">
+                        <label for="@parameter.Name" class="control-label">@parameter.Name</label>
+                        <input value="@value" type="text" name="inputValues[]" class="form-control" />
+                        <input type="hidden" name="inputIds[]" value="@parameter.Id" />
+                        <span validation-for="Name" class="text-danger"></span>
+                    </div>
+                }
+
+            }
+        </div>
         </div>
 
     }
-</div>
-
-        }
-    }
-
-<div class="my-3">
-    @Resource.PersonsAllowed <input asp-for="Unit.AllowedPersons" style="width:100px;display:inline" class="form-control mb-2" /><br />
-    <input asp-for="Unit.MoreThanAllowed" />@Resource.MaxThanThatMostPay <input asp-for="Unit.MoreThanAllowedPrice" style="width:100px;display:inline" class="form-control" /> @Resource.ForEveryPerson <input asp-for="Unit.MaximumAllowed" style="width:100px;display:inline" class="form-control" />
-</div>
-
     <hr />
     <h4>@Resource.Images</h4>
     <div class="my-4">
@@ -133,14 +79,14 @@
     <div class="form-group">
         <label class="control-label">
 
-            <input id="chkDayPrice" onchange="dayPrice($(this).prop('checked'))" asp-for="@Model.Unit.IsDayPrice" />
+            <input id="chkDayPrice" onchange="dayPrice($(this).prop('checked'))" asp-for="@Model.Unit.IsDayPrice"/>
             @Resource.DayPrice
         </label>
         <input asp-for="@Model.Unit.DayPrice" required="" class="form-control" />
         <span asp-validation-for="@Model.Unit.DayPrice" class="text-danger"></span>
     </div>
     <h5 class="mt-4">
-        <input type="checkbox" id="chkPricePerDay" onchange="pricePerDay($(this).prop('checked'))" />
+        <input type="checkbox" id="chkPricePerDay" onchange="pricePerDay($(this).prop('checked'))"/>
         @Resource.PricePerDay
     </h5>
     <div class="form-row pricePerDayGroup">
@@ -310,17 +256,13 @@
         });
         updateMenu("mychalet");
 
-        function haveSimilar(isSimilar,count) {
+        function haveSimilar(isSimilar) {
             if (isSimilar) {
                 $("#Unit_Count").removeAttr("readonly");
                 $("#SimilarDiv").removeClass("d-none");
 
             } else {
-                if (count === 0) {
-                    $("#Unit_Count").val(1);
-                } else {
-                    $("#Unit_Count").val(count);
-                }
+                $("#Unit_Count").val(1);
                 $("#Unit_Count").prop("readonly", "readonly");
                 $("#SimilarDiv").addClass("d-none");
             }
@@ -422,7 +364,7 @@
             }
         }
 
-        if ('@Model.Unit.IsDayPrice'==='true') {
+        if ('@Model.Unit.IsDayPrice'==='True') {
             $("#Unit_DayPrice").removeAttr("readonly");
             $(".pricePerDayGroup input").prop("readonly", "readonly");
             document.getElementById('chkDayPrice').checked = true;

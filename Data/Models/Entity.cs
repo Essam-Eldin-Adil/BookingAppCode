@@ -12,8 +12,8 @@ namespace Data
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public int? Order { get; set; }
-        [DataType(DataType.DateTime)]
-        public DateTime CreatedDate { get; set; } = Convert.ToDateTime(DateTime.Now);
+        [DataType(DataType.Date)]
+        public DateTime CreatedDate { get; set; } = Convert.ToDateTime(DateTime.Now.ToString("yyyy-MM-dd"));
         public bool IsDeleted { get; set; } = false;
     }
 }

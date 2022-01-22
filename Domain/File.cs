@@ -8,7 +8,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Security.Policy;
 using System.Text;
 
 namespace Domain
@@ -27,29 +26,7 @@ namespace Domain
             }
             return null;
         }
-        public static string GetImage(HttpContext httpContext, Guid? id)
-        {
-            var path = Path.Combine("images", "noimg.jpg");
-            if (id==null)
-                return path;
-            if (id==Guid.Empty)
-                return path;
-            var fileRepository = (IRepository<Data.Models.File>)httpContext.RequestServices.GetService(typeof(IRepository<Data.Models.File>));
-            var file = fileRepository.Find(id);
-            return file != null ? file.FileContent : path;
-        }
 
-        public static string GetThumpImage(HttpContext httpContext, Guid? id)
-        {
-            var path = Path.Combine("images", "noimg.jpg");
-            if (id == null)
-                return path; 
-            if (id == Guid.Empty)
-                return path;
-            var fileRepository = (IRepository<Data.Models.File>)httpContext.RequestServices.GetService(typeof(IRepository<Data.Models.File>));
-            var file = fileRepository.Find(id);
-            return file != null ? file.FileContentMin : path;
-        }
         public static string GetExtension(string name)
         {
             return Path.GetExtension(name).Replace(".", "");

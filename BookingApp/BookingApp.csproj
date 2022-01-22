@@ -14,20 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\AdminControl\NeighborhoodsController.cs" />
-    <Compile Remove="Controllers\AdminControl\RegionsController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\css\style.scss" />
-    <Content Remove="wwwroot\js\components\daterangepicker-ar.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bootstrap.v3.Datetimepicker.CSS" Version="4.17.49" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.9" />
@@ -60,7 +53,6 @@
     <None Include="wwwroot\js\components\bs-select.js" />
     <None Include="wwwroot\js\components\bs-switches.js" />
     <None Include="wwwroot\js\components\datepicker.js" />
-    <None Include="wwwroot\js\components\daterangepicker-ar.js" />
     <None Include="wwwroot\js\components\daterangepicker.js" />
     <None Include="wwwroot\js\components\event.move.js" />
     <None Include="wwwroot\js\components\image-changer.js" />
@@ -123,16 +115,10 @@
     <None Include="wwwroot\js\components\tinymce\themes\silver\theme.min.js" />
     <None Include="wwwroot\js\components\tinymce\tinymce.min.js" />
     <None Include="wwwroot\js\components\typehead.js" />
-    <None Include="wwwroot\website\css\icon-files\realestate.svg" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\invoices\" />
     <Folder Include="wwwroot\_uploads\ChaletImages\Thumb\" />
-    <Folder Include="wwwroot\_uploads\CitiesImages\" />
-    <Folder Include="wwwroot\_uploads\BankImages\" />
-    <Folder Include="wwwroot\_uploads\Icons\" />
-    <Folder Include="wwwroot\_uploads\UserImages\" />
     <Folder Include="wwwroot\_uploads\UnitImages\" />
   </ItemGroup>
 

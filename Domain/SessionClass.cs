@@ -14,15 +14,7 @@ public abstract class SessionClass
     {
         httpContext.Session.Clear();
     }
-    public static bool IsAuthentecated(HttpContext httpContext)
-    {
-        var json = httpContext.Session.GetString("User");
-        if (string.IsNullOrEmpty(json))
-        {
-            return false;
-        }
-        return true;
-    }
+
     public static User GetUser(HttpContext httpContext)
     {
         var json = httpContext.Session.GetString("User");
@@ -31,11 +23,6 @@ public abstract class SessionClass
             return new User();
         }
         return JsonConvert.DeserializeObject<User>(json);
-    }
-
-    public static void Remove(HttpContext httpContext)
-    {
-        httpContext.Session.Remove("User");
     }
 
     public static void SetUser(HttpContext httpContext,User user)

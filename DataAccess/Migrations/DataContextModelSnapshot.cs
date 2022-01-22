@@ -15,7 +15,7 @@ namespace DataAccess.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Data.Models.Chalets.Chalet", b =>
@@ -29,9 +29,6 @@ namespace DataAccess.Migrations
 
                     b.Property<Guid>("CityId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("CleanCondition")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("CloseToSea")
                         .HasColumnType("bit");
@@ -48,21 +45,6 @@ namespace DataAccess.Migrations
                     b.Property<int>("DistanceFromSea")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EnterTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ExitTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("FamilyCondition")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("InsuranceAmount")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("InsuranceCondition")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
 
@@ -78,38 +60,17 @@ namespace DataAccess.Migrations
                     b.Property<string>("Longitude")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("MoneyTransferCondition")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Neighborhood")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("NeighborhoodId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Order")
                         .HasColumnType("int");
 
-                    b.Property<string>("OtherCondition")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PropertyType")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProprityCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Region")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("RegionId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ReservationManager")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReservationPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("ViewStatus")
                         .HasColumnType("bit");
@@ -117,6 +78,10 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
+
+                    b.HasIndex("NeighborhoodId");
+
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Chalets");
                 });
@@ -261,72 +226,6 @@ namespace DataAccess.Migrations
                     b.ToTable("ParameterGroups");
                 });
 
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterGroupTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ParameterGroupId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("ParameterGroupId");
-
-                    b.ToTable("ParameterGroupTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ParameterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("ParameterId");
-
-                    b.ToTable("ParameterTranslations");
-                });
-
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.PricePerDay", b =>
                 {
                     b.Property<Guid>("Id")
@@ -373,47 +272,11 @@ namespace DataAccess.Migrations
                     b.ToTable("PricePerDays");
                 });
 
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ResortParameterValue", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChaletId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ParameterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChaletId");
-
-                    b.HasIndex("ParameterId");
-
-                    b.ToTable("ResortParameterValues");
-                });
-
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.Unit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AllowedPersons")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("ChaletId")
                         .HasColumnType("uniqueidentifier");
@@ -448,20 +311,8 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsSimilar")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaximumAllowed")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("MoreThanAllowed")
-                        .HasColumnType("bit");
-
-                    b.Property<double>("MoreThanAllowedPrice")
-                        .HasColumnType("float");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
 
                     b.Property<int?>("Order")
                         .HasColumnType("int");
@@ -477,9 +328,6 @@ namespace DataAccess.Migrations
 
                     b.Property<bool>("ViewStatus")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Views")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -554,6 +402,61 @@ namespace DataAccess.Migrations
                     b.ToTable("ChaletImages");
                 });
 
+            modelBuilder.Entity("Data.Models.Chalets.ChaletSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ChaletId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("CleanCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EnterTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExitTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("FamilyCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("InsuranceAmount")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("InsuranceCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("MoneyTransferCondition")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OtherCondition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReservationManager")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReservationPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChaletId");
+
+                    b.ToTable("ChaletSettings");
+                });
+
             modelBuilder.Entity("Data.Models.Chalets.ChaletUser", b =>
                 {
                     b.Property<Guid>("Id")
@@ -590,94 +493,7 @@ namespace DataAccess.Migrations
                     b.ToTable("ChaletUsers");
                 });
 
-            modelBuilder.Entity("Data.Models.Chalets.PaymentTransaction", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PaymentType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RefNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ReservationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReservationId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Invoices");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.RatingAndReview.Rate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Cleaning")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Crew")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<double>("PropertyCondition")
-                        .HasColumnType("float");
-
-                    b.Property<double>("RateCount")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("UnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UnitId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.Region1", b =>
+            modelBuilder.Entity("Data.Models.Chalets.Region", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -702,40 +518,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Region1");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.RegionTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("RegionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("RegionId");
-
-                    b.ToTable("RegionTranslations");
+                    b.ToTable("Regions");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.Reservation", b =>
@@ -743,9 +526,6 @@ namespace DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CancelResones")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -755,9 +535,6 @@ namespace DataAccess.Migrations
 
                     b.Property<DateTime>("DateTo")
                         .HasColumnType("datetime2");
-
-                    b.Property<double>("DayPrice")
-                        .HasColumnType("float");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -770,20 +547,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ReservedBy")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReservedByUser")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<int>("TotalDays")
-                        .HasColumnType("int");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
 
                     b.Property<Guid>("UnitId")
                         .HasColumnType("uniqueidentifier");
@@ -841,36 +606,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Files");
                 });
 
-            modelBuilder.Entity("Data.Models.Fiverate", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UnitId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UnitId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Fiverates");
-                });
-
             modelBuilder.Entity("Data.Models.General.Bank", b =>
                 {
                     b.Property<Guid>("Id")
@@ -895,39 +630,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Banks");
-                });
-
-            modelBuilder.Entity("Data.Models.General.BankTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BankId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BankId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("BankTranslations");
                 });
 
             modelBuilder.Entity("Data.Models.General.ChaletBank", b =>
@@ -1000,71 +702,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Data.Models.General.CityTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CityName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("CityTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.General.ContactUs", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subject")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ContactUss");
-                });
-
             modelBuilder.Entity("Data.Models.General.Country", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1094,39 +731,6 @@ namespace DataAccess.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("Data.Models.General.CountryTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CountryId");
-
-                    b.HasIndex("LanguageId");
-
-                    b.ToTable("CountryTranslations");
-                });
-
             modelBuilder.Entity("Data.Models.General.Job", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1150,39 +754,7 @@ namespace DataAccess.Migrations
                     b.ToTable("Jobs");
                 });
 
-            modelBuilder.Entity("Data.Models.General.Language", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Flag")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Language");
-                });
-
-            modelBuilder.Entity("Data.Models.General.Neighborhood1", b =>
+            modelBuilder.Entity("Data.Models.General.Neighborhood", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -1205,129 +777,9 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Neighborhood1");
-                });
+                    b.HasIndex("RegionId");
 
-            modelBuilder.Entity("Data.Models.General.NeighborhoodTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("NeighborhoodId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("NeighborhoodId");
-
-                    b.ToTable("NeighborhoodTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.General.SettingTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("SettingId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("SettingId");
-
-                    b.ToTable("SettingTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.Role", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Role");
-                });
-
-            modelBuilder.Entity("Data.Models.RoleTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LanguageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LanguageId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("RoleTranslation");
+                    b.ToTable("Neighborhoods");
                 });
 
             modelBuilder.Entity("Data.Models.Setting", b =>
@@ -1366,9 +818,6 @@ namespace DataAccess.Migrations
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CityId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<long>("ConfirmCode")
                         .HasColumnType("bigint");
@@ -1413,9 +862,6 @@ namespace DataAccess.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Region")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -1424,11 +870,6 @@ namespace DataAccess.Migrations
 
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserNo")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("UserType")
                         .HasColumnType("int");
@@ -1449,7 +890,23 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Data.Models.General.Neighborhood", "Neighborhood")
+                        .WithMany()
+                        .HasForeignKey("NeighborhoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Models.Chalets.Region", "Region")
+                        .WithMany()
+                        .HasForeignKey("RegionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
+
+                    b.Navigation("Neighborhood");
+
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ChaletParameterValue", b =>
@@ -1461,7 +918,7 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Data.Models.Chalets.ChaletDetails.Unit", "Unit")
-                        .WithMany("ChaletParameterValues")
+                        .WithMany()
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1493,44 +950,6 @@ namespace DataAccess.Migrations
                     b.Navigation("ParameterGroup");
                 });
 
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterGroupTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Chalets.ChaletDetails.ParameterGroup", "ParameterGroup")
-                        .WithMany("ParameterGroupTranslations")
-                        .HasForeignKey("ParameterGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("ParameterGroup");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Chalets.ChaletDetails.Parameter", "Parameter")
-                        .WithMany("ParameterTranslations")
-                        .HasForeignKey("ParameterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Parameter");
-                });
-
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.PricePerDay", b =>
                 {
                     b.HasOne("Data.Models.Chalets.ChaletDetails.Unit", "Unit")
@@ -1540,25 +959,6 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Unit");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ResortParameterValue", b =>
-                {
-                    b.HasOne("Data.Models.Chalets.Chalet", "Chalet")
-                        .WithMany("ResortParameterValue")
-                        .HasForeignKey("ChaletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Chalets.ChaletDetails.Parameter", "Parameter")
-                        .WithMany()
-                        .HasForeignKey("ParameterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chalet");
-
-                    b.Navigation("Parameter");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.Unit", b =>
@@ -1610,6 +1010,17 @@ namespace DataAccess.Migrations
                     b.Navigation("File");
                 });
 
+            modelBuilder.Entity("Data.Models.Chalets.ChaletSetting", b =>
+                {
+                    b.HasOne("Data.Models.Chalets.Chalet", "Chalet")
+                        .WithMany()
+                        .HasForeignKey("ChaletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chalet");
+                });
+
             modelBuilder.Entity("Data.Models.Chalets.ChaletUser", b =>
                 {
                     b.HasOne("Data.Models.Chalets.Chalet", "Chalet")
@@ -1629,45 +1040,7 @@ namespace DataAccess.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Data.Models.Chalets.PaymentTransaction", b =>
-                {
-                    b.HasOne("Data.Models.Chalets.Reservation", "Reservation")
-                        .WithMany("Invoices")
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Reservation");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.RatingAndReview.Rate", b =>
-                {
-                    b.HasOne("Data.Models.Chalets.ChaletDetails.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Unit");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.Region1", b =>
+            modelBuilder.Entity("Data.Models.Chalets.Region", b =>
                 {
                     b.HasOne("Data.Models.General.City", "City")
                         .WithMany()
@@ -1676,25 +1049,6 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.RegionTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Chalets.Region1", "Region")
-                        .WithMany("RegionTranslations")
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.Reservation", b =>
@@ -1714,44 +1068,6 @@ namespace DataAccess.Migrations
                     b.Navigation("Unit");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data.Models.Fiverate", b =>
-                {
-                    b.HasOne("Data.Models.Chalets.ChaletDetails.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Unit");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Data.Models.General.BankTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Bank", "Bank")
-                        .WithMany("BankTranslations")
-                        .HasForeignKey("BankId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bank");
-
-                    b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Data.Models.General.ChaletBank", b =>
@@ -1784,157 +1100,32 @@ namespace DataAccess.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("Data.Models.General.CityTranslation", b =>
+            modelBuilder.Entity("Data.Models.General.Neighborhood", b =>
                 {
-                    b.HasOne("Data.Models.General.City", "City")
-                        .WithMany("CityTranslations")
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.General.Language", "Language")
+                    b.HasOne("Data.Models.Chalets.Region", "Region")
                         .WithMany()
-                        .HasForeignKey("LanguageId")
+                        .HasForeignKey("RegionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("City");
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Data.Models.General.CountryTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
-
-                    b.Navigation("Language");
-                });
-
-            modelBuilder.Entity("Data.Models.General.NeighborhoodTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.General.Neighborhood1", "Neighborhood")
-                        .WithMany("NeighborhoodTranslations")
-                        .HasForeignKey("NeighborhoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Neighborhood");
-                });
-
-            modelBuilder.Entity("Data.Models.General.SettingTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Setting", "Setting")
-                        .WithMany()
-                        .HasForeignKey("SettingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Setting");
-                });
-
-            modelBuilder.Entity("Data.Models.RoleTranslation", b =>
-                {
-                    b.HasOne("Data.Models.General.Language", "Language")
-                        .WithMany("RoleTranslations")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Models.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Language");
-
-                    b.Navigation("Role");
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.Chalet", b =>
                 {
                     b.Navigation("ChaletImages");
 
-                    b.Navigation("ResortParameterValue");
-
                     b.Navigation("Units");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.Parameter", b =>
-                {
-                    b.Navigation("ParameterTranslations");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.ParameterGroup", b =>
                 {
-                    b.Navigation("ParameterGroupTranslations");
-
                     b.Navigation("Parameters");
                 });
 
             modelBuilder.Entity("Data.Models.Chalets.ChaletDetails.Unit", b =>
                 {
-                    b.Navigation("ChaletParameterValues");
-
                     b.Navigation("UnitImages");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.Region1", b =>
-                {
-                    b.Navigation("RegionTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.Chalets.Reservation", b =>
-                {
-                    b.Navigation("Invoices");
-                });
-
-            modelBuilder.Entity("Data.Models.General.Bank", b =>
-                {
-                    b.Navigation("BankTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.General.City", b =>
-                {
-                    b.Navigation("CityTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.General.Language", b =>
-                {
-                    b.Navigation("RoleTranslations");
-                });
-
-            modelBuilder.Entity("Data.Models.General.Neighborhood1", b =>
-                {
-                    b.Navigation("NeighborhoodTranslations");
                 });
 #pragma warning restore 612, 618
         }

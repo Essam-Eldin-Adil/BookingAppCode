@@ -38,8 +38,8 @@
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-12 text-right">
-                                <button class="btn btn-success btn-sm w-50 mb-3" onclick="pay('@reservation.Id', '@reservation.Unit.DepositAmount', '@reservation.TotalPrice')" data-toggle="modal" data-target="#confirmModal">@Resource.ConfirmReservation</button>
-                                <a href="~/Chalets/ReservationDetails/@reservation.Id" class="btn btn-primary btn-sm w-50">@Resource.ReservationDetails</a>
+                                <button class="btn btn-success btn-sm w-50 mb-3">@Resource.Confirmed</button>
+                                <button class="btn btn-primary btn-sm w-50">@Resource.ReservationDetails</button>
                             </div>
                             <div class="col-md-3 border-left">
                                 <div class="row">
@@ -122,53 +122,14 @@
                             </div>
                             <div class="col-md-4 col-lg-4 col-sm-12">
                                 <div class="entry-title">
+                                    <span>@Resource.ReservationNumber: </span><b>@reservation.ReservationNumber</b>
+                                    <h4>@reservation.Unit.Chalet.ChaletName</h4>
                                     <h4 class="text-muted">@reservation.Unit.Name</h4>
-                                    <span>@Resource.ReservationNumber: </span><b>@reservation.ReservationNumber</b><br />
-                                    <span>@Resource.Name: </span><b>@reservation.User.FirstName @reservation.User.FirstName</b><br />
-                                    <span class="text-success">
-                                        @switch (reservation.Status)
-                                        {
-                                            case (int)Enums.Status.Confirmed:
-                                                <span class="badge badge-success">@Resource.Confirmed</span>
-                                                break;
-                                            case (int)Enums.Status.Cancled:
-                                                <span class="badge badge-danger">@Resource.Cancel</span>
-                                                break;
-                                            case (int)Enums.Status.New:
-                                                <span class="badge badge-warning">@Resource.Pending</span>
-                                                break;
-                                        }
-                                    </span><br />
-                                    @switch (reservation.ReservedBy)
-                                    {
-                                        case (int)Enums.ReservedBy.Application:
-                                            <span class="text-success">@Resource.ReservedByApplication</span>
-                                            break;
-                                        case (int)Enums.ReservedBy.ProprityUser:
-                                            <span class="text-success">@Resource.ReservedByProprityUser: @reservation.ReservedByUser</span>
-                                            break;
-                                        case (int)Enums.ReservedBy.SystemAdmin:
-                                            <span class="text-success">@Resource.ReservedBySystemAdmin: @reservation.ReservedByUser</span>
-                                            break;
-                                        case (int)Enums.ReservedBy.Website:
-                                            <span class="text-success">@Resource.ReservedByWebsite</span>
-                                            break;
-                                    }
                                 </div>
                             </div>
                             <div class="col-md-3 col-sm-12 text-right">
-
-                                <a href="~/Chalets/ReservationDetails/@reservation.Id" class="btn btn-primary btn-sm w-50 mt-1">@Resource.ReservationDetails</a>
-                                @if (@reservation.ReservedBy == (int)Enums.ReservedBy.ProprityUser || @reservation.ReservedBy == (int)Enums.ReservedBy.SystemAdmin)
-                                {
-                                    <a href="~/Chalets/UpdateReservation/@reservation.Id" class="btn btn-primary mt-1 btn-sm w-50">@Resource.UpdateReservation</a>
-                                    <a href="~/Chalets/CancelReservation/@reservation.Id" class="btn btn-danger mt-1 btn-sm w-50">@Resource.CancelReservation</a>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-primary mt-1 btn-sm w-50 disabled">@Resource.UpdateReservation</button>
-                                    <button class="btn btn-danger mt-1 btn-sm w-50 disabled">@Resource.CancelReservation</button>
-                                }
+                                <button class="btn btn-success btn-sm w-50 mb-3">@Resource.Confirmed</button>
+                                <button class="btn btn-primary btn-sm w-50">@Resource.ReservationDetails</button>
                             </div>
                             <div class="col-md-3 border-left">
                                 <div class="row">
@@ -235,67 +196,8 @@
     </div>
 
 </div>
-
-
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-body">
-            <form asp-action="Payment" asp-controller="Chalets" method="post" class="modal-content was-validated">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Resource.ConfirmReservation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="ReservationId" id="ReservationId" />
-                    <p>@Resource.TotalPrice <span id="totalAmountText"></span> @Resource.Currency</p>
-                    <p>@Resource.DepositAmount <span id="amountText"></span> @Resource.Currency</p>
-                    <div class="form-group">
-                        <label>@Resource.Amount</label>
-                        <input type="number" name="Amount" required="" class="form-control" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Close</button>
-                    <button type="submit" class="btn btn-primary" >@Resource.Pay</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="PaymentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-body">
-            <form asp-action="Payment" asp-controller="Chalets" method="post" class="modal-content was-validated">
-                <div class="modal-header">
-                    <h5 class="modal-title">@Resource.ConfirmReservation</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="ReservationId" id="ReservationId" />
-                    <p>@Resource.TotalPrice <span id="totalAmountText"></span> @Resource.Currency</p>
-                    <p>@Resource.DepositAmount <span id="amountText"></span> @Resource.Currency</p>
-                    <div class="form-group">
-                        <label>@Resource.Amount</label>
-                        <input type="number" name="Amount" required="" class="form-control" />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Resource.Close</button>
-                    <button type="submit" class="btn btn-primary">@Resource.Pay</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 @section scripts{
     <script>
-        function pay(reservid, DepositAmount, TotalAmount) {
-            $("#ReservationId").val(reservid);
-            $("#amountText").html(DepositAmount);
-            $("#totalAmountText").html(TotalAmount);
-        }
         updateMenu("reservations");
     </script>
 }

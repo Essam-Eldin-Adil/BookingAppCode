@@ -1,13 +1,6 @@
 ﻿<!DOCTYPE html>
 <html dir="@HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection")" lang="ar-EG">
 <partial name="_head" />
-@{
-    var resort = false;
-    if (ViewBag.IsResort != null)
-    {
-        resort = true;
-    }
-}
 @RenderSection("css", required: false)
 <body class="stretched">
 
@@ -17,9 +10,15 @@
     <div id="wrapper">
 
         <partial name="_headerAccount" />
+
         <section id="content">
             <div class="content-wrap">
-                <div class="container clearfix">
+                <div class="container">
+                    
+                    <div class="text-center" style="display: none" id="loading">
+                        <span class="text-info spinner icons-spinner-5" aria-hidden="true"></span>
+                        <h6>@Resource.PleaseWait</h6>
+                    </div>
                     @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
                     {
                         <div class="style-msg @TempData["AlertType"].ToString()msg">
@@ -27,167 +26,31 @@
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                         </div>
                     }
-                    <div class="row gutter-40 col-mb-80">
-
-                        <div class="sidebar sticky-sidebar-wrap col-lg-3">
-                            <div class="sidebar-widgets-wrap">
-                                <div class="sticky-sidebar">
-                                    <div class="widget quick-contact-widget form-widget clearfix">
-
-                                        <div class="card bg-dark border-0">
-                                            <div class="card-header row">
-                                                <div class="col-md-4 col-sm-12">
-                                                    <img src="@Url.Content("~/"+Domain.File.GetImage(HttpContextAccessor.HttpContext,SessionClass.GetUser(HttpContextAccessor.HttpContext).Image))" />
-                                                </div>
-                                                <div class="col-md-8 col-sm-12 text-center ">
-                                                    <h5 class="text-white">@SessionClass.GetUser(HttpContextAccessor.HttpContext).FirstName</h5>
-                                                    <a class="text-white" href="~/Accounts/Logout"><i class="icon-power-off"></i> @Resource.Logout</a>
-                                                </div>
-                                            </div>
-                                            <div class="card-body p-0">
-                                                <div class="list-group">
-
-                                                    <a class="list-group-item list-group-item-action" id="settings" href="~/UserAccount/Setting/@ViewBag.chaletId">
-                                                        <i class="icon-settings"></i> @Resource.Settings
-                                                    </a>
-                                                    @if (resort)
-                                                    {
-                                                        <a id="mychalet" class="list-group-item list-group-item-action" href="~/Chalets/Index/@ViewBag.chaletId">
-                                                            <i class="icon-building"></i> @Resource.PropertiesUnits
-                                                        </a>
-                                                    }
-                                                    <a id="reservations" class="list-group-item list-group-item-action" href="~/Chalets/Reservations/@ViewBag.chaletId">
-                                                        <i class="icon-calendar-check"></i> @Resource.Reservations
-                                                    </a>
-                                                    <a id="reservation-calender" class="list-group-item list-group-item-action" href="~/Chalets/Calender/@ViewBag.chaletId">
-                                                        <i class="icon-calendar-1"></i> @Resource.AddUpdateReservations
-                                                    </a>
-                                                </div>
-                                                <div class="toggle bg-white m-0">
-                                                    <div class="toggle-header p-3">
-                                                        <div class="toggle-icon">
-                                                            <i class="toggle-closed icon-line-plus"></i>
-                                                            <i class="toggle-open icon-line-minus"></i>
-                                                        </div>
-                                                        <div class="toggle-title">
-                                                            @Resource.GoTo
-                                                        </div>
-                                                    </div>
-                                                    <div class="toggle-content">
-                                                        <div class="list-group">
-                                                            <a class="list-group-item list-group-item-action" href="~/UserAccount/Chalets">
-                                                                <div>@Resource.MyProperties</div>
-                                                            </a>
-                                                            <a class="list-group-item list-group-item-action" href="~/UserAccount/Setting/@ViewBag.chaletId">
-                                                                <div>@Resource.Accounting</div>
-                                                            </a>
-                                                            <a class="list-group-item list-group-item-action" href="~/Chalets/Index/@ViewBag.chaletId">
-                                                                <div>@Resource.Reports</div>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="postcontent col-lg-9">
-                            @RenderBody()
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section><!-- #content end -->
-        <!--<section id="content">
-        <div class="content-wrap">
-            <div class="container">
-
-                <div class="text-center" style="display: none" id="loading">
-                    <span class="text-info spinner icons-spinner-5" aria-hidden="true"></span>
-                    <h6>@Resource.PleaseWait</h6>
-                </div>
-                @if (TempData.ContainsKey("AlertType") && TempData.ContainsKey("AlertMessage"))
-                {
-                    <div class="style-msg @TempData["AlertType"].ToString()msg">
-                        <div class="sb-msg"><i class="icon-thumbs-up"></i><strong>@TempData["AlertTitle"].ToString()</strong> @TempData["AlertMessage"].ToString().</div>
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    </div>
-                }
-                <div class="card rounded-top bg-white border-0 w-100 shadow p-3">
-                    <div class="row">
-                        <div class="sidebar border-right col-lg-2 pl-0 pr-0">
-                            <div class="sidebar-widgets-wrap">
-                                <div class="widget widget_links clearfix">
-                                    <ul class="mb-2">
-                                        <li id="settings" class="mlink py-3">
-                                            <a href="~/UserAccount/Setting/@ViewBag.chaletId">
-                                                <div>@Resource.Settings</div>
-                                            </a>
-                                        </li>-->
-        @*<li id="chaletInfo" class="mlink py-3">
-                <a href="~/UserAccount/Chalet/@ViewBag.chaletId">
-                    <div>@Resource.EditProprity</div>
-                </a>
-            </li>*@
-        <!--@if (resort)
-                                            {
-                                                <li id="mychalet" class="mlink py-3">
-                                                    <a href="~/Chalets/Index/@ViewBag.chaletId">
-                                                        <div>@Resource.MyProperties</div>
-                                                    </a>
-                                                </li>
-                                            }
-                                            <li id="reservations" class="mlink py-3">
-                                                <a href="~/Chalets/Reservations/@ViewBag.chaletId">
-                                                    <div>@Resource.Reservations</div>
-                                                </a>
-                                            </li>
-                                            <li id="reservation-calender" class="mlink py-3">
-                                                <a href="~/Chalets/Calender/@ViewBag.chaletId">
-                                                    <div>@Resource.AddUpdateReservations</div>
-                                                </a>
-                                            </li>
+                    <div class="card rounded-top bg-white border-0 w-100 shadow p-3">
+                        <div class="row">
+                            <div class="sidebar border-right col-lg-2 pl-0 pr-0">
+                                <div class="sidebar-widgets-wrap">
+                                    <div class="widget widget_links clearfix">
+                                        <ul>
+                                            <li id="chaletInfo" class="mlink py-3"><a href="~/UserAccount/Chalet/@ViewBag.chaletId">
+                                                <div>@Resource.PropertyInfo</div></a></li>
+                                            <li id="settings" class="mlink py-3"><a href="~/UserAccount/Setting/@ViewBag.chaletId">
+                                                <div>@Resource.Settings</div></a></li>
+                                            <li id="mychalet" class="mlink py-3"><a href="~/Chalets/Index/@ViewBag.chaletId">
+                                                <div>@Resource.MyProperties</div></a></li>
+                                            <li id="reservations" class="mlink py-3"><a href="~/Chalets/Reservations/@ViewBag.chaletId">
+                                                <div>@Resource.Reservations</div></a></li>
+                                            <li id="reservation-calender" class="mlink py-3"><a href="~/Chalets/Calender/@ViewBag.chaletId">
+                                                <div>@Resource.ReservationsCalender</div></a></li>
+                                            <li id="invoices" class="mlink py-3">
+                                                <a href="#">
+                                                    <div>@Resource.MyInvoices</div></a></li>
                                         </ul>
-                                        <div class="toggle">
-                                            <div class="toggle-header">
-                                                <div class="toggle-icon">
-                                                    <i class="toggle-closed icon-line-plus"></i>
-                                                    <i class="toggle-open icon-line-minus"></i>
-                                                </div>
-                                                <div class="toggle-title">
-                                                    @Resource.GoTo
-                                                </div>
-                                            </div>
-                                            <div class="toggle-content">
-                                                <ul>
-                                                    <li id="chaletInfo" class="mlink py-3">
-                                                        <a href="~/UserAccount/Chalets">
-                                                            <div>@Resource.MyProperties</div>
-                                                        </a>
-                                                    </li>
-                                                    <li id="settings" class="mlink py-3">
-                                                        <a href="~/UserAccount/Setting/@ViewBag.chaletId">
-                                                            <div>@Resource.Accounting</div>
-                                                        </a>
-                                                    </li>
-                                                    <li id="mychalet" class="mlink py-3">
-                                                        <a href="~/Chalets/Index/@ViewBag.chaletId">
-                                                            <div>@Resource.Reports</div>
-                                                        </a>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="postcontent col-lg-10">
-
+                               
 
                                 @RenderBody()
                             </div>
@@ -196,29 +59,224 @@
                     </div>
                 </div>
             </div>
-        </section>-->
-        <!-- #content end -->
-        <!-- Footer
-        ============================================= -->
-        <footer id="footer" class="dark">
-            <!-- Copyrights
-            ============================================= -->
-            <partial name="_footerAccount" />
-        </footer>
+        </section><!-- #content end -->
+        <partial name="_footerAccount" />
+
     </div><!-- #wrapper end -->
 
     <partial name="_scripts" />
     <script>
-        $(function () {
-            $('.datepicker').datepicker({
-                autoclose: true,
-                startDate: "today",
-                todayHighlight: true,
-                format: "mm/dd/yyyy",
-            });
-        });
+        var lang = {};
     </script>
-    @RenderSection("scripts", required: false)
 
+    @if (HttpContextAccessor.HttpContext.Session.GetString("LanguageDirection") == "RTL")
+    {
+        <script>
+            lang = {
+                "emptyTable": "ليست هناك بيانات متاحة في الجدول",
+                "loadingRecords": "جارٍ التحميل...",
+                "lengthMenu": "أظهر _MENU_ مدخلات",
+                "zeroRecords": "لم يعثر على أية سجلات",
+                "info": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                "infoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                "infoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                "search": "ابحث:",
+                "paginate": {
+                    "first": "الأول",
+                    "previous": "السابق",
+                    "next": "التالي",
+                    "last": "الأخير"
+                },
+                "aria": {
+                    "sortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                    "sortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                },
+                "select": {
+                    "rows": {
+                        "_": "%d قيمة محددة",
+                        "1": "1 قيمة محددة"
+                    },
+                    "cells": {
+                        "1": "1 خلية محددة",
+                        "_": "%d خلايا محددة"
+                    },
+                    "columns": {
+                        "1": "1 عمود محدد",
+                        "_": "%d أعمدة محددة"
+                    }
+                },
+                "buttons": {
+                    "print": "طباعة",
+                    "copyKeys": "زر <i>ctrl<\/i> أو <i>⌘<\/i> + <i>C<\/i> من الجدول<br>ليتم نسخها إلى الحافظة<br><br>للإلغاء اضغط على الرسالة أو اضغط على زر الخروج.",
+                    "copySuccess": {
+                        "_": "%d قيمة نسخت",
+                        "1": "1 قيمة نسخت"
+                    },
+                    "pageLength": {
+                        "-1": "اظهار الكل",
+                        "_": "إظهار %d أسطر"
+                    },
+                    "collection": "مجموعة",
+                    "copy": "نسخ",
+                    "copyTitle": "نسخ إلى الحافظة",
+                    "csv": "CSV",
+                    "excel": "Excel",
+                    "pdf": "PDF",
+                    "colvis": "إظهار الأعمدة",
+                    "colvisRestore": "إستعادة العرض"
+                },
+                "autoFill": {
+                    "cancel": "إلغاء",
+                    "fill": "املأ جميع الحقول بـ <i>%d&lt;\\\/i&gt;<\/i>",
+                    "fillHorizontal": "تعبئة الحقول أفقيًا",
+                    "fillVertical": "تعبئة الحقول عموديا"
+                },
+                "searchBuilder": {
+                    "add": "اضافة شرط",
+                    "clearAll": "ازالة الكل",
+                    "condition": "الشرط",
+                    "data": "المعلومة",
+                    "logicAnd": "و",
+                    "logicOr": "أو",
+                    "title": [
+                        "منشئ البحث"
+                    ],
+                    "value": "القيمة",
+                    "conditions": {
+                        "date": {
+                            "after": "بعد",
+                            "before": "قبل",
+                            "between": "بين",
+                            "empty": "فارغ",
+                            "equals": "تساوي",
+                            "not": "ليس",
+                            "notBetween": "ليست بين",
+                            "notEmpty": "ليست فارغة"
+                        },
+                        "number": {
+                            "between": "بين",
+                            "empty": "فارغة",
+                            "equals": "تساوي",
+                            "gt": "أكبر من",
+                            "gte": "أكبر وتساوي",
+                            "lt": "أقل من",
+                            "lte": "أقل وتساوي",
+                            "not": "ليست",
+                            "notBetween": "ليست بين",
+                            "notEmpty": "ليست فارغة"
+                        },
+                        "string": {
+                            "contains": "يحتوي",
+                            "empty": "فاغ",
+                            "endsWith": "ينتهي ب",
+                            "equals": "يساوي",
+                            "not": "ليست",
+                            "notEmpty": "ليست فارغة",
+                            "startsWith": " تبدأ بـ "
+                        }
+                    },
+                    "button": {
+                        "0": "فلاتر البحث",
+                        "_": "فلاتر البحث (%d)"
+                    },
+                    "deleteTitle": "حذف فلاتر"
+                },
+                "searchPanes": {
+                    "clearMessage": "ازالة الكل",
+                    "collapse": {
+                        "0": "بحث",
+                        "_": "بحث (%d)"
+                    },
+                    "count": "عدد",
+                    "countFiltered": "عدد المفلتر",
+                    "loadMessage": "جارِ التحميل ...",
+                    "title": "الفلاتر النشطة"
+                },
+                "infoThousands": ",",
+                "datetime": {
+                    "previous": "السابق",
+                    "next": "التالي",
+                    "hours": "الساعة",
+                    "minutes": "الدقيقة",
+                    "seconds": "الثانية",
+                    "unknown": "-",
+                    "amPm": [
+                        "صباحا",
+                        "مساءا"
+                    ],
+                    "weekdays": [
+                        "الأحد",
+                        "الإثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت"
+                    ],
+                    "months": [
+                        "يناير",
+                        "فبراير",
+                        "مارس",
+                        "أبريل",
+                        "مايو",
+                        "يونيو",
+                        "يوليو",
+                        "أغسطس",
+                        "سبتمبر",
+                        "أكتوبر",
+                        "نوفمبر",
+                        "ديسمبر"
+                    ]
+                },
+                "editor": {
+                    "close": "إغلاق",
+                    "create": {
+                        "button": "إضافة",
+                        "title": "إضافة جديدة",
+                        "submit": "إرسال"
+                    },
+                    "edit": {
+                        "button": "تعديل",
+                        "title": "تعديل السجل",
+                        "submit": "تحديث"
+                    },
+                    "remove": {
+                        "button": "حذف",
+                        "title": "حذف",
+                        "submit": "حذف",
+                        "confirm": {
+                            "_": "هل أنت متأكد من رغبتك في حذف السجلات %d المحددة؟",
+                            "1": "هل أنت متأكد من رغبتك في حذف السجل؟"
+                        }
+                    },
+                    "error": {
+                        "system": "حدث خطأ ما"
+                    },
+                    "multi": {
+                        "title": "قيم متعدية",
+                        "restore": "تراجع"
+                    }
+                },
+                "processing": "جارٍ المعالجة..."
+            };
+
+            function loading() {
+                $("#loading").fadeIn();
+            }
+
+            function stopLoading() {
+                $("#loading").fadeOut();
+            }
+
+            $( document ).ajaxStart(function() {
+                loading();
+            });
+            $(document).ajaxComplete(function () {
+                stopLoading();
+            });
+        </script>
+    }
+@RenderSection("scripts", required: false)
+ 
 </body>
 </html>

@@ -302,37 +302,16 @@ public class Repository<Entity> : IRepository<Entity> where Entity : Data.Entity
     //{
     //   return Find(id);
     //}
-    public void UserUpdate(Entity entity)
-    {
 
-        _dataContext.Attach(entity);
-        
-        _dataContext.Entry(entity).State = EntityState.Modified;
-        _dataContext.Entry(entity).Property("UserNo").IsModified = false;
-        //_dataContext.Set<Entity>().Update(entity);
-        _dataContext.SaveChanges();
-    }
-    public void ReservationUpdate(Entity entity)
-    {
-
-        _dataContext.Attach(entity);
-
-        _dataContext.Entry(entity).State = EntityState.Modified;
-        _dataContext.Entry(entity).Property("ReservationNumber").IsModified = false;
-        //_dataContext.Set<Entity>().Update(entity);
-        _dataContext.SaveChanges();
-    }
     public void Update(Entity entity)
     {
 
         _dataContext.Attach(entity);
-        _dataContext.Entry(entity).Property(c => c.IsDeleted).IsModified = false;
         _dataContext.Entry(entity).State = EntityState.Modified;
 
         //_dataContext.Set<Entity>().Update(entity);
         _dataContext.SaveChanges();
     }
-
     public async Task UpdateAsync(Entity entity)
     {
         _dataContext.Attach(entity);
